@@ -216,8 +216,12 @@ done:
     return result;
 }
 
+#if 0
 int
 main(int argc, char **argv)
+#else
+int SDL_main(int argc, char** argv)
+#endif
 {
     struct {
         SDL_bool enable_intrinsics;
