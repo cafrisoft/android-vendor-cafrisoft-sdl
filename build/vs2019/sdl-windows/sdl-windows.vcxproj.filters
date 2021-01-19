@@ -31,6 +31,24 @@
     <Filter Include="source\include">
       <UniqueIdentifier>{2485cbd4-5f15-4808-a3dc-cccfb90501d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\src\thread">
+      <UniqueIdentifier>{3a15fbf0-035b-4a9b-b992-8872401ea781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\thread\windows">
+      <UniqueIdentifier>{68a64292-d85f-4343-b667-ecc9ad11534c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\video">
+      <UniqueIdentifier>{a7d994ca-856a-402f-8878-f7730ba44c72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\video\windows">
+      <UniqueIdentifier>{bd92d744-6504-4b59-9c57-5a34aea5e541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\render">
+      <UniqueIdentifier>{3aae2ac1-c545-4be1-bbe9-f559e1c69602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\render\direct3d">
+      <UniqueIdentifier>{6101e618-c50d-45a9-893c-214674cca520}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -38,6 +56,63 @@
     </ClInclude>
     <ClInclude Include="..\..\..\source\include\SDL_config_windows.h">
       <Filter>source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\thread\windows\SDL_systhread_c.h">
+      <Filter>source\src\thread\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowskeyboard.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsmessagebox.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsmodes.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsmouse.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsopengl.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsopengles.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsshape.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowstaskdialog.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsvideo.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsvulkan.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowswindow.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\wmmsg.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_msctf.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_vkeys.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsclipboard.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsevents.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\windows\SDL_windowsframebuffer.h">
+      <Filter>source\src\video\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\direct3d\SDL_shaders_d3d.h">
+      <Filter>source\src\render\direct3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +124,63 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\src\main\android\SDL_android_main.c">
       <Filter>source\src\main\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\thread\windows\SDL_systhread.c">
+      <Filter>source\src\thread\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\thread\windows\SDL_systls.c">
+      <Filter>source\src\thread\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\thread\windows\SDL_sysmutex.c">
+      <Filter>source\src\thread\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\thread\windows\SDL_syssem.c">
+      <Filter>source\src\thread\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsmessagebox.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsmodes.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsmouse.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsopengl.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsopengles.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsshape.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsvideo.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsvulkan.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowswindow.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsclipboard.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsevents.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsframebuffer.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowskeyboard.c">
+      <Filter>source\src\video\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\direct3d\SDL_render_d3d.c">
+      <Filter>source\src\render\direct3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\direct3d\SDL_shaders_d3d.c">
+      <Filter>source\src\render\direct3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
