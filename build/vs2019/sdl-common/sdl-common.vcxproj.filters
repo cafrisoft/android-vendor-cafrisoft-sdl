@@ -76,6 +76,36 @@
     <Filter Include="source\src\locale">
       <UniqueIdentifier>{e02e7b53-cafd-4fbe-893a-6eeb5cb92f1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\src\misc">
+      <UniqueIdentifier>{0e6d348c-bab9-4f42-9288-35e26ae2ff66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\joystick\virtual">
+      <UniqueIdentifier>{ea80657f-4a8a-4fc9-81d8-bc364c4da152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\video\dummy">
+      <UniqueIdentifier>{ba6c537c-0336-4dff-9a98-6e3b3de1a967}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\render\opengl">
+      <UniqueIdentifier>{df48fe7d-d500-4a3d-bf80-a2d2d871cfe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\render\opengles2">
+      <UniqueIdentifier>{18844aac-1628-412b-bf8f-37b1edd81e9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\render\software">
+      <UniqueIdentifier>{a4f78506-1adb-4433-999a-4d2bb32d891e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\libm">
+      <UniqueIdentifier>{05631734-6125-4829-a63e-910fc8d39038}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\video\AAAAA">
+      <UniqueIdentifier>{f28e7d9e-a692-4f07-a70d-6ce01fb2509b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\video\yuv2rgb">
+      <UniqueIdentifier>{7d8bb25b-0a74-405a-9a17-c9e1ebd54e9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\hidapi">
+      <UniqueIdentifier>{61d5b899-18f3-4416-8629-62c3639c2c8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -131,42 +161,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\source\src\audio\SDL_audio_c.h">
       <Filter>source\src\audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_rect_c.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_RLEaccel_c.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_shape_internals.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_sysvideo.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_vulkan_internal.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_yuv_c.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_blit.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_blit_auto.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_blit_copy.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_blit_slow.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_egl_c.h">
-      <Filter>source\src\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\video\SDL_pixels_c.h">
-      <Filter>source\src\video</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\src\events\SDL_keyboard_c.h">
       <Filter>source\src\events</Filter>
@@ -267,6 +261,108 @@
     <ClInclude Include="..\..\..\source\src\locale\SDL_syslocale.h">
       <Filter>source\src\locale</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\source\src\misc\SDL_sysurl.h">
+      <Filter>source\src\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\virtual\SDL_virtualjoystick_c.h">
+      <Filter>source\src\joystick\virtual</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\dummy\SDL_nullframebuffer_c.h">
+      <Filter>source\src\video\dummy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\dummy\SDL_nullvideo.h">
+      <Filter>source\src\video\dummy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\dummy\SDL_nullevents_c.h">
+      <Filter>source\src\video\dummy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\opengl\SDL_shaders_gl.h">
+      <Filter>source\src\render\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\opengl\SDL_glfuncs.h">
+      <Filter>source\src\render\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\opengles2\SDL_shaders_gles2.h">
+      <Filter>source\src\render\opengles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\opengles2\SDL_gles2funcs.h">
+      <Filter>source\src\render\opengles2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_blendline.h">
+      <Filter>source\src\render\software</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_blendpoint.h">
+      <Filter>source\src\render\software</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_draw.h">
+      <Filter>source\src\render\software</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_drawline.h">
+      <Filter>source\src\render\software</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_drawpoint.h">
+      <Filter>source\src\render\software</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_render_sw_c.h">
+      <Filter>source\src\render\software</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_rotate.h">
+      <Filter>source\src\render\software</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_blendfillrect.h">
+      <Filter>source\src\render\software</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\libm\math_libm.h">
+      <Filter>source\src\libm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\libm\math_private.h">
+      <Filter>source\src\libm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_blit.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_blit_auto.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_blit_copy.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_blit_slow.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_egl_c.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_pixels_c.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_rect_c.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_RLEaccel_c.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_shape_internals.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_sysvideo.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_vulkan_internal.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\SDL_yuv_c.h">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\yuv2rgb\yuv_rgb_sse_func.h">
+      <Filter>source\src\video\yuv2rgb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\yuv2rgb\yuv_rgb_std_func.h">
+      <Filter>source\src\video\yuv2rgb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\video\yuv2rgb\yuv_rgb.h">
+      <Filter>source\src\video\yuv2rgb</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sdl-common.cpp">
@@ -347,69 +443,6 @@
     <ClCompile Include="..\..\..\source\src\audio\SDL_audiocvt.c">
       <Filter>source\src\audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_RLEaccel.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_shape.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_stretch.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_surface.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_video.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_vulkan_utils.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_yuv.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_blit.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_blit_0.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_blit_1.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_blit_A.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_blit_auto.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_blit_copy.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_blit_N.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_blit_slow.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_bmp.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_clipboard.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_egl.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_fillrect.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_pixels.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\video\SDL_rect.c">
-      <Filter>source\src\video</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\src\cpuinfo\SDL_cpuinfo.c">
       <Filter>source\src\cpuinfo</Filter>
     </ClCompile>
@@ -488,5 +521,222 @@
     <ClCompile Include="..\..\..\source\src\locale\SDL_locale.c">
       <Filter>source\src\locale</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\src\misc\SDL_url.c">
+      <Filter>source\src\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\virtual\SDL_virtualjoystick.c">
+      <Filter>source\src\joystick\virtual</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\dummy\SDL_nullframebuffer.c">
+      <Filter>source\src\video\dummy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\dummy\SDL_nullvideo.c">
+      <Filter>source\src\video\dummy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\dummy\SDL_nullevents.c">
+      <Filter>source\src\video\dummy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\opengl\SDL_shaders_gl.c">
+      <Filter>source\src\render\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\opengl\SDL_render_gl.c">
+      <Filter>source\src\render\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\opengles2\SDL_shaders_gles2.c">
+      <Filter>source\src\render\opengles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\opengles2\SDL_render_gles2.c">
+      <Filter>source\src\render\opengles2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_blendpoint.c">
+      <Filter>source\src\render\software</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_drawline.c">
+      <Filter>source\src\render\software</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_drawpoint.c">
+      <Filter>source\src\render\software</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_render_sw.c">
+      <Filter>source\src\render\software</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_rotate.c">
+      <Filter>source\src\render\software</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_blendfillrect.c">
+      <Filter>source\src\render\software</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_blendline.c">
+      <Filter>source\src\render\software</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\e_log.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\e_log10.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\e_pow.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\e_rem_pio2.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\e_sqrt.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\k_cos.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\k_rem_pio2.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\k_sin.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\k_tan.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\s_atan.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\s_copysign.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\s_cos.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\s_fabs.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\s_floor.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\s_scalbn.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\s_sin.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\s_tan.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\e_atan2.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\e_exp.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\libm\e_fmod.c">
+      <Filter>source\src\libm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_blit.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_blit_0.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_blit_1.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_blit_A.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_blit_auto.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_blit_copy.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_blit_N.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_blit_slow.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_bmp.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_clipboard.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_egl.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_fillrect.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_pixels.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_rect.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_RLEaccel.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_shape.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_stretch.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_surface.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_video.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_vulkan_utils.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\SDL_yuv.c">
+      <Filter>source\src\video\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\video\yuv2rgb\yuv_rgb.c">
+      <Filter>source\src\video\yuv2rgb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\hidapi\SDL_hidapi.c">
+      <Filter>source\src\hidapi</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\source\src\video\yuv2rgb\LICENSE">
+      <Filter>source\src\video\yuv2rgb</Filter>
+    </None>
+    <None Include="..\..\..\source\src\video\yuv2rgb\README.md">
+      <Filter>source\src\video\yuv2rgb</Filter>
+    </None>
+    <None Include="..\..\..\source\src\hidapi\Makefile.am">
+      <Filter>source\src\hidapi</Filter>
+    </None>
+    <None Include="..\..\..\source\src\hidapi\bootstrap">
+      <Filter>source\src\hidapi</Filter>
+    </None>
+    <None Include="..\..\..\source\src\hidapi\configure.ac">
+      <Filter>source\src\hidapi</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\source\src\hidapi\LICENSE.txt">
+      <Filter>source\src\hidapi</Filter>
+    </Text>
+    <Text Include="..\..\..\source\src\hidapi\LICENSE-bsd.txt">
+      <Filter>source\src\hidapi</Filter>
+    </Text>
+    <Text Include="..\..\..\source\src\hidapi\LICENSE-gpl3.txt">
+      <Filter>source\src\hidapi</Filter>
+    </Text>
+    <Text Include="..\..\..\source\src\hidapi\LICENSE-orig.txt">
+      <Filter>source\src\hidapi</Filter>
+    </Text>
+    <Text Include="..\..\..\source\src\hidapi\README.txt">
+      <Filter>source\src\hidapi</Filter>
+    </Text>
+    <Text Include="..\..\..\source\src\hidapi\AUTHORS.txt">
+      <Filter>source\src\hidapi</Filter>
+    </Text>
+    <Text Include="..\..\..\source\src\hidapi\HACKING.txt">
+      <Filter>source\src\hidapi</Filter>
+    </Text>
   </ItemGroup>
 </Project>

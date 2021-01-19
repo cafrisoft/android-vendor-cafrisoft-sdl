@@ -177,11 +177,27 @@
     <ClInclude Include="..\..\..\source\src\joystick\SDL_joystick_c.h" />
     <ClInclude Include="..\..\..\source\src\joystick\SDL_sysjoystick.h" />
     <ClInclude Include="..\..\..\source\src\joystick\usb_ids.h" />
+    <ClInclude Include="..\..\..\source\src\joystick\virtual\SDL_virtualjoystick_c.h" />
+    <ClInclude Include="..\..\..\source\src\libm\math_libm.h" />
+    <ClInclude Include="..\..\..\source\src\libm\math_private.h" />
     <ClInclude Include="..\..\..\source\src\locale\SDL_syslocale.h" />
+    <ClInclude Include="..\..\..\source\src\misc\SDL_sysurl.h" />
     <ClInclude Include="..\..\..\source\src\power\SDL_syspower.h" />
+    <ClInclude Include="..\..\..\source\src\render\opengles2\SDL_gles2funcs.h" />
+    <ClInclude Include="..\..\..\source\src\render\opengles2\SDL_shaders_gles2.h" />
+    <ClInclude Include="..\..\..\source\src\render\opengl\SDL_glfuncs.h" />
+    <ClInclude Include="..\..\..\source\src\render\opengl\SDL_shaders_gl.h" />
     <ClInclude Include="..\..\..\source\src\render\SDL_d3dmath.h" />
     <ClInclude Include="..\..\..\source\src\render\SDL_sysrender.h" />
     <ClInclude Include="..\..\..\source\src\render\SDL_yuv_sw_c.h" />
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_blendfillrect.h" />
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_blendline.h" />
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_blendpoint.h" />
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_draw.h" />
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_drawline.h" />
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_drawpoint.h" />
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_render_sw_c.h" />
+    <ClInclude Include="..\..\..\source\src\render\software\SDL_rotate.h" />
     <ClInclude Include="..\..\..\source\src\SDL_assert_c.h" />
     <ClInclude Include="..\..\..\source\src\SDL_dataqueue.h" />
     <ClInclude Include="..\..\..\source\src\SDL_error_c.h" />
@@ -194,6 +210,9 @@
     <ClInclude Include="..\..\..\source\src\thread\SDL_systhread.h" />
     <ClInclude Include="..\..\..\source\src\thread\SDL_thread_c.h" />
     <ClInclude Include="..\..\..\source\src\timer\SDL_timer_c.h" />
+    <ClInclude Include="..\..\..\source\src\video\dummy\SDL_nullevents_c.h" />
+    <ClInclude Include="..\..\..\source\src\video\dummy\SDL_nullframebuffer_c.h" />
+    <ClInclude Include="..\..\..\source\src\video\dummy\SDL_nullvideo.h" />
     <ClInclude Include="..\..\..\source\src\video\SDL_blit.h" />
     <ClInclude Include="..\..\..\source\src\video\SDL_blit_auto.h" />
     <ClInclude Include="..\..\..\source\src\video\SDL_blit_copy.h" />
@@ -206,6 +225,9 @@
     <ClInclude Include="..\..\..\source\src\video\SDL_sysvideo.h" />
     <ClInclude Include="..\..\..\source\src\video\SDL_vulkan_internal.h" />
     <ClInclude Include="..\..\..\source\src\video\SDL_yuv_c.h" />
+    <ClInclude Include="..\..\..\source\src\video\yuv2rgb\yuv_rgb.h" />
+    <ClInclude Include="..\..\..\source\src\video\yuv2rgb\yuv_rgb_sse_func.h" />
+    <ClInclude Include="..\..\..\source\src\video\yuv2rgb\yuv_rgb_std_func.h" />
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
@@ -231,13 +253,47 @@
     <ClCompile Include="..\..\..\source\src\events\SDL_windowevents.c" />
     <ClCompile Include="..\..\..\source\src\file\SDL_rwops.c" />
     <ClCompile Include="..\..\..\source\src\haptic\SDL_haptic.c" />
+    <ClCompile Include="..\..\..\source\src\hidapi\SDL_hidapi.c" />
     <ClCompile Include="..\..\..\source\src\joystick\SDL_gamecontroller.c" />
     <ClCompile Include="..\..\..\source\src\joystick\SDL_joystick.c" />
+    <ClCompile Include="..\..\..\source\src\joystick\virtual\SDL_virtualjoystick.c" />
+    <ClCompile Include="..\..\..\source\src\libm\e_atan2.c" />
+    <ClCompile Include="..\..\..\source\src\libm\e_exp.c" />
+    <ClCompile Include="..\..\..\source\src\libm\e_fmod.c" />
+    <ClCompile Include="..\..\..\source\src\libm\e_log.c" />
+    <ClCompile Include="..\..\..\source\src\libm\e_log10.c" />
+    <ClCompile Include="..\..\..\source\src\libm\e_pow.c" />
+    <ClCompile Include="..\..\..\source\src\libm\e_rem_pio2.c" />
+    <ClCompile Include="..\..\..\source\src\libm\e_sqrt.c" />
+    <ClCompile Include="..\..\..\source\src\libm\k_cos.c" />
+    <ClCompile Include="..\..\..\source\src\libm\k_rem_pio2.c" />
+    <ClCompile Include="..\..\..\source\src\libm\k_sin.c" />
+    <ClCompile Include="..\..\..\source\src\libm\k_tan.c" />
+    <ClCompile Include="..\..\..\source\src\libm\s_atan.c" />
+    <ClCompile Include="..\..\..\source\src\libm\s_copysign.c" />
+    <ClCompile Include="..\..\..\source\src\libm\s_cos.c" />
+    <ClCompile Include="..\..\..\source\src\libm\s_fabs.c" />
+    <ClCompile Include="..\..\..\source\src\libm\s_floor.c" />
+    <ClCompile Include="..\..\..\source\src\libm\s_scalbn.c" />
+    <ClCompile Include="..\..\..\source\src\libm\s_sin.c" />
+    <ClCompile Include="..\..\..\source\src\libm\s_tan.c" />
     <ClCompile Include="..\..\..\source\src\locale\SDL_locale.c" />
+    <ClCompile Include="..\..\..\source\src\misc\SDL_url.c" />
     <ClCompile Include="..\..\..\source\src\power\SDL_power.c" />
+    <ClCompile Include="..\..\..\source\src\render\opengles2\SDL_render_gles2.c" />
+    <ClCompile Include="..\..\..\source\src\render\opengles2\SDL_shaders_gles2.c" />
+    <ClCompile Include="..\..\..\source\src\render\opengl\SDL_render_gl.c" />
+    <ClCompile Include="..\..\..\source\src\render\opengl\SDL_shaders_gl.c" />
     <ClCompile Include="..\..\..\source\src\render\SDL_d3dmath.c" />
     <ClCompile Include="..\..\..\source\src\render\SDL_render.c" />
     <ClCompile Include="..\..\..\source\src\render\SDL_yuv_sw.c" />
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_blendfillrect.c" />
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_blendline.c" />
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_blendpoint.c" />
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_drawline.c" />
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_drawpoint.c" />
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_render_sw.c" />
+    <ClCompile Include="..\..\..\source\src\render\software\SDL_rotate.c" />
     <ClCompile Include="..\..\..\source\src\SDL.c" />
     <ClCompile Include="..\..\..\source\src\SDL_assert.c" />
     <ClCompile Include="..\..\..\source\src\SDL_dataqueue.c" />
@@ -260,6 +316,9 @@
     <ClCompile Include="..\..\..\source\src\thread\generic\SDL_systls.c" />
     <ClCompile Include="..\..\..\source\src\thread\SDL_thread.c" />
     <ClCompile Include="..\..\..\source\src\timer\SDL_timer.c" />
+    <ClCompile Include="..\..\..\source\src\video\dummy\SDL_nullevents.c" />
+    <ClCompile Include="..\..\..\source\src\video\dummy\SDL_nullframebuffer.c" />
+    <ClCompile Include="..\..\..\source\src\video\dummy\SDL_nullvideo.c" />
     <ClCompile Include="..\..\..\source\src\video\SDL_blit.c" />
     <ClCompile Include="..\..\..\source\src\video\SDL_blit_0.c" />
     <ClCompile Include="..\..\..\source\src\video\SDL_blit_1.c" />
@@ -281,7 +340,24 @@
     <ClCompile Include="..\..\..\source\src\video\SDL_video.c" />
     <ClCompile Include="..\..\..\source\src\video\SDL_vulkan_utils.c" />
     <ClCompile Include="..\..\..\source\src\video\SDL_yuv.c" />
+    <ClCompile Include="..\..\..\source\src\video\yuv2rgb\yuv_rgb.c" />
     <ClCompile Include="sdl-common.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\source\src\hidapi\bootstrap" />
+    <None Include="..\..\..\source\src\hidapi\configure.ac" />
+    <None Include="..\..\..\source\src\hidapi\Makefile.am" />
+    <None Include="..\..\..\source\src\video\yuv2rgb\LICENSE" />
+    <None Include="..\..\..\source\src\video\yuv2rgb\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\source\src\hidapi\AUTHORS.txt" />
+    <Text Include="..\..\..\source\src\hidapi\HACKING.txt" />
+    <Text Include="..\..\..\source\src\hidapi\LICENSE-bsd.txt" />
+    <Text Include="..\..\..\source\src\hidapi\LICENSE-gpl3.txt" />
+    <Text Include="..\..\..\source\src\hidapi\LICENSE-orig.txt" />
+    <Text Include="..\..\..\source\src\hidapi\LICENSE.txt" />
+    <Text Include="..\..\..\source\src\hidapi\README.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

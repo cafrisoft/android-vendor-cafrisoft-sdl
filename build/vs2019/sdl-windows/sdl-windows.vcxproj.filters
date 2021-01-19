@@ -112,6 +112,27 @@
     <Filter Include="source\src\audio\winmm">
       <UniqueIdentifier>{16e9c3ce-e188-4075-b5fa-fe959d114723}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\src\audio\directsound">
+      <UniqueIdentifier>{b0f0bf87-969b-42eb-b2ef-ccf259181842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\audio\disk">
+      <UniqueIdentifier>{561427f8-c7ac-4bc9-9d61-ea0c590138f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\audio\dummy">
+      <UniqueIdentifier>{2680a06c-58d7-4793-8157-3b6f3138fe28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\joystick\hidapi">
+      <UniqueIdentifier>{5fde36b4-3c30-43db-a678-45c7674aaca0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\render\direct3d11">
+      <UniqueIdentifier>{871e32c4-2add-483a-9c29-db6b4e8d888b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\misc">
+      <UniqueIdentifier>{3b788823-cdc5-4035-b689-50c58d1ace7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\misc\windows">
+      <UniqueIdentifier>{84a5633b-aa6c-4e2a-8806-ceddc0ab046f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -218,6 +239,27 @@
     </ClInclude>
     <ClInclude Include="..\..\..\source\src\audio\winmm\SDL_winmm.h">
       <Filter>source\src\audio\winmm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\audio\directsound\SDL_directsound.h">
+      <Filter>source\src\audio\directsound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\audio\disk\SDL_diskaudio.h">
+      <Filter>source\src\audio\disk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\audio\dummy\SDL_dummyaudio.h">
+      <Filter>source\src\audio\dummy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\hidapi\SDL_hidapijoystick_c.h">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\hidapi\SDL_hidapi_rumble.h">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\direct3d11\SDL_shaders_d3d11.h">
+      <Filter>source\src\render\direct3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\direct3d11\SDL_render_winrt.h">
+      <Filter>source\src\render\direct3d11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +394,54 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\src\audio\winmm\SDL_winmm.c">
       <Filter>source\src\audio\winmm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\audio\directsound\SDL_directsound.c">
+      <Filter>source\src\audio\directsound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\audio\disk\SDL_diskaudio.c">
+      <Filter>source\src\audio\disk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\audio\dummy\SDL_dummyaudio.c">
+      <Filter>source\src\audio\dummy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\hidapi\SDL_hidapi_steam.c">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\hidapi\SDL_hidapi_switch.c">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\hidapi\SDL_hidapi_xbox360.c">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\hidapi\SDL_hidapi_xbox360w.c">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\hidapi\SDL_hidapi_xboxone.c">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\hidapi\SDL_hidapijoystick.c">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\hidapi\SDL_hidapi_gamecube.c">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\hidapi\SDL_hidapi_ps4.c">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\hidapi\SDL_hidapi_ps5.c">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\hidapi\SDL_hidapi_rumble.c">
+      <Filter>source\src\joystick\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\direct3d11\SDL_shaders_d3d11.c">
+      <Filter>source\src\render\direct3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\direct3d11\SDL_render_d3d11.c">
+      <Filter>source\src\render\direct3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\misc\windows\SDL_sysurl.c">
+      <Filter>source\src\misc\windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
