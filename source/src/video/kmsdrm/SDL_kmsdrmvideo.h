@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2021 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
   Atomic KMSDRM backend by Manuel Alfayate Corchete <redwindwanderer@gmail.com>
 
   This software is provided 'as-is', without any express or implied
@@ -34,8 +34,10 @@
 
 #include <gbm.h>
 #include <assert.h>
+#if SDL_VIDEO_OPENGL_EGL
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
+#endif
 
 /****************************************************************************************/
 /* Driverdata pointers are void struct* used to store backend-specific variables        */
@@ -56,8 +58,6 @@ typedef struct SDL_VideoData
     unsigned int num_windows;
 
     SDL_bool video_init;        /* Has VideoInit succeeded? */
-
-    SDL_bool vulkan_mode;       /* Are we in Vulkan mode? One VK window is enough to be. */
 
 } SDL_VideoData;
 
@@ -84,6 +84,7 @@ typedef struct SDL_DisplayData
 {
     drmModeModeInfo mode;
     drmModeModeInfo preferred_mode;
+    uint32_t atomic_flags;
 
     plane *display_plane;
     plane *cursor_plane;
@@ -99,6 +100,10 @@ typedef struct SDL_DisplayData
 
     EGLSyncKHR kms_fence;
     EGLSyncKHR gpu_fence;
+
+#if SDL_VIDEO_OPENGL_EGL
+    EGLSurface old_egl_surface;
+#endif
 
     SDL_bool modeset_pending;
     SDL_bool gbm_init;
@@ -124,7 +129,9 @@ typedef struct SDL_WindowData
     struct gbm_bo *bo;
     struct gbm_bo *next_bo;
 
+#if SDL_VIDEO_OPENGL_EGL
     EGLSurface egl_surface;
+#endif
 
     /* For scaling and AR correction. */
     int32_t src_w;
@@ -172,7 +179,7 @@ KMSDRM_FBInfo *KMSDRM_FBFromBO(_THIS, struct gbm_bo *bo);
 void drm_atomic_set_plane_props(struct KMSDRM_PlaneInfo *info); 
 
 void drm_atomic_waitpending(_THIS);
-int drm_atomic_commit(_THIS, SDL_bool blocking, SDL_bool allow_modeset);
+int drm_atomic_commit(_THIS, SDL_bool blocking);
 int add_plane_property(drmModeAtomicReq *req, struct plane *plane,
                              const char *name, uint64_t value);
 int add_crtc_property(drmModeAtomicReq *req, struct crtc *crtc,

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2021 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -19,9 +19,6 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 #include "../../SDL_internal.h"
-
-#include "SDL_render.h"
-#include "SDL_system.h"
 
 #if SDL_VIDEO_RENDER_D3D11 && !SDL_RENDER_DISABLED
 
@@ -1243,8 +1240,6 @@ D3D11_DestroyTexture(SDL_Renderer * renderer,
     SAFE_RELEASE(data->mainTextureResourceViewU);
     SAFE_RELEASE(data->mainTextureV);
     SAFE_RELEASE(data->mainTextureResourceViewV);
-    SAFE_RELEASE(data->mainTextureNV);
-    SAFE_RELEASE(data->mainTextureResourceViewNV);
     SDL_free(data->pixels);
     SDL_free(data);
     texture->driverdata = NULL;
@@ -2597,31 +2592,5 @@ SDL_RenderDriver D3D11_RenderDriver = {
 };
 
 #endif /* SDL_VIDEO_RENDER_D3D11 && !SDL_RENDER_DISABLED */
-
-#ifdef __WIN32__
-/* This function needs to always exist on Windows, for the Dynamic API. */
-ID3D11Device *
-SDL_RenderGetD3D11Device(SDL_Renderer * renderer)
-{
-    ID3D11Device *device = NULL;
-
-#if SDL_VIDEO_RENDER_D3D11 && !SDL_RENDER_DISABLED
-    D3D11_RenderData *data = (D3D11_RenderData *) renderer->driverdata;
-
-    /* Make sure that this is a D3D renderer */
-    if (renderer->DestroyRenderer != D3D11_DestroyRenderer) {
-        SDL_SetError("Renderer is not a D3D11 renderer");
-        return NULL;
-    }
-
-    device = (ID3D11Device *)data->d3dDevice;
-    if (device) {
-        ID3D11Device_AddRef(device);
-    }
-#endif /* SDL_VIDEO_RENDER_D3D11 && !SDL_RENDER_DISABLED */
-
-    return device;
-}
-#endif /* __WIN32__ */
 
 /* vi: set ts=4 sw=4 expandtab: */

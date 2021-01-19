@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2021 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -38,7 +38,7 @@
 
 /* C datatypes */
 /* Define SIZEOF_VOIDP for 64/32 architectures */
-#if defined(__LP64__) || defined(_LP64) || defined(_WIN64)
+#ifdef __LP64__
 #define SIZEOF_VOIDP 8
 #else
 #define SIZEOF_VOIDP 4
@@ -116,6 +116,7 @@
 #cmakedefine HAVE_STRRCHR 1
 #cmakedefine HAVE_STRSTR 1
 #cmakedefine HAVE_STRTOK_R 1
+#cmakedefine HAVE_STRTOK_S 1
 #cmakedefine HAVE_ITOA 1
 #cmakedefine HAVE__LTOA 1
 #cmakedefine HAVE__UITOA 1
@@ -165,12 +166,8 @@
 #cmakedefine HAVE_LOGF 1
 #cmakedefine HAVE_LOG10 1
 #cmakedefine HAVE_LOG10F 1
-#cmakedefine HAVE_LROUND 1
-#cmakedefine HAVE_LROUNDF 1
 #cmakedefine HAVE_POW 1
 #cmakedefine HAVE_POWF 1
-#cmakedefine HAVE_ROUND 1
-#cmakedefine HAVE_ROUNDF 1
 #cmakedefine HAVE_SCALBN 1
 #cmakedefine HAVE_SCALBNF 1
 #cmakedefine HAVE_SIN 1
@@ -206,7 +203,6 @@
 #cmakedefine HAVE_STDARG_H 1
 #cmakedefine HAVE_STDDEF_H 1
 #cmakedefine HAVE_FLOAT_H 1
-
 #else
 /* We may need some replacement for stdarg.h here */
 #include <stdarg.h>
@@ -291,7 +287,6 @@
 #cmakedefine SDL_AUDIO_DRIVER_SUNAUDIO @SDL_AUDIO_DRIVER_SUNAUDIO@
 #cmakedefine SDL_AUDIO_DRIVER_WASAPI @SDL_AUDIO_DRIVER_WASAPI@
 #cmakedefine SDL_AUDIO_DRIVER_WINMM @SDL_AUDIO_DRIVER_WINMM@
-#cmakedefine SDL_AUDIO_DRIVER_OS2 @SDL_AUDIO_DRIVER_OS2@
 
 /* Enable various input drivers */
 #cmakedefine SDL_INPUT_LINUXEV @SDL_INPUT_LINUXEV@
@@ -329,26 +324,22 @@
 #cmakedefine SDL_LOADSO_DUMMY @SDL_LOADSO_DUMMY@
 #cmakedefine SDL_LOADSO_LDG @SDL_LOADSO_LDG@
 #cmakedefine SDL_LOADSO_WINDOWS @SDL_LOADSO_WINDOWS@
-#cmakedefine SDL_LOADSO_OS2 @SDL_LOADSO_OS2@
 
 /* Enable various threading systems */
-#cmakedefine SDL_THREAD_GENERIC_COND_SUFFIX @SDL_THREAD_GENERIC_COND_SUFFIX@
 #cmakedefine SDL_THREAD_PTHREAD @SDL_THREAD_PTHREAD@
 #cmakedefine SDL_THREAD_PTHREAD_RECURSIVE_MUTEX @SDL_THREAD_PTHREAD_RECURSIVE_MUTEX@
 #cmakedefine SDL_THREAD_PTHREAD_RECURSIVE_MUTEX_NP @SDL_THREAD_PTHREAD_RECURSIVE_MUTEX_NP@
 #cmakedefine SDL_THREAD_WINDOWS @SDL_THREAD_WINDOWS@
-#cmakedefine SDL_THREAD_OS2 @SDL_THREAD_OS2@
 
 /* Enable various timer systems */
 #cmakedefine SDL_TIMER_HAIKU @SDL_TIMER_HAIKU@
 #cmakedefine SDL_TIMER_DUMMY @SDL_TIMER_DUMMY@
 #cmakedefine SDL_TIMER_UNIX @SDL_TIMER_UNIX@
 #cmakedefine SDL_TIMER_WINDOWS @SDL_TIMER_WINDOWS@
-#cmakedefine SDL_TIMER_OS2 @SDL_TIMER_OS2@
+#cmakedefine SDL_TIMER_WINCE @SDL_TIMER_WINCE@
 
 /* Enable various video drivers */
 #cmakedefine SDL_VIDEO_DRIVER_ANDROID @SDL_VIDEO_DRIVER_ANDROID@
-#cmakedefine SDL_VIDEO_DRIVER_EMSCRIPTEN @SDL_VIDEO_DRIVER_EMSCRIPTEN@
 #cmakedefine SDL_VIDEO_DRIVER_HAIKU @SDL_VIDEO_DRIVER_HAIKU@
 #cmakedefine SDL_VIDEO_DRIVER_COCOA @SDL_VIDEO_DRIVER_COCOA@
 #cmakedefine SDL_VIDEO_DRIVER_UIKIT @SDL_VIDEO_DRIVER_UIKIT@
@@ -362,8 +353,6 @@
 #cmakedefine SDL_VIDEO_DRIVER_RPI @SDL_VIDEO_DRIVER_RPI@
 #cmakedefine SDL_VIDEO_DRIVER_VIVANTE @SDL_VIDEO_DRIVER_VIVANTE@
 #cmakedefine SDL_VIDEO_DRIVER_VIVANTE_VDK @SDL_VIDEO_DRIVER_VIVANTE_VDK@
-#cmakedefine SDL_VIDEO_DRIVER_OS2 @SDL_VIDEO_DRIVER_OS2@
-#cmakedefine SDL_VIDEO_DRIVER_QNX @SDL_VIDEO_DRIVER_QNX@
 
 #cmakedefine SDL_VIDEO_DRIVER_KMSDRM @SDL_VIDEO_DRIVER_KMSDRM@
 #cmakedefine SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC @SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC@
@@ -375,6 +364,7 @@
 #cmakedefine SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_CURSOR @SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_CURSOR@
 #cmakedefine SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_XKBCOMMON @SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_XKBCOMMON@
 
+#cmakedefine SDL_VIDEO_DRIVER_EMSCRIPTEN @SDL_VIDEO_DRIVER_EMSCRIPTEN@
 #cmakedefine SDL_VIDEO_DRIVER_X11 @SDL_VIDEO_DRIVER_X11@
 #cmakedefine SDL_VIDEO_DRIVER_X11_DYNAMIC @SDL_VIDEO_DRIVER_X11_DYNAMIC@
 #cmakedefine SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT @SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT@
@@ -442,7 +432,6 @@
 #cmakedefine SDL_FILESYSTEM_UNIX @SDL_FILESYSTEM_UNIX@
 #cmakedefine SDL_FILESYSTEM_WINDOWS @SDL_FILESYSTEM_WINDOWS@
 #cmakedefine SDL_FILESYSTEM_EMSCRIPTEN @SDL_FILESYSTEM_EMSCRIPTEN@
-#cmakedefine SDL_FILESYSTEM_OS2 @SDL_FILESYSTEM_OS2@
 
 /* Enable assembly routines */
 #cmakedefine SDL_ASSEMBLY_ROUTINES @SDL_ASSEMBLY_ROUTINES@

@@ -53,12 +53,12 @@ include(${SDL2_SOURCE_DIR}/cmake/sdlchecks.cmake)
 # set SDL_BINARY_AGE and SDL_INTERFACE_AGE to 0.
 set(SDL_MAJOR_VERSION 2)
 set(SDL_MINOR_VERSION 0)
-set(SDL_MICRO_VERSION 15)
-set(SDL_INTERFACE_AGE 1)
-set(SDL_BINARY_AGE 15)
+set(SDL_MICRO_VERSION 14)
+set(SDL_INTERFACE_AGE 0)
+set(SDL_BINARY_AGE 14)
 set(SDL_VERSION "${SDL_MAJOR_VERSION}.${SDL_MINOR_VERSION}.${SDL_MICRO_VERSION}")
 # the following should match the versions in Xcode project file:
-set(DYLIB_CURRENT_VERSION 15.1.0)
+set(DYLIB_CURRENT_VERSION 15.0.0)
 set(DYLIB_COMPATIBILITY_VERSION 1.0.0)
 
 # Set defaults preventing destination file conflicts
@@ -528,7 +528,7 @@ if(USE_GCC OR USE_CLANG)
     list(APPEND EXTRA_LDFLAGS "-Wl,-undefined,error")
     list(APPEND EXTRA_LDFLAGS "-Wl,-compatibility_version,${DYLIB_COMPATIBILITY_VERSION}")
     list(APPEND EXTRA_LDFLAGS "-Wl,-current_version,${DYLIB_CURRENT_VERSION}")
-  elseif(NOT OPENBSD)
+  else()
     set(CMAKE_REQUIRED_FLAGS "-Wl,--no-undefined")
     check_c_compiler_flag("" HAVE_NO_UNDEFINED)
     set(CMAKE_REQUIRED_FLAGS ${ORIG_CMAKE_REQUIRED_FLAGS})
@@ -780,11 +780,11 @@ if(LIBC)
             wcslen wcsdup wcsstr wcscmp wcsncmp _wcsicmp _wcsnicmp
             strlen _strrev _strupr _strlwr strchr strrchr strstr itoa _ltoa
             _ultoa strtol strtoul strtoll strtod atoi atof strcmp strncmp
-            _stricmp _strnicmp sscanf
+            _stricmp _strnicmp strtok_s sscanf
             acos acosf asin asinf atan atanf atan2 atan2f ceil ceilf
             copysign copysignf cos cosf exp expf fabs fabsf floor floorf fmod fmodf
-            log logf log10 log10f lround lroundf pow powf round roundf scalbn scalbnf
-            sin sinf sqrt sqrtf tan tanf trunc truncf)
+            log logf log10 log10f pow powf scalbn scalbnf sin sinf sqrt sqrtf tan tanf
+            trunc truncf)
       string(TOUPPER ${_FN} _UPPER)
       set(HAVE_${_UPPER} 1)
     endforeach()
@@ -843,8 +843,8 @@ if(LIBC)
       foreach(_FN
               atan atan2 atanf atan2f ceil ceilf copysign copysignf cos cosf
               exp expf fabs fabsf floor floorf fmod fmodf log logf log10 log10f
-              lround lroundf pow powf round roundf scalbn scalbnf sin sinf sqrt
-              sqrtf tan tanf acos acosf asin asinf trunc truncf)
+              pow powf scalbn scalbnf sin sinf sqrt sqrtf tan tanf acos acosf
+              asin asinf trunc truncf)
         string(TOUPPER ${_FN} _UPPER)
         set(_HAVEVAR "HAVE_${_UPPER}")
         check_symbol_exists("${_FN}" "math.h" ${_HAVEVAR})
@@ -1180,8 +1180,6 @@ elseif(UNIX AND NOT APPLE AND NOT ANDROID AND NOT RISCOS)
     CheckOpenGLESX11()
     CheckWayland()
     CheckVivante()
-    # Need to check EGL before checking KMSDRM because KMSDRM depends on it.
-    CheckEGLKMSDRM()
     CheckKMSDRM()
   endif()
 
@@ -1512,15 +1510,13 @@ elseif(WINDOWS)
   endif()
 
   if(SDL_THREADS)
-    set(SDL_THREAD_GENERIC_COND_SUFFIX 1)
     set(SDL_THREAD_WINDOWS 1)
     set(SOURCE_FILES ${SOURCE_FILES}
-      ${SDL2_SOURCE_DIR}/src/thread/generic/SDL_syscond.c
-      ${SDL2_SOURCE_DIR}/src/thread/windows/SDL_syscond_srw.c
       ${SDL2_SOURCE_DIR}/src/thread/windows/SDL_sysmutex.c
       ${SDL2_SOURCE_DIR}/src/thread/windows/SDL_syssem.c
       ${SDL2_SOURCE_DIR}/src/thread/windows/SDL_systhread.c
-      ${SDL2_SOURCE_DIR}/src/thread/windows/SDL_systls.c)
+      ${SDL2_SOURCE_DIR}/src/thread/windows/SDL_systls.c
+      ${SDL2_SOURCE_DIR}/src/thread/generic/SDL_syscond.c)
     set(HAVE_SDL_THREADS TRUE)
   endif()
 
@@ -1672,11 +1668,7 @@ elseif(APPLE)
     message_error("SDL_FILE must be enabled to build on MacOS X")
   endif()
 
-  if(IOS OR TVOS)
-    file(GLOB MISC_SOURCES ${SDL2_SOURCE_DIR}/src/misc/ios/*.m)
-  else()
-    file(GLOB MISC_SOURCES ${SDL2_SOURCE_DIR}/src/misc/macosx/*.m)
-  endif()
+  file(GLOB MISC_SOURCES ${SDL2_SOURCE_DIR}/src/misc/macosx/*.m)
   set(SOURCE_FILES ${SOURCE_FILES} ${MISC_SOURCES})
   set(HAVE_SDL_MISC TRUE)
 

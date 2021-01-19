@@ -21,9 +21,9 @@ dnl Set various version strings - taken gratefully from the GTk sources
 #
 SDL_MAJOR_VERSION=2
 SDL_MINOR_VERSION=0
-SDL_MICRO_VERSION=15
-SDL_INTERFACE_AGE=1
-SDL_BINARY_AGE=15
+SDL_MICRO_VERSION=14
+SDL_INTERFACE_AGE=0
+SDL_BINARY_AGE=14
 SDL_VERSION=$SDL_MAJOR_VERSION.$SDL_MINOR_VERSION.$SDL_MICRO_VERSION
 
 AC_SUBST(SDL_MAJOR_VERSION)
@@ -348,7 +348,7 @@ if test x$enable_libc = xyes; then
     AC_CHECK_FUNCS(malloc calloc realloc free getenv setenv putenv unsetenv qsort abs bcopy memset memcpy memmove wcslen wcslcpy wcslcat wcsdup wcsstr wcscmp wcsncmp wcscasecmp _wcsicmp wcsncasecmp _wcsnicmp strlen strlcpy strlcat _strrev _strupr _strlwr strchr strrchr strstr strtok_r itoa _ltoa _uitoa _ultoa strtol strtoul _i64toa _ui64toa strtoll strtoull atoi atof strcmp strncmp _stricmp strcasecmp _strnicmp strncasecmp vsscanf vsnprintf fopen64 fseeko fseeko64 sigaction setjmp nanosleep sysconf sysctlbyname getauxval elf_aux_info poll _Exit)
 
     AC_CHECK_LIB(m, pow, [LIBS="$LIBS -lm"; EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lm"])
-    AC_CHECK_FUNCS(acos acosf asin asinf atan atanf atan2 atan2f ceil ceilf copysign copysignf cos cosf exp expf fabs fabsf floor floorf trunc truncf fmod fmodf log logf log10 log10f lround lroundf pow powf round roundf scalbn scalbnf sin sinf sqrt sqrtf tan tanf)
+    AC_CHECK_FUNCS(acos acosf asin asinf atan atanf atan2 atan2f ceil ceilf copysign copysignf cos cosf exp expf fabs fabsf floor floorf trunc truncf fmod fmodf log logf log10 log10f pow powf scalbn scalbnf sin sinf sqrt sqrtf tan tanf)
 
     AC_CHECK_LIB(iconv, iconv_open, [LIBS="$LIBS -liconv"; EXTRA_LDFLAGS="$EXTRA_LDFLAGS -liconv"])
     AC_CHECK_FUNCS(iconv)
@@ -2203,8 +2203,11 @@ AS_HELP_STRING([--enable-directfb-shared], [dynamically load directfb support [[
             SOURCES="$SOURCES $srcdir/src/video/directfb/*.c"
             EXTRA_CFLAGS="$EXTRA_CFLAGS $DIRECTFB_CFLAGS"
 
+            AC_MSG_CHECKING(for directfb dynamic loading support)
             directfb_shared=no
-            directfb_lib=[`find_lib "libdirectfb*.so.*" "$DIRECTFB_LIBS" | sed 's/.*\/\(.*\)/\1/; q'`]
+            directfb_lib=[`find_lib "libdirectfb*.so.*" "$DIRECTFB_LIBS"`]
+            # | sed 's/.*\/\(.*\)/\1/; q'`]
+AC_MSG_WARN("directfb $directfb_lib")
             if test x$have_loadso != xyes && \
                test x$enable_directfb_shared = xyes; then
                 AC_MSG_WARN([You must have SDL_LoadObject() support for dynamic directfb loading])
@@ -2212,13 +2215,14 @@ AS_HELP_STRING([--enable-directfb-shared], [dynamically load directfb support [[
             if test x$have_loadso = xyes && \
                test x$enable_directfb_shared = xyes && test x$directfb_lib != x; then
                 directfb_shared=yes
-                echo "-- dynamic libdirectfb -> $directfb_lib"
+                echo "-- $directfb_lib_spec -> $directfb_lib"
                 AC_DEFINE_UNQUOTED(SDL_VIDEO_DRIVER_DIRECTFB_DYNAMIC, "$directfb_lib", [ ])
                 SUMMARY_video="${SUMMARY_video} directfb(dynamic)"
             else
                 EXTRA_LDFLAGS="$EXTRA_LDFLAGS $DIRECTFB_LIBS"
                 SUMMARY_video="${SUMMARY_video} directfb"
             fi
+            AC_MSG_RESULT($directfb_shared)
             SDL_CFLAGS="$SDL_CFLAGS $DIRECTFB_CFLAGS"
             have_video=yes
         fi
@@ -2232,10 +2236,7 @@ CheckKMSDRM()
 AS_HELP_STRING([--enable-video-kmsdrm], [use KMSDRM video driver [[default=no]]]),
                   , enable_video_kmsdrm=no)
 
-    if  test x$enable_video = xyes && \
-        test x$enable_video_kmsdrm = xyes && \
-        test x$video_opengl_egl = xyes; then
-
+    if test x$enable_video = xyes -a x$enable_video_kmsdrm = xyes; then
         video_kmsdrm=no
 
         PKG_CHECK_MODULES([LIBDRM], [libdrm >= 1.4.82], libdrm_avail=yes, libdrm_avail=no)
@@ -2414,28 +2415,6 @@ CheckOpenGLESX11()
                 SUMMARY_video="${SUMMARY_video} opengl_es2"
             fi
         fi
-    fi
-}
-
-dnl Find EGL
-CheckEGLKMSDRM()
-{
-    AC_MSG_CHECKING(for EGL support)
-    video_opengl_egl=no
-    AC_TRY_COMPILE([
-      #define LINUX
-      #define EGL_API_FB
-      #define MESA_EGL_NO_X11_HEADERS
-      #define EGL_NO_X11
-      #include <EGL/egl.h>
-      #include <EGL/eglext.h>
-    ],[
-    ],[
-    video_opengl_egl=yes
-    ])
-    AC_MSG_RESULT($video_opengl_egl)
-    if test x$video_opengl_egl = xyes; then
-	AC_DEFINE(SDL_VIDEO_OPENGL_EGL, 1, [ ])
     fi
 }
 
@@ -2710,12 +2689,12 @@ AS_HELP_STRING([--enable-dbus], [enable D-Bus support [[default=yes]]]),
                         , enable_dbus=yes)
     if test x$enable_dbus = xyes; then
         PKG_CHECK_MODULES([DBUS], [dbus-1], have_dbus=yes, have_dbus=no)
-        save_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="$save_CPPFLAGS $DBUS_CFLAGS"
+        save_CFLAGS="$CFLAGS"
+        CFLAGS="$save_CFLAGS $DBUS_CFLAGS"
         AC_CHECK_HEADER(dbus/dbus.h,
                         have_dbus_dbus_h_hdr=yes,
                         have_dbus_dbus_h_hdr=no)
-        CPPFLAGS="$save_CPPFLAGS"
+        CFLAGS="$save_CFLAGS"
         if test x$have_dbus_dbus_h_hdr = xyes; then
             AC_DEFINE(HAVE_DBUS_DBUS_H, 1, [ ])
             EXTRA_CFLAGS="$EXTRA_CFLAGS $DBUS_CFLAGS"
@@ -2766,12 +2745,12 @@ AS_HELP_STRING([--enable-ibus], [enable IBus support [[default=yes]]]),
                   , enable_ibus=yes)
     if test x$enable_ibus = xyes; then
         PKG_CHECK_MODULES([IBUS], [ibus-1.0], have_ibus=yes, have_ibus=no)
-        save_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="$save_CPPFLAGS $IBUS_CFLAGS"
+        save_CFLAGS="$CFLAGS"
+        CFLAGS="$save_CFLAGS $IBUS_CFLAGS"
         AC_CHECK_HEADER(ibus-1.0/ibus.h,
                         have_ibus_ibus_h_hdr=yes,
                         have_ibus_ibus_h_hdr=no)
-        CPPFLAGS="$save_CPPFLAGS"
+        CFLAGS="$save_CFLAGS"
         if test x$have_ibus_ibus_h_hdr = xyes; then
             if test x$enable_ime != xyes; then
                 AC_MSG_WARN([IME support is required for IBus.])
@@ -3576,8 +3555,6 @@ case "$host" in
         CheckRPI
         CheckX11
         CheckDirectFB
-        # Need to check for EGL first because KMSDRM depends on it.
-        CheckEGLKMSDRM
         CheckKMSDRM
         CheckOpenGLX11
         CheckOpenGLESX11
@@ -3865,7 +3842,6 @@ AS_HELP_STRING([--enable-render-d3d], [enable the Direct3D render driver [[defau
         fi
         # Set up files for the thread library
         if test x$enable_threads = xyes; then
-            AC_DEFINE(SDL_THREAD_GENERIC_COND_SUFFIX, 1, [ ])
             AC_DEFINE(SDL_THREAD_WINDOWS, 1, [ ])
             SOURCES="$SOURCES $srcdir/src/thread/windows/*.c"
             SOURCES="$SOURCES $srcdir/src/thread/generic/SDL_syscond.c"
@@ -4336,27 +4312,27 @@ fi
 SDLTEST_SOURCES="$srcdir/src/test/*.c"
 
 if test x$video_wayland = xyes; then
-    WAYLAND_PROTOCOLS=`cd $srcdir/wayland-protocols ; for p in *.xml ; do printf '%s' "\$p" |sed 's,\\.xml\$, ,g' ; done`
-    WAYLAND_PROTOCOLS_SOURCES=`for p in $WAYLAND_PROTOCOLS ; do printf '%s' "\\$(gen)/\$p-protocol.c " ; done`
-    WAYLAND_PROTOCOLS_HEADERS=`for p in $WAYLAND_PROTOCOLS ; do printf '%s' "\\$(gen)/\$p-client-protocol.h " ; done`
+    WAYLAND_PROTOCOLS=`cd $srcdir/wayland-protocols ; for p in *.xml ; do echo -n "\$p" |sed 's,\\.xml\$, ,g' ; done`
+    WAYLAND_PROTOCOLS_SOURCES=`for p in $WAYLAND_PROTOCOLS ; do echo -n "\\$(gen)/\$p-protocol.c " ; done`
+    WAYLAND_PROTOCOLS_HEADERS=`for p in $WAYLAND_PROTOCOLS ; do echo -n "\\$(gen)/\$p-client-protocol.h " ; done`
     GEN_SOURCES="$GEN_SOURCES $WAYLAND_PROTOCOLS_SOURCES"
     GEN_HEADERS="$GEN_HEADERS $WAYLAND_PROTOCOLS_HEADERS"
 
     WAYLAND_PROTOCOLS_DEPENDS=`for p in $WAYLAND_PROTOCOLS ; do\
         echo ;\
-        printf '%s\n' "\\$(gen)/\$p-client-protocol.h: \\$(srcdir)/wayland-protocols/\$p.xml" ;\
-        printf '%s\n' "	@\\$(SHELL) \\$(auxdir)/mkinstalldirs \\$(gen)" ;\
-        printf '%s\n' "	\\$(RUN_CMD_GEN)\\$(WAYLAND_SCANNER) client-header \\$< \\$@" ;\
+        echo "\\$(gen)/\$p-client-protocol.h: \\$(srcdir)/wayland-protocols/\$p.xml" ;\
+        echo "	@\\$(SHELL) \\$(auxdir)/mkinstalldirs \\$(gen)" ;\
+        echo "	\\$(RUN_CMD_GEN)\\$(WAYLAND_SCANNER) client-header \\$< \\$@" ;\
         echo ;\
-        printf '%s\n' "\\$(gen)/\$p-protocol.c: \\$(srcdir)/wayland-protocols/\$p.xml" ;\
-        printf '%s\n' "	@\\$(SHELL) \\$(auxdir)/mkinstalldirs \\$(gen)" ;\
-        printf '%s\n' "	\\$(RUN_CMD_GEN)\\$(WAYLAND_SCANNER) code \\$< \\$@" ;\
+        echo "\\$(gen)/\$p-protocol.c: \\$(srcdir)/wayland-protocols/\$p.xml" ;\
+        echo "	@\\$(SHELL) \\$(auxdir)/mkinstalldirs \\$(gen)" ;\
+        echo "	\\$(RUN_CMD_GEN)\\$(WAYLAND_SCANNER) code \\$< \\$@" ;\
         echo ;\
-        printf '%s\n' "\\$(objects)/\$p-protocol.lo: \\$(gen)/\$p-protocol.c \\$(gen)/\$p-client-protocol.h" ;\
-        printf '%s\n' "	\\$(RUN_CMD_CC)\\$(LIBTOOL) --tag=CC --mode=compile \\$(CC) \\$(CFLAGS) \\$(EXTRA_CFLAGS) $DEPENDENCY_TRACKING_OPTIONS -c \\$< -o \\$@" ;\
+        echo "\\$(objects)/\$p-protocol.lo: \\$(gen)/\$p-protocol.c \\$(gen)/\$p-client-protocol.h" ;\
+        echo "	\\$(RUN_CMD_CC)\\$(LIBTOOL) --tag=CC --mode=compile \\$(CC) \\$(CFLAGS) \\$(EXTRA_CFLAGS) $DEPENDENCY_TRACKING_OPTIONS -c \\$< -o \\$@" ;\
         done ;\
         echo ;\
-        for s in $WAYLAND_SOURCES ; do printf '%s' "\$s:" ; printf ' \$(gen)/%s-client-protocol.h' $WAYLAND_PROTOCOLS ; echo ; done ; echo`
+        for s in $WAYLAND_SOURCES ; do echo -n "\$s:" ; for p in $WAYLAND_PROTOCOLS ; do echo -n " \\$(gen)/\$p-client-protocol.h" ; done ; echo ; done ; echo`
 fi
 
 OBJECTS=`echo $SOURCES`

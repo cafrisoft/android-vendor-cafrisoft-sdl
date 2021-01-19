@@ -820,19 +820,20 @@ int HID_API_EXPORT HID_API_CALL hid_read_timeout(hid_device *dev, unsigned char 
 		}
 	}
 
-	/* See if there is any data yet. */
-	res = WaitForSingleObject(ev, milliseconds >= 0 ? milliseconds : INFINITE);
-	if (res != WAIT_OBJECT_0) {
-		/* There was no data this time. Return zero bytes available,
-			but leave the Overlapped I/O running. */
-		return 0;
+	if (milliseconds >= 0) {
+		/* See if there is any data yet. */
+		res = WaitForSingleObject(ev, milliseconds);
+		if (res != WAIT_OBJECT_0) {
+			/* There was no data this time. Return zero bytes available,
+			   but leave the Overlapped I/O running. */
+			return 0;
+		}
 	}
 
-	/* Get the number of bytes read. The actual data has been copied to the data[]
-	   array which was passed to ReadFile(). We must not wait here because we've
-	   already waited on our event above, and since it's auto-reset, it will have
-	   been reset back to unsignalled by now. */
-	res = GetOverlappedResult(dev->device_handle, &dev->ol, &bytes_read, FALSE/*don't wait*/);
+	/* Either WaitForSingleObject() told us that ReadFile has completed, or
+	   we are in non-blocking mode. Get the number of bytes read. The actual
+	   data has been copied to the data[] array which was passed to ReadFile(). */
+	res = GetOverlappedResult(dev->device_handle, &dev->ol, &bytes_read, TRUE/*wait*/);
 	
 	/* Set pending back to false, even if GetOverlappedResult() returned error. */
 	dev->read_pending = FALSE;
@@ -931,23 +932,9 @@ int HID_API_EXPORT HID_API_CALL hid_get_feature_report(hid_device *dev, unsigned
 
 void HID_API_EXPORT HID_API_CALL hid_close(hid_device *dev)
 {
-	typedef BOOL (WINAPI *CancelIoEx_t)(HANDLE hFile, LPOVERLAPPED lpOverlapped);
-	CancelIoEx_t CancelIoExFunc = (CancelIoEx_t)GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")), "CancelIoEx");
-
 	if (!dev)
 		return;
-
-	if (CancelIoExFunc) {
-		CancelIoExFunc(dev->device_handle, NULL);
-	} else {
-		/* Windows XP, this will only cancel I/O on the current thread */
-		CancelIo(dev->device_handle);
-	}
-	if (dev->read_pending) {
-		DWORD bytes_read = 0;
-
-		GetOverlappedResult(dev->device_handle, &dev->ol, &bytes_read, TRUE/*wait*/);
-	}
+	CancelIo(dev->device_handle);
 	free_hid_device(dev);
 }
 

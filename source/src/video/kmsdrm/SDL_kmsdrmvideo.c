@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2021 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
   Atomic KMSDRM backend by Manuel Alfayate Corchete <redwindwanderer@gmail.com>
 
   This software is provided 'as-is', without any express or implied
@@ -486,8 +486,8 @@ void get_planes_info(_THIS)
 #endif
 
 /* Get the plane_id of a plane that is of the specified plane type (primary,
-   overlay, cursor...) and can use specified CRTC. */
-static int get_plane_id(_THIS, unsigned int crtc_id, uint32_t plane_type)
+   overlay, cursor...) and can use the CRTC we have chosen previously. */
+static int get_plane_id(_THIS, uint32_t plane_type)
 {
     drmModeRes *resources = NULL;
     drmModePlaneResPtr plane_resources = NULL;
@@ -497,13 +497,14 @@ static int get_plane_id(_THIS, unsigned int crtc_id, uint32_t plane_type)
     int found = 0;
 
     SDL_VideoData *viddata = ((SDL_VideoData *)_this->driverdata);
+    SDL_DisplayData *dispdata = (SDL_DisplayData *)SDL_GetDisplayDriverData(0);
 
     resources = KMSDRM_drmModeGetResources(viddata->drm_fd);
 
     /* Get the crtc_index for the current CRTC.
        It's needed to find out if a plane supports the CRTC. */
     for (i = 0; i < resources->count_crtcs; i++) {
-        if (resources->crtcs[i] == crtc_id) {
+        if (resources->crtcs[i] == dispdata->crtc->crtc->crtc_id) {
             crtc_index = i;
             break;
         }
@@ -564,7 +565,6 @@ setup_plane(_THIS, struct plane **plane, uint32_t plane_type)
 {
     uint32_t plane_id;
     SDL_VideoData *viddata = ((SDL_VideoData *)_this->driverdata);
-    SDL_DisplayData *dispdata = (SDL_DisplayData *)SDL_GetDisplayDriverData(0);
     int ret = 0;
 
     *plane = SDL_calloc(1, sizeof(**plane));
@@ -573,8 +573,8 @@ setup_plane(_THIS, struct plane **plane, uint32_t plane_type)
         goto cleanup;
     }
 
-    /* Get plane ID for a given CRTC and plane type. */
-    plane_id = get_plane_id(_this, dispdata->crtc->crtc->crtc_id, plane_type);
+    /* Get plane ID. */
+    plane_id = get_plane_id(_this, plane_type);
 
     if (!plane_id) {
         ret = SDL_SetError("Invalid Plane ID");
@@ -671,28 +671,19 @@ drm_atomic_set_plane_props(struct KMSDRM_PlaneInfo *info)
     add_plane_property(dispdata->atomic_req, info->plane, "CRTC_Y", info->crtc_y);
 }
 
-int drm_atomic_commit(_THIS, SDL_bool blocking, SDL_bool allow_modeset)
+int drm_atomic_commit(_THIS, SDL_bool blocking)
 {
     SDL_DisplayData *dispdata = (SDL_DisplayData *)SDL_GetDisplayDriverData(0);
     SDL_VideoData *viddata = ((SDL_VideoData *)_this->driverdata);
-    uint32_t atomic_flags = 0;
     int ret;
 
-    if (!blocking) {
-        atomic_flags |= DRM_MODE_ATOMIC_NONBLOCK;
-    }
+    if (!blocking)
+        dispdata->atomic_flags |= DRM_MODE_ATOMIC_NONBLOCK;
 
-    if (allow_modeset) {
-        atomic_flags |= DRM_MODE_ATOMIC_ALLOW_MODESET;
-    }
-
-    /* Never issue a new atomic commit if previous has not yet completed,
-       or it will error. */
+    /* Never issue a new atomic commit if previous has not yet completed, or it will error. */
     drm_atomic_waitpending(_this);
 
-    ret = KMSDRM_drmModeAtomicCommit(viddata->drm_fd, dispdata->atomic_req,
-              atomic_flags, NULL);
-
+    ret = KMSDRM_drmModeAtomicCommit(viddata->drm_fd, dispdata->atomic_req, dispdata->atomic_flags, NULL);
     if (ret) {
         SDL_SetError("Atomic commit failed, returned %d.", ret);
         /* Uncomment this for fast-debugging */
@@ -710,6 +701,7 @@ int drm_atomic_commit(_THIS, SDL_bool blocking, SDL_bool allow_modeset)
 out:
     KMSDRM_drmModeAtomicFree(dispdata->atomic_req);
     dispdata->atomic_req = NULL;
+    dispdata->atomic_flags = 0;
 
     return ret;
 }
@@ -747,7 +739,7 @@ KMSDRM_Available(void)
     if (ret >= 0)
         return 1;
 
-   return ret;
+    return ret;
 }
 
 static void
@@ -830,8 +822,6 @@ KMSDRM_CreateDevice(int devindex)
     viddata->devindex = devindex;
     viddata->drm_fd = -1;
 
-    viddata->vulkan_mode = SDL_FALSE;
-
     device->driverdata = viddata;
 
     /* Setup all functions that can be handled from this backend. */
@@ -856,19 +846,20 @@ KMSDRM_CreateDevice(int devindex)
     device->SetWindowGrab = KMSDRM_SetWindowGrab;
     device->DestroyWindow = KMSDRM_DestroyWindow;
     device->GetWindowWMInfo = KMSDRM_GetWindowWMInfo;
-
+#if SDL_VIDEO_OPENGL_EGL
     device->GL_DefaultProfileConfig = KMSDRM_GLES_DefaultProfileConfig;
+    device->GL_LoadLibrary = KMSDRM_GLES_LoadLibrary;
     device->GL_GetProcAddress = KMSDRM_GLES_GetProcAddress;
+    device->GL_UnloadLibrary = KMSDRM_GLES_UnloadLibrary;
     device->GL_CreateContext = KMSDRM_GLES_CreateContext;
     device->GL_MakeCurrent = KMSDRM_GLES_MakeCurrent;
     device->GL_SetSwapInterval = KMSDRM_GLES_SetSwapInterval;
     device->GL_GetSwapInterval = KMSDRM_GLES_GetSwapInterval;
     device->GL_SwapWindow = KMSDRM_GLES_SwapWindow;
     device->GL_DeleteContext = KMSDRM_GLES_DeleteContext;
-    /* Those two functions are dummy. We do these things manually. */
-    device->GL_LoadLibrary = KMSDRM_GLES_LoadLibrary;
-    device->GL_UnloadLibrary = KMSDRM_GLES_UnloadLibrary;
-
+#endif
+    device->PumpEvents = KMSDRM_PumpEvents;
+    device->free = KMSDRM_DeleteDevice;
 #if SDL_VIDEO_VULKAN
     device->Vulkan_LoadLibrary = KMSDRM_Vulkan_LoadLibrary;
     device->Vulkan_UnloadLibrary = KMSDRM_Vulkan_UnloadLibrary;
@@ -876,10 +867,6 @@ KMSDRM_CreateDevice(int devindex)
     device->Vulkan_CreateSurface = KMSDRM_Vulkan_CreateSurface;
     device->Vulkan_GetDrawableSize = KMSDRM_Vulkan_GetDrawableSize;
 #endif
-
-    device->PumpEvents = KMSDRM_PumpEvents;
-    device->free = KMSDRM_DeleteDevice;
-
     return device;
 
 cleanup:
@@ -895,6 +882,7 @@ VideoBootStrap KMSDRM_bootstrap = {
     "KMS/DRM Video Driver",
     KMSDRM_CreateDevice
 };
+
 
 static void
 KMSDRM_FBDestroyCallback(struct gbm_bo *bo, void *data)
@@ -1019,6 +1007,7 @@ int KMSDRM_DisplayDataInit (_THIS, SDL_DisplayData *dispdata) {
     int ret = 0;
     unsigned i,j;
 
+    dispdata->atomic_flags = 0;
     dispdata->atomic_req = NULL;
     dispdata->kms_fence = NULL;
     dispdata->gpu_fence = NULL;
@@ -1327,6 +1316,10 @@ KMSDRM_GBMDeinit (_THIS, SDL_DisplayData *dispdata)
     dispdata->gbm_init = SDL_FALSE;
 }
 
+/* Destroy the window surfaces and buffers. Have the PRIMARY PLANE
+   disconnected from these buffers before doing so, or have the PRIMARY PLANE
+   reading the original FB where the TTY lives, before doing this, or CRTC will
+   be disconnected by the kernel. */
 void
 KMSDRM_DestroySurfaces(_THIS, SDL_Window *window)
 {
@@ -1334,33 +1327,15 @@ KMSDRM_DestroySurfaces(_THIS, SDL_Window *window)
     SDL_DisplayData *dispdata = (SDL_DisplayData *)SDL_GetDisplayDriverData(0);
     KMSDRM_PlaneInfo plane_info = {0};
 
-    /* TODO : Continue investigating why this doesn't work. We should do this instead
-       of making the display plane point to the TTY console, which isn't there
-       after creating and destroying a Vulkan window. */
-#if 0
-    /* Disconnect the connector from the CRTC (remember: several connectors
-       can read a CRTC), deactivate the CRTC, and set the PRIMARY PLANE props
-       CRTC_ID and FB_ID to 0. Then we can destroy the GBM buffers and surface. */
-    add_connector_property(dispdata->atomic_req, dispdata->connector , "CRTC_ID", 0);
-    add_crtc_property(dispdata->atomic_req, dispdata->crtc , "MODE_ID", 0); 
-    add_crtc_property(dispdata->atomic_req, dispdata->crtc , "active", 0); 
-
-    plane_info.plane = dispdata->display_plane;
-    plane_info.crtc_id = 0;
-    plane_info.fb_id = 0;
-
-    drm_atomic_set_plane_props(&plane_info);
-
-    /* Issue atomic commit that is blocking and allows modesetting. */
-    if (drm_atomic_commit(_this, SDL_TRUE, SDL_TRUE)) {
-        SDL_SetError("Failed to issue atomic commit on surfaces destruction.");
-    }
+#if SDL_VIDEO_OPENGL_EGL
+    EGLContext egl_context;
 #endif
 
-#if 1
-    /************************************************************/
-    /* Make the display plane point to the original TTY buffer. */
-    /************************************************************/
+    /********************************************************************/
+    /* BLOCK 1: protect the PRIMARY PLANE before destroying the buffers */
+    /* it's using, by making it point to the original CRTC buffer,      */
+    /* where the TTY console should be.                                 */
+    /********************************************************************/
 
     plane_info.plane = dispdata->display_plane;
     plane_info.crtc_id = dispdata->crtc->crtc->crtc_id;
@@ -1372,26 +1347,18 @@ KMSDRM_DestroySurfaces(_THIS, SDL_Window *window)
 
     drm_atomic_set_plane_props(&plane_info);
 
-    if (drm_atomic_commit(_this, SDL_TRUE, SDL_FALSE)) {
+    /* Issue blocking atomic commit. */
+    if (drm_atomic_commit(_this, SDL_TRUE)) {
         SDL_SetError("Failed to issue atomic commit on surfaces destruction.");
     }
-#endif
 
-    /***************************/
-    /* Destroy the EGL surface */
-    /***************************/
+    /****************************************************************************/
+    /* BLOCK 2: We can finally destroy the window GBM and EGL surfaces, and     */
+    /* GBM buffers now that the buffers are not being used by the PRIMARY PLANE */
+    /* anymore.                                                                 */
+    /****************************************************************************/
 
-    SDL_EGL_MakeCurrent(_this, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-
-    if (windata->egl_surface != EGL_NO_SURFACE) {
-        SDL_EGL_DestroySurface(_this, windata->egl_surface);
-        windata->egl_surface = EGL_NO_SURFACE;
-    }
-
-    /***************************/
-    /* Destroy the GBM buffers */
-    /***************************/
-
+    /* Destroy the GBM surface and buffers. */
     if (windata->bo) {
         KMSDRM_gbm_surface_release_buffer(windata->gs, windata->bo);
         windata->bo = NULL;
@@ -1402,14 +1369,32 @@ KMSDRM_DestroySurfaces(_THIS, SDL_Window *window)
         windata->next_bo = NULL;
     }
 
-    /***************************/
-    /* Destroy the GBM surface */
-    /***************************/
+    /***************************************************************************/
+    /* Destroy the EGL surface.                                                */
+    /* In this eglMakeCurrent() call, we disable the current EGL surface       */
+    /* because we're going to destroy it, but DON'T disable the EGL context,   */
+    /* because it won't be enabled again until the programs ask for a pageflip */
+    /* so we get to SwapWindow().                                              */
+    /* If we disable the context until then and a program tries to retrieve    */
+    /* the context version info before calling for a pageflip, the program     */
+    /* will get wrong info and we will be in trouble.                          */
+    /***************************************************************************/
+
+#if SDL_VIDEO_OPENGL_EGL
+    egl_context = (EGLContext)SDL_GL_GetCurrentContext();
+    SDL_EGL_MakeCurrent(_this, EGL_NO_SURFACE, egl_context);
+
+    if (windata->egl_surface != EGL_NO_SURFACE) {
+        SDL_EGL_DestroySurface(_this, windata->egl_surface);
+        windata->egl_surface = EGL_NO_SURFACE;
+    }
+#endif
 
     if (windata->gs) {
         KMSDRM_gbm_surface_destroy(windata->gs);
         windata->gs = NULL;
     }
+
 }
 
 int
@@ -1446,6 +1431,7 @@ KMSDRM_CreateSurfaces(_THIS, SDL_Window * window)
         return SDL_SetError("Could not create GBM surface");
     }
 
+#if SDL_VIDEO_OPENGL_EGL
     /* We can't get the EGL context yet because SDL_CreateRenderer has not been called,
        but we need an EGL surface NOW, or GL won't be able to render into any surface
        and we won't see the first frame. */
@@ -1461,6 +1447,8 @@ KMSDRM_CreateSurfaces(_THIS, SDL_Window * window)
        go back to delayed SDL_EGL_MakeCurrent() call in SwapWindow. */
     egl_context = (EGLContext)SDL_GL_GetCurrentContext();
     ret = SDL_EGL_MakeCurrent(_this, windata->egl_surface, egl_context);
+
+#endif
 
 cleanup:
 
@@ -1488,32 +1476,16 @@ KMSDRM_DestroyWindow(_THIS, SDL_Window *window)
         return;
     }
 
-    if ( !is_vulkan && dispdata->gbm_init ) {
-
-        /* Free cursor plane. */
-        KMSDRM_DeinitMouse(_this);
-
-        /* Destroy GBM surface and buffers. */
+    if (!is_vulkan) {
         KMSDRM_DestroySurfaces(_this, window);
-
-        /* Unload EGL library. */
+#if SDL_VIDEO_OPENGL_EGL
         if (_this->egl_data) {
             SDL_EGL_UnloadLibrary(_this);
         }
-
-        /* Unload GL library. */
-        if (_this->gl_config.driver_loaded) {
-            SDL_GL_UnloadLibrary();
-        }
-
-        /* Free display plane, and destroy GBM device. */
-        KMSDRM_GBMDeinit(_this, dispdata);
-    }
-
-    else {
-        /* If we were in Vulkan mode, get out of it. */
-        if (viddata->vulkan_mode) {
-            viddata->vulkan_mode = SDL_FALSE;
+#endif
+        if (dispdata->gbm_init) {
+            KMSDRM_DeinitMouse(_this);
+            KMSDRM_GBMDeinit(_this, dispdata);
         }
     }
 
@@ -1562,6 +1534,7 @@ KMSDRM_ReconfigureWindow( _THIS, SDL_Window * window) {
         windata->output_x = 0;
 
     } else {
+
         /* Normal non-fullscreen windows are scaled using the CRTC,
            so get output (CRTC) size and position, for AR correction. */
         ratio = (float)window->w / (float)window->h;
@@ -1570,6 +1543,7 @@ KMSDRM_ReconfigureWindow( _THIS, SDL_Window * window) {
         windata->output_w = dispdata->mode.vdisplay * ratio;
         windata->output_h = dispdata->mode.vdisplay;
         windata->output_x = (dispdata->mode.hdisplay - windata->output_w) / 2;
+
     }
 
     if (!is_vulkan) {
@@ -1736,21 +1710,14 @@ KMSDRM_SetDisplayMode(_THIS, SDL_VideoDisplay * display, SDL_DisplayMode * mode)
     drmModeConnector *conn = dispdata->connector->connector;
     int i;
 
-    /* Don't do anything if we are in Vulkan mode. */
-    if (viddata->vulkan_mode) {
-        return 0;
-    }
-
     if (!modedata) {
         return SDL_SetError("Mode doesn't have an associated index");
     }
 
-    /* Take note of the new mode to be set. */
+    /* Take note of the new mode. It will be used in SwapWindow to
+       set the props needed for mode setting. */
     dispdata->mode = conn->modes[modedata->mode_index];
 
-    /* Take note that we have to change mode in SwapWindow(). We have to do it there
-       because we need a buffer of the new size so the commit that contains the
-       mode change can be completed OK.  */
     dispdata->modeset_pending = SDL_TRUE;
 
     for (i = 0; i < viddata->num_windows; i++) {
@@ -1775,25 +1742,11 @@ KMSDRM_CreateWindow(_THIS, SDL_Window * window)
     SDL_VideoDisplay *display = SDL_GetDisplayForWindow(window);
     SDL_DisplayData *dispdata = display->driverdata;
     SDL_bool is_vulkan = window->flags & SDL_WINDOW_VULKAN; /* Is this a VK window? */
-    SDL_bool vulkan_mode = viddata->vulkan_mode; /* Do we have any Vulkan windows? */
     NativeDisplayType egl_display;
     float ratio;
     int ret = 0;
 
-    if ( !(dispdata->gbm_init) && !is_vulkan && !vulkan_mode ) {
- 
-         /* If this is not a Vulkan Window, then this is a GL window, so at the
-            end of this function, we must have marked the window as being OPENGL
-            and we must have loaded the GL library: both things are needed so the
-            GL_CreateRenderer() and GL_LoadFunctions() calls in SDL_CreateWindow()
-            succeed without having to re-create the window.
-            We must load the EGL library too, which can't be loaded until the GBM
-            device has been created, because SDL_EGL_Library() function uses it. */ 
-
-         /* Maybe you didn't ask for an OPENGL window, but that's what you will get.
-            See previous comment on why. */
-         window->flags |= SDL_WINDOW_OPENGL;
-
+    if ( !(dispdata->gbm_init) && (!is_vulkan)) {
          /* Reopen FD, create gbm dev, setup display plane, etc,.
             but only when we come here for the first time,
             and only if it's not a VK window. */
@@ -1801,24 +1754,21 @@ KMSDRM_CreateWindow(_THIS, SDL_Window * window)
                  goto cleanup;
          }
 
-         /* Manually load the GL library. KMSDRM_EGL_LoadLibrary() has already
+#if SDL_VIDEO_OPENGL_EGL
+         /* Manually load the EGL library. KMSDRM_EGL_LoadLibrary() has already
             been called by SDL_CreateWindow() but we don't do anything there,
             precisely to be able to load it here.
             If we let SDL_CreateWindow() load the lib, it will be loaded
             before we call KMSDRM_GBMInit(), causing GLES programs to fail. */
          if (!_this->egl_data) {
              egl_display = (NativeDisplayType)((SDL_VideoData *)_this->driverdata)->gbm_dev;
-             if (SDL_EGL_LoadLibrary(_this, NULL, egl_display, EGL_PLATFORM_GBM_MESA)) {
+             if ((ret = SDL_EGL_LoadLibrary(_this, NULL, egl_display, EGL_PLATFORM_GBM_MESA))) {
                  goto cleanup;
              }
-
-             if (SDL_GL_LoadLibrary(NULL) < 0) {
-                goto cleanup;
-             }
          }
-     
-         /* Can't init mouse stuff sooner because cursor plane is not ready,
-            so we do it here. */
+#endif
+
+         /* Can't init mouse stuff sooner because cursor plane is not ready. */
          KMSDRM_InitMouse(_this);
 
          /* Since we take cursor buffer way from the cursor plane and
@@ -1862,8 +1812,7 @@ KMSDRM_CreateWindow(_THIS, SDL_Window * window)
     windata->viddata = viddata;
     window->driverdata = windata;
 
-    if (!is_vulkan && !vulkan_mode) {
-        /* Create the window surfaces. Needs the window diverdata in place. */
+    if (!is_vulkan) {
         if ((ret = KMSDRM_CreateSurfaces(_this, window))) {
             goto cleanup;
         }
@@ -1885,9 +1834,6 @@ KMSDRM_CreateWindow(_THIS, SDL_Window * window)
     }
 
     viddata->windows[viddata->num_windows++] = window;
-
-    /* If we have just created a Vulkan window, establish that we are in Vulkan mode now. */
-    viddata->vulkan_mode = is_vulkan;
 
     /* Focus on the newly created window */
     SDL_SetMouseFocus(window);

@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 1997-2021 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -303,14 +303,6 @@ loop(void *arg)
             break;
 
         case SDL_KEYDOWN:
-            if (event.key.keysym.sym >= SDLK_0 && event.key.keysym.sym <= SDLK_9) {
-                if (gamecontroller) {
-                    int player_index = (event.key.keysym.sym - SDLK_0);
-
-                    SDL_GameControllerSetPlayerIndex(gamecontroller, player_index);
-                }
-                break;
-            }
             if (event.key.keysym.sym != SDLK_ESCAPE) {
                 break;
             }
@@ -433,7 +425,6 @@ main(int argc, char *argv[])
 
     SDL_SetHint(SDL_HINT_ACCELEROMETER_AS_JOYSTICK, "0");
     SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_PS4_RUMBLE, "1");
-    SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_PS5_RUMBLE, "1");
     SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
 
     /* Enable standard application logging */

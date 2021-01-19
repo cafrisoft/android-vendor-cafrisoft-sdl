@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2021 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -47,19 +47,7 @@
 #include <errno.h>
 #include <poll.h>
 
-#ifdef __OpenBSD__
-#define KMSDRM_LEGACY_DRI_PATH "/dev/"
-#define KMSDRM_LEGACY_DRI_DEVFMT "%sdrm%d"
-#define KMSDRM_LEGACY_DRI_DEVNAME "drm"
-#define KMSDRM_LEGACY_DRI_DEVNAMESIZE 3
-#define KMSDRM_LEGACY_DRI_CARDPATHFMT "/dev/drm%d"
-#else
 #define KMSDRM_LEGACY_DRI_PATH "/dev/dri/"
-#define KMSDRM_LEGACY_DRI_DEVFMT "%scard%d"
-#define KMSDRM_LEGACY_DRI_DEVNAME "card"
-#define KMSDRM_LEGACY_DRI_DEVNAMESIZE 4
-#define KMSDRM_LEGACY_DRI_CARDPATHFMT "/dev/dri/card%d"
-#endif
 
 static int
 check_modestting(int devindex)
@@ -68,14 +56,14 @@ check_modestting(int devindex)
     char device[512];
     int drm_fd;
 
-    SDL_snprintf(device, sizeof (device), KMSDRM_LEGACY_DRI_DEVFMT, KMSDRM_LEGACY_DRI_PATH, devindex);
+    SDL_snprintf(device, sizeof (device), "%scard%d", KMSDRM_LEGACY_DRI_PATH, devindex);
 
     drm_fd = open(device, O_RDWR | O_CLOEXEC);
     if (drm_fd >= 0) {
         if (SDL_KMSDRM_LEGACY_LoadSymbols()) {
             drmModeRes *resources = KMSDRM_LEGACY_drmModeGetResources(drm_fd);
             if (resources) {
-                SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, KMSDRM_LEGACY_DRI_DEVFMT " connector, encoder and CRTC counts are: %d %d %d",
+                SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "%scard%d connector, encoder and CRTC counts are: %d %d %d",
                              KMSDRM_LEGACY_DRI_PATH, devindex,
                              resources->count_connectors, resources->count_encoders, resources->count_crtcs);
 
@@ -116,7 +104,7 @@ static int get_dricount(void)
     if (folder) {
         while ((res = readdir(folder))) {
             int len = SDL_strlen(res->d_name);
-            if (len > KMSDRM_LEGACY_DRI_DEVNAMESIZE && SDL_strncmp(res->d_name, KMSDRM_LEGACY_DRI_DEVNAME, KMSDRM_LEGACY_DRI_DEVNAMESIZE) == 0) {
+            if (len > 4 && SDL_strncmp(res->d_name, "card", 4) == 0) {
                 devcount++;
             }
         }
@@ -225,7 +213,7 @@ KMSDRM_LEGACY_CreateDevice(int devindex)
     device->SetWindowGrab = KMSDRM_LEGACY_SetWindowGrab;
     device->DestroyWindow = KMSDRM_LEGACY_DestroyWindow;
     device->GetWindowWMInfo = KMSDRM_LEGACY_GetWindowWMInfo;
-
+#if SDL_VIDEO_OPENGL_EGL
     device->GL_LoadLibrary = KMSDRM_LEGACY_GLES_LoadLibrary;
     device->GL_GetProcAddress = KMSDRM_LEGACY_GLES_GetProcAddress;
     device->GL_UnloadLibrary = KMSDRM_LEGACY_GLES_UnloadLibrary;
@@ -235,7 +223,7 @@ KMSDRM_LEGACY_CreateDevice(int devindex)
     device->GL_GetSwapInterval = KMSDRM_LEGACY_GLES_GetSwapInterval;
     device->GL_SwapWindow = KMSDRM_LEGACY_GLES_SwapWindow;
     device->GL_DeleteContext = KMSDRM_LEGACY_GLES_DeleteContext;
-
+#endif
     device->PumpEvents = KMSDRM_LEGACY_PumpEvents;
     device->free = KMSDRM_LEGACY_DeleteDevice;
 
@@ -381,12 +369,14 @@ KMSDRM_LEGACY_DestroySurfaces(_THIS, SDL_Window * window)
         windata->next_bo = NULL;
     }
 
+#if SDL_VIDEO_OPENGL_EGL
     SDL_EGL_MakeCurrent(_this, EGL_NO_SURFACE, EGL_NO_CONTEXT);
 
     if (windata->egl_surface != EGL_NO_SURFACE) {
         SDL_EGL_DestroySurface(_this, windata->egl_surface);
         windata->egl_surface = EGL_NO_SURFACE;
     }
+#endif
 
     if (windata->gs) {
         KMSDRM_LEGACY_gbm_surface_destroy(windata->gs);
@@ -404,14 +394,18 @@ KMSDRM_LEGACY_CreateSurfaces(_THIS, SDL_Window * window)
     Uint32 height = dispdata->mode.vdisplay;
     Uint32 surface_fmt = GBM_FORMAT_XRGB8888;
     Uint32 surface_flags = GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING;
+#if SDL_VIDEO_OPENGL_EGL
     EGLContext egl_context;
+#endif
 
     if (!KMSDRM_LEGACY_gbm_device_is_format_supported(viddata->gbm, surface_fmt, surface_flags)) {
         SDL_LogWarn(SDL_LOG_CATEGORY_VIDEO, "GBM surface format not supported. Trying anyway.");
     }
 
+#if SDL_VIDEO_OPENGL_EGL
     SDL_EGL_SetRequiredVisualId(_this, surface_fmt);
     egl_context = (EGLContext)SDL_GL_GetCurrentContext();
+#endif
 
     KMSDRM_LEGACY_DestroySurfaces(_this, window);
 
@@ -421,6 +415,7 @@ KMSDRM_LEGACY_CreateSurfaces(_THIS, SDL_Window * window)
         return SDL_SetError("Could not create GBM surface");
     }
 
+#if SDL_VIDEO_OPENGL_EGL
     windata->egl_surface = SDL_EGL_CreateSurface(_this, (NativeWindowType)windata->gs);
 
     if (windata->egl_surface == EGL_NO_SURFACE) {
@@ -430,6 +425,7 @@ KMSDRM_LEGACY_CreateSurfaces(_THIS, SDL_Window * window)
     SDL_EGL_MakeCurrent(_this, windata->egl_surface, egl_context);
 
     windata->egl_surface_dirty = 0;
+#endif
 
     return 0;
 }
@@ -453,8 +449,8 @@ KMSDRM_LEGACY_VideoInit(_THIS)
 
     SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "KMSDRM_LEGACY_VideoInit()");
 
-    /* Open /dev/dri/cardNN (/dev/drmN if on OpenBSD) */
-    SDL_snprintf(devname, sizeof(devname), KMSDRM_LEGACY_DRI_CARDPATHFMT, viddata->devindex);
+    /* Open /dev/dri/cardNN */
+    SDL_snprintf(devname, sizeof(devname), "/dev/dri/card%d", viddata->devindex);
 
     SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "Opening device %s", devname);
     viddata->drm_fd = open(devname, O_RDWR | O_CLOEXEC);
@@ -738,9 +734,15 @@ KMSDRM_LEGACY_SetDisplayMode(_THIS, SDL_VideoDisplay * display, SDL_DisplayMode 
         SDL_Window *window = viddata->windows[i];
         SDL_WindowData *windata = (SDL_WindowData *)window->driverdata;
 
+#if SDL_VIDEO_OPENGL_EGL
         /* Can't recreate EGL surfaces right now, need to wait until SwapWindow
            so the correct thread-local surface and context state are available */
         windata->egl_surface_dirty = 1;
+#else
+        if (KMSDRM_LEGACY_CreateSurfaces(_this, window)) {
+            return -1;
+        }
+#endif
 
         /* Tell app about the resize */
         SDL_SendWindowEvent(window, SDL_WINDOWEVENT_RESIZED, mode->w, mode->h);
@@ -756,11 +758,13 @@ KMSDRM_LEGACY_CreateWindow(_THIS, SDL_Window * window)
     SDL_WindowData *windata;
     SDL_VideoDisplay *display;
 
+#if SDL_VIDEO_OPENGL_EGL
     if (!_this->egl_data) {
         if (SDL_GL_LoadLibrary(NULL) < 0) {
             goto error;
         }
     }
+#endif
 
     /* Allocate window internal data */
     windata = (SDL_WindowData *)SDL_calloc(1, sizeof(SDL_WindowData));
@@ -833,15 +837,9 @@ KMSDRM_LEGACY_DestroyWindow(_THIS, SDL_Window * window)
         return;
     }
 
+    /* Remove from the internal window list */
     viddata = windata->viddata;
 
-    /* If this is the only window left, hide the cursor. */
-    if (viddata->num_windows == 1)
-    {
-        SDL_ShowCursor(SDL_FALSE);
-    }
-
-    /* Remove from the internal window list */
     for (i = 0; i < viddata->num_windows; i++) {
         if (viddata->windows[i] == window) {
             viddata->num_windows--;

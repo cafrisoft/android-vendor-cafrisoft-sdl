@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2021 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -42,12 +42,11 @@
 #undef volatile
 
 /* C datatypes */
-#if defined(__LP64__) || defined(_LP64) || defined(_WIN64)
+#ifdef __LP64__
 #define SIZEOF_VOIDP 8
 #else
 #define SIZEOF_VOIDP 4
 #endif
-
 #undef HAVE_GCC_ATOMICS
 #undef HAVE_GCC_SYNC_LOCK_TEST_AND_SET
 
@@ -120,6 +119,7 @@
 #undef HAVE_STRRCHR
 #undef HAVE_STRSTR
 #undef HAVE_STRTOK_R
+#undef HAVE_STRTOK_S
 #undef HAVE_ITOA
 #undef HAVE__LTOA
 #undef HAVE__UITOA
@@ -170,12 +170,8 @@
 #undef HAVE_LOGF
 #undef HAVE_LOG10
 #undef HAVE_LOG10F
-#undef HAVE_LROUND
-#undef HAVE_LROUNDF
 #undef HAVE_POW
 #undef HAVE_POWF
-#undef HAVE_ROUND
-#undef HAVE_ROUNDF
 #undef HAVE_SCALBN
 #undef HAVE_SCALBNF
 #undef HAVE_SIN
@@ -291,7 +287,6 @@
 #undef SDL_AUDIO_DRIVER_SUNAUDIO
 #undef SDL_AUDIO_DRIVER_WASAPI
 #undef SDL_AUDIO_DRIVER_WINMM
-#undef SDL_AUDIO_DRIVER_OS2
 
 /* Enable various input drivers */
 #undef SDL_INPUT_LINUXEV
@@ -330,22 +325,18 @@
 #undef SDL_LOADSO_DUMMY
 #undef SDL_LOADSO_LDG
 #undef SDL_LOADSO_WINDOWS
-#undef SDL_LOADSO_OS2
 
 /* Enable various threading systems */
-#undef SDL_THREAD_GENERIC_COND_SUFFIX
 #undef SDL_THREAD_PTHREAD
 #undef SDL_THREAD_PTHREAD_RECURSIVE_MUTEX
 #undef SDL_THREAD_PTHREAD_RECURSIVE_MUTEX_NP
 #undef SDL_THREAD_WINDOWS
-#undef SDL_THREAD_OS2
 
 /* Enable various timer systems */
 #undef SDL_TIMER_HAIKU
 #undef SDL_TIMER_DUMMY
 #undef SDL_TIMER_UNIX
 #undef SDL_TIMER_WINDOWS
-#undef SDL_TIMER_OS2
 
 /* Enable various video drivers */
 #undef SDL_VIDEO_DRIVER_HAIKU
@@ -390,7 +381,6 @@
 #undef SDL_VIDEO_DRIVER_NACL
 #undef SDL_VIDEO_DRIVER_VIVANTE
 #undef SDL_VIDEO_DRIVER_VIVANTE_VDK
-#undef SDL_VIDEO_DRIVER_OS2
 #undef SDL_VIDEO_DRIVER_QNX
 
 #undef SDL_VIDEO_RENDER_D3D
@@ -437,7 +427,6 @@
 #undef SDL_FILESYSTEM_NACL
 #undef SDL_FILESYSTEM_ANDROID
 #undef SDL_FILESYSTEM_EMSCRIPTEN
-#undef SDL_FILESYSTEM_OS2
 
 /* Enable assembly routines */
 #undef SDL_ASSEMBLY_ROUTINES

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2021 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -25,7 +25,6 @@
 /* Handle rumble on a separate thread so it doesn't block the application */
 
 #include "SDL_thread.h"
-#include "SDL_timer.h"
 #include "SDL_hidapijoystick_c.h"
 #include "SDL_hidapi_rumble.h"
 #include "../../thread/SDL_systhread.h"
@@ -82,9 +81,6 @@ static int SDL_HIDAPI_RumbleThread(void *data)
             SDL_UnlockMutex(request->device->dev_lock);
             (void)SDL_AtomicDecRef(&request->device->rumble_pending);
             SDL_free(request);
-
-            /* Make sure we're not starving report reads when there's lots of rumble */
-            SDL_Delay(10);
         }
     }
     return 0;

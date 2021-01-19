@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2021 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
   Atomic KMSDRM backend by Manuel Alfayate Corchete <redwindwanderer@gmail.com>
 
   This software is provided 'as-is', without any express or implied
@@ -252,7 +252,7 @@ KMSDRM_ShowCursor(SDL_Cursor * cursor)
                 info.plane = dispdata->cursor_plane;
                 /* The rest of the members are zeroed. */
                 drm_atomic_set_plane_props(&info);
-                if (drm_atomic_commit(display->device, SDL_TRUE, SDL_FALSE))
+                if (drm_atomic_commit(display->device, SDL_TRUE))
                     return SDL_SetError("Failed atomic commit in KMSDRM_ShowCursor.");
                 }
                 return 0;
@@ -324,7 +324,7 @@ KMSDRM_ShowCursor(SDL_Cursor * cursor)
 
     drm_atomic_set_plane_props(&info);
 
-    if (drm_atomic_commit(display->device, SDL_TRUE, SDL_FALSE)) {
+    if (drm_atomic_commit(display->device, SDL_TRUE)) {
         ret = SDL_SetError("Failed atomic commit in KMSDRM_ShowCursor.");
         goto cleanup;
     }
@@ -409,6 +409,7 @@ KMSDRM_InitMouse(_THIS)
     SDL_VideoData *viddata = ((SDL_VideoData *)dev->driverdata);
     SDL_DisplayData *dispdata = (SDL_DisplayData *)SDL_GetDisplayDriverData(0);
     SDL_Mouse *mouse = SDL_GetMouse();
+    uint64_t usable_cursor_w, usable_cursor_h;
 
     mouse->CreateCursor = KMSDRM_CreateCursor;
     mouse->ShowCursor = KMSDRM_ShowCursor;
@@ -438,20 +439,23 @@ KMSDRM_InitMouse(_THIS)
             return;
         }
 
-	if (KMSDRM_drmGetCap(viddata->drm_fd, DRM_CAP_CURSOR_WIDTH,  &dispdata->cursor_w) ||
-	    KMSDRM_drmGetCap(viddata->drm_fd, DRM_CAP_CURSOR_HEIGHT, &dispdata->cursor_h))
+	if (KMSDRM_drmGetCap(viddata->drm_fd, DRM_CAP_CURSOR_WIDTH,  &usable_cursor_w) ||
+	    KMSDRM_drmGetCap(viddata->drm_fd, DRM_CAP_CURSOR_HEIGHT, &usable_cursor_h))
 	{
 	    SDL_SetError("Could not get the recommended GBM cursor size");
 	    goto cleanup;
 	}
 
-	if (dispdata->cursor_w == 0 || dispdata->cursor_h == 0) {
+	if (usable_cursor_w == 0 || usable_cursor_h == 0) {
 	    SDL_SetError("Could not get an usable GBM cursor size");
 	    goto cleanup;
 	}
 
+        dispdata->cursor_w = usable_cursor_w;
+        dispdata->cursor_h = usable_cursor_h;
+
 	dispdata->cursor_bo = KMSDRM_gbm_bo_create(viddata->gbm_dev,
-	    dispdata->cursor_w, dispdata->cursor_h,
+	    usable_cursor_w, usable_cursor_h,
 	    GBM_FORMAT_ARGB8888, GBM_BO_USE_CURSOR | GBM_BO_USE_WRITE);
 
 	if (!dispdata->cursor_bo) {
@@ -491,7 +495,7 @@ KMSDRM_DeinitMouse(_THIS)
 	drm_atomic_set_plane_props(&info);
 	/* Wait until the cursor is unset from the cursor plane
 	   before destroying it's BO. */
-	if (drm_atomic_commit(video_device, SDL_TRUE, SDL_FALSE)) {
+	if (drm_atomic_commit(video_device, SDL_TRUE)) {
 	    SDL_SetError("Failed atomic commit in KMSDRM_DenitMouse.");
 	}
 	/* ..and finally destroy the cursor DRM BO! */

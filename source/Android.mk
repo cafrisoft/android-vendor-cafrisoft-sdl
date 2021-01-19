@@ -2,32 +2,17 @@ LOCAL_PATH := $(call my-dir)
 
 ###########################
 #
-# hidapi library
-#
-###########################
-
-include $(CLEAR_VARS)
-
-LOCAL_CPPFLAGS += -std=c++11
-
-LOCAL_SRC_FILES := src/hidapi/android/hid.cpp
-
-LOCAL_SHARED_LIBRARIES := liblog
-
-LOCAL_MODULE := libhidapi
-#LOCAL_LDLIBS := -llog
-LOCAL_MODULE_TAGS := optional
-
-include $(BUILD_SHARED_LIBRARY)
-
-
-###########################
-#
 # SDL shared library
 #
 ###########################
 
 include $(CLEAR_VARS)
+
+LOCAL_MODULE := SDL2
+
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
 
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,, \
@@ -71,16 +56,86 @@ LOCAL_SRC_FILES := \
 	$(wildcard $(LOCAL_PATH)/src/video/yuv2rgb/*.c) \
 	$(wildcard $(LOCAL_PATH)/src/test/*.c))
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_CFLAGS := -DGL_GLEXT_PROTOTYPES
+LOCAL_SHARED_LIBRARIES := hidapi
 
-LOCAL_SHARED_LIBRARIES := libhidapi \
-    liblog \
-	libandroid \
-	libOpenSLES libGLESv2 libGLESv1_CM
+LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES
+LOCAL_CFLAGS += \
+	-Wall -Wextra \
+	-Wdocumentation \
+	-Wdocumentation-unknown-command \
+	-Wmissing-prototypes \
+	-Wunreachable-code-break \
+	-Wunneeded-internal-declaration \
+	-Wmissing-variable-declarations \
+	-Wfloat-conversion \
+	-Wshorten-64-to-32 \
+	-Wunreachable-code-return \
+	-Wshift-sign-overflow \
+	-Wstrict-prototypes \
+	-Wkeyword-macro \
+
+
+# Warnings we haven't fixed (yet)
+LOCAL_CFLAGS += -Wno-unused-parameter -Wno-sign-compare
+ 
+
+LOCAL_LDLIBS := -ldl -lGLESv1_CM -lGLESv2 -lOpenSLES -llog -landroid
+
+ifeq ($(NDK_DEBUG),1)
+    cmd-strip :=
+endif
 
 LOCAL_STATIC_LIBRARIES := cpufeatures
-LOCAL_MODULE := libSDL2
-LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
+
+###########################
+#
+# SDL static library
+#
+###########################
+
+LOCAL_MODULE := SDL2_static
+
+LOCAL_MODULE_FILENAME := libSDL2
+
+LOCAL_LDLIBS := 
+LOCAL_EXPORT_LDLIBS := -ldl -lGLESv1_CM -lGLESv2 -llog -landroid
+
+include $(BUILD_STATIC_LIBRARY)
+
+###########################
+#
+# SDL main static library
+#
+###########################
+
+include $(CLEAR_VARS)
+
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+
+LOCAL_MODULE := SDL2_main
+
+LOCAL_MODULE_FILENAME := libSDL2main
+
+include $(BUILD_STATIC_LIBRARY)
+
+###########################
+#
+# hidapi library
+#
+###########################
+
+include $(CLEAR_VARS)
+
+LOCAL_CPPFLAGS += -std=c++11
+
+LOCAL_SRC_FILES := src/hidapi/android/hid.cpp
+
+LOCAL_MODULE := libhidapi
+LOCAL_LDLIBS := -llog
+
+include $(BUILD_SHARED_LIBRARY)
+
+$(call import-module,android/cpufeatures)
+
