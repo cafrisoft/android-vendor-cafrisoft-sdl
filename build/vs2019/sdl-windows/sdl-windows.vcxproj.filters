@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{9d88640c-c6c0-483d-9f02-6e57f676daad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src">
+      <UniqueIdentifier>{5169b182-9594-4847-a4a3-54438949af99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\main">
+      <UniqueIdentifier>{c179a9de-fca1-4c46-a3e2-75030d2cb4f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\main\windows">
+      <UniqueIdentifier>{0828edef-73b4-4a91-9d45-2d96fc5c5104}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\main\android">
+      <UniqueIdentifier>{1d4b50e7-baac-4bff-a800-7936398b7802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\include">
+      <UniqueIdentifier>{2485cbd4-5f15-4808-a3dc-cccfb90501d5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\include\SDL_config_windows.h">
+      <Filter>source\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sdl-windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\main\windows\SDL_windows_main.c">
+      <Filter>source\src\main\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\main\android\SDL_android_main.c">
+      <Filter>source\src\main\android</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\source\src\main\windows\version.rc">
+      <Filter>source\src\main\windows</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

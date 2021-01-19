@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{d8efecac-8b14-4647-b32b-da004d237734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\include">
+      <UniqueIdentifier>{e7d7c65c-9073-4c0f-8ed8-6e87a4a54089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src">
+      <UniqueIdentifier>{d18f794a-d0e0-4d0e-bb06-58e614ecc301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\AAAAA">
+      <UniqueIdentifier>{fd692290-c2b0-46b7-af18-787b068f4e95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\stdlib">
+      <UniqueIdentifier>{df7507cd-fa5d-487a-97fc-bfce299b57b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\dynapi">
+      <UniqueIdentifier>{892a449a-4573-4ee8-b13c-b682a7e176a3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\include\SDL.h">
+      <Filter>source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\SDL_assert_c.h">
+      <Filter>source\src\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\SDL_dataqueue.h">
+      <Filter>source\src\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\SDL_error_c.h">
+      <Filter>source\src\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\SDL_hints_c.h">
+      <Filter>source\src\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\SDL_internal.h">
+      <Filter>source\src\AAAAA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\include\SDL_config.h">
+      <Filter>source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\include\SDL_config_windows.h">
+      <Filter>source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\dynapi\SDL_dynapi.h">
+      <Filter>source\src\dynapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\dynapi\SDL_dynapi_overrides.h">
+      <Filter>source\src\dynapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\dynapi\SDL_dynapi_procs.h">
+      <Filter>source\src\dynapi</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sdl-common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\SDL.c">
+      <Filter>source\src\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\SDL_assert.c">
+      <Filter>source\src\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\SDL_dataqueue.c">
+      <Filter>source\src\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\SDL_error.c">
+      <Filter>source\src\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\SDL_hints.c">
+      <Filter>source\src\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\SDL_log.c">
+      <Filter>source\src\AAAAA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\stdlib\SDL_qsort.c">
+      <Filter>source\src\stdlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\stdlib\SDL_stdlib.c">
+      <Filter>source\src\stdlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\stdlib\SDL_string.c">
+      <Filter>source\src\stdlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\stdlib\SDL_strtokr.c">
+      <Filter>source\src\stdlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\stdlib\SDL_crc32.c">
+      <Filter>source\src\stdlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\stdlib\SDL_getenv.c">
+      <Filter>source\src\stdlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\stdlib\SDL_iconv.c">
+      <Filter>source\src\stdlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\stdlib\SDL_malloc.c">
+      <Filter>source\src\stdlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\dynapi\SDL_dynapi.c">
+      <Filter>source\src\dynapi</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

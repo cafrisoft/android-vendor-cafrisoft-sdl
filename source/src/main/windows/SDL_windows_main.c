@@ -29,6 +29,7 @@ OutOfMemory(void)
     return FALSE;
 }
 
+
 #if defined(_MSC_VER)
 /* The VC++ compiler needs main/wmain defined */
 # define console_ansi_main main

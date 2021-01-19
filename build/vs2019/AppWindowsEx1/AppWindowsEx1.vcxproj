@@ -43,7 +43,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -156,8 +156,11 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\sdl-root\sdl-root.vcxproj">
-      <Project>{d5f627c3-219c-4a39-b21f-5c04baddae42}</Project>
+    <ProjectReference Include="..\sdl-common\sdl-common.vcxproj">
+      <Project>{afa97111-9783-4e70-8e47-e135a1735290}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\sdl-windows\sdl-windows.vcxproj">
+      <Project>{0e209212-0b3d-453e-ace1-818cd1735f75}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
