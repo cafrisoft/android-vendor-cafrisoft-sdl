@@ -49,6 +49,69 @@
     <Filter Include="source\src\render\direct3d">
       <UniqueIdentifier>{6101e618-c50d-45a9-893c-214674cca520}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\src\filesystem">
+      <UniqueIdentifier>{cfad2257-6820-4832-b804-9f59f352b3c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\filesystem\windows">
+      <UniqueIdentifier>{5b497196-6457-4523-9417-67c2cf215449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\joystick">
+      <UniqueIdentifier>{1e174ffc-fbc6-4d38-b529-6820af69ea6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\joystick\windows">
+      <UniqueIdentifier>{8475caa9-c8dd-4090-a4f0-2a282d457ff8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\haptic">
+      <UniqueIdentifier>{14ac3d5a-1763-4744-8361-077a26ae1b40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\haptic\windows">
+      <UniqueIdentifier>{c8f82bdd-7a93-4cfa-8cc1-8409e202b219}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\loadso">
+      <UniqueIdentifier>{a20871ef-7ee5-470f-9570-d029465476ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\loadso\windows">
+      <UniqueIdentifier>{faa44420-9eee-4a99-b5cc-7a97cf3cdea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\power">
+      <UniqueIdentifier>{afa1d948-e667-4d9f-bfd9-bdd0ee5291cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\power\windows">
+      <UniqueIdentifier>{6f6b782d-ff51-4793-973f-263b7c9e74d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\timer">
+      <UniqueIdentifier>{8b50de1c-290a-41a6-9b1b-780ed10546fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\timer\windows">
+      <UniqueIdentifier>{7f66a26f-7e18-4884-90a4-868a890b6768}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\sensor">
+      <UniqueIdentifier>{974f7b36-8d8b-49e8-93d0-ab7aec768cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\sensor\windows">
+      <UniqueIdentifier>{e6f5a3c7-b3b7-44bb-88bc-4cc56cb136e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\locale">
+      <UniqueIdentifier>{41ae2649-8187-4701-b225-337faef92fe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\locale\windows">
+      <UniqueIdentifier>{99b6b847-791f-4f64-b670-4375040a7954}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\core">
+      <UniqueIdentifier>{63d526c5-53fb-4dc1-a6d5-c17ce1a90c41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\core\windows">
+      <UniqueIdentifier>{5a060772-4cc6-4647-8442-cc8749af22fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\audio">
+      <UniqueIdentifier>{22aa3c47-557d-4d48-b84a-817b17a667e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\audio\wasapi">
+      <UniqueIdentifier>{79b1c220-86de-44ea-b20c-0f8ca83d8f36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\audio\winmm">
+      <UniqueIdentifier>{16e9c3ce-e188-4075-b5fa-fe959d114723}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -113,6 +176,48 @@
     </ClInclude>
     <ClInclude Include="..\..\..\source\src\render\direct3d\SDL_shaders_d3d.h">
       <Filter>source\src\render\direct3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\windows\SDL_windowsjoystick_c.h">
+      <Filter>source\src\joystick\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\windows\SDL_xinputjoystick_c.h">
+      <Filter>source\src\joystick\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\windows\SDL_dinputjoystick_c.h">
+      <Filter>source\src\joystick\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\windows\SDL_rawinputjoystick_c.h">
+      <Filter>source\src\joystick\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\haptic\windows\SDL_windowshaptic_c.h">
+      <Filter>source\src\haptic\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\haptic\windows\SDL_xinputhaptic_c.h">
+      <Filter>source\src\haptic\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\haptic\windows\SDL_dinputhaptic_c.h">
+      <Filter>source\src\haptic\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\sensor\windows\SDL_windowssensor.h">
+      <Filter>source\src\sensor\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\core\windows\SDL_xinput.h">
+      <Filter>source\src\core\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\core\windows\SDL_directx.h">
+      <Filter>source\src\core\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\core\windows\SDL_hid.h">
+      <Filter>source\src\core\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\core\windows\SDL_windows.h">
+      <Filter>source\src\core\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\audio\wasapi\SDL_wasapi.h">
+      <Filter>source\src\audio\wasapi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\audio\winmm\SDL_winmm.h">
+      <Filter>source\src\audio\winmm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +286,72 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\src\render\direct3d\SDL_shaders_d3d.c">
       <Filter>source\src\render\direct3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\filesystem\windows\SDL_sysfilesystem.c">
+      <Filter>source\src\filesystem\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_windows_gaming_input.c">
+      <Filter>source\src\joystick\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_windowsjoystick.c">
+      <Filter>source\src\joystick\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_xinputjoystick.c">
+      <Filter>source\src\joystick\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_dinputjoystick.c">
+      <Filter>source\src\joystick\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_mmjoystick.c">
+      <Filter>source\src\joystick\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_rawinputjoystick.c">
+      <Filter>source\src\joystick\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\haptic\windows\SDL_xinputhaptic.c">
+      <Filter>source\src\haptic\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\haptic\windows\SDL_dinputhaptic.c">
+      <Filter>source\src\haptic\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\haptic\windows\SDL_windowshaptic.c">
+      <Filter>source\src\haptic\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\loadso\windows\SDL_sysloadso.c">
+      <Filter>source\src\loadso\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\power\windows\SDL_syspower.c">
+      <Filter>source\src\power\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\timer\windows\SDL_systimer.c">
+      <Filter>source\src\timer\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\sensor\windows\SDL_windowssensor.c">
+      <Filter>source\src\sensor\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\locale\windows\SDL_syslocale.c">
+      <Filter>source\src\locale\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\core\windows\SDL_xinput.c">
+      <Filter>source\src\core\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\core\windows\SDL_hid.c">
+      <Filter>source\src\core\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\core\windows\SDL_windows.c">
+      <Filter>source\src\core\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\audio\wasapi\SDL_wasapi_win32.c">
+      <Filter>source\src\audio\wasapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\audio\wasapi\SDL_wasapi_winrt.cpp">
+      <Filter>source\src\audio\wasapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\audio\wasapi\SDL_wasapi.c">
+      <Filter>source\src\audio\wasapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\audio\winmm\SDL_winmm.c">
+      <Filter>source\src\audio\winmm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

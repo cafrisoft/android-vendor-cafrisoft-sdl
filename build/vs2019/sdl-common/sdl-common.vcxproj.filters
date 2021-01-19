@@ -46,6 +46,36 @@
     <Filter Include="source\src\video">
       <UniqueIdentifier>{5a1f811b-ce62-481b-9d2b-5423823ab759}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\src\cpuinfo">
+      <UniqueIdentifier>{66f9f746-baef-4f93-8e2a-cfdfbd78ef50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\events">
+      <UniqueIdentifier>{0ef15b31-5934-46fc-b744-a2306b571d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\joystick">
+      <UniqueIdentifier>{8e23be52-a3ba-442d-842f-1bc095de77c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\haptic">
+      <UniqueIdentifier>{2a611ae6-047b-4774-bdaf-9eef1a306091}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\thread\generic">
+      <UniqueIdentifier>{de43df0d-8021-40e7-b369-aab09e85cde7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\power">
+      <UniqueIdentifier>{d61626ad-1b0e-4241-9140-479645944c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\render">
+      <UniqueIdentifier>{751188ba-b841-450b-837e-9a5164184f16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\timer">
+      <UniqueIdentifier>{166dae94-21a4-4416-a931-8c1c43e81aec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\sensor">
+      <UniqueIdentifier>{dc954550-3d4e-48e4-b135-6aba4fc612c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\locale">
+      <UniqueIdentifier>{e02e7b53-cafd-4fbe-893a-6eeb5cb92f1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -137,6 +167,105 @@
     </ClInclude>
     <ClInclude Include="..\..\..\source\src\video\SDL_pixels_c.h">
       <Filter>source\src\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\SDL_keyboard_c.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\SDL_mouse_c.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\SDL_sysevents.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\SDL_touch_c.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\SDL_windowevents_c.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\blank_cursor.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\default_cursor.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\scancodes_darwin.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\scancodes_linux.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\scancodes_windows.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\scancodes_xfree86.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\SDL_clipboardevents_c.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\SDL_displayevents_c.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\SDL_dropevents_c.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\SDL_events_c.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\events\SDL_gesture_c.h">
+      <Filter>source\src\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\SDL_joystick_c.h">
+      <Filter>source\src\joystick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\SDL_sysjoystick.h">
+      <Filter>source\src\joystick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\usb_ids.h">
+      <Filter>source\src\joystick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\controller_type.h">
+      <Filter>source\src\joystick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\joystick\SDL_gamecontrollerdb.h">
+      <Filter>source\src\joystick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\haptic\SDL_haptic_c.h">
+      <Filter>source\src\haptic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\haptic\SDL_syshaptic.h">
+      <Filter>source\src\haptic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\thread\generic\SDL_systhread_c.h">
+      <Filter>source\src\thread\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\thread\generic\SDL_sysmutex_c.h">
+      <Filter>source\src\thread\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\power\SDL_syspower.h">
+      <Filter>source\src\power</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\SDL_sysrender.h">
+      <Filter>source\src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\SDL_yuv_sw_c.h">
+      <Filter>source\src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\render\SDL_d3dmath.h">
+      <Filter>source\src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\timer\SDL_timer_c.h">
+      <Filter>source\src\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\sensor\SDL_sensor_c.h">
+      <Filter>source\src\sensor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\sensor\SDL_syssensor.h">
+      <Filter>source\src\sensor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\locale\SDL_syslocale.h">
+      <Filter>source\src\locale</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +409,84 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\src\video\SDL_rect.c">
       <Filter>source\src\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\cpuinfo\SDL_cpuinfo.c">
+      <Filter>source\src\cpuinfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\events\SDL_keyboard.c">
+      <Filter>source\src\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\events\SDL_mouse.c">
+      <Filter>source\src\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\events\SDL_quit.c">
+      <Filter>source\src\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\events\SDL_touch.c">
+      <Filter>source\src\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\events\SDL_windowevents.c">
+      <Filter>source\src\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\events\SDL_clipboardevents.c">
+      <Filter>source\src\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\events\SDL_displayevents.c">
+      <Filter>source\src\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\events\SDL_dropevents.c">
+      <Filter>source\src\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\events\SDL_events.c">
+      <Filter>source\src\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\events\SDL_gesture.c">
+      <Filter>source\src\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\SDL_joystick.c">
+      <Filter>source\src\joystick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\joystick\SDL_gamecontroller.c">
+      <Filter>source\src\joystick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\haptic\SDL_haptic.c">
+      <Filter>source\src\haptic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_syssem.c">
+      <Filter>source\src\thread\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_systhread.c">
+      <Filter>source\src\thread\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_systls.c">
+      <Filter>source\src\thread\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_syscond.c">
+      <Filter>source\src\thread\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_sysmutex.c">
+      <Filter>source\src\thread\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\power\SDL_power.c">
+      <Filter>source\src\power</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\SDL_yuv_sw.c">
+      <Filter>source\src\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\SDL_d3dmath.c">
+      <Filter>source\src\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\render\SDL_render.c">
+      <Filter>source\src\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\timer\SDL_timer.c">
+      <Filter>source\src\timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\sensor\SDL_sensor.c">
+      <Filter>source\src\sensor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\locale\SDL_locale.c">
+      <Filter>source\src\locale</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

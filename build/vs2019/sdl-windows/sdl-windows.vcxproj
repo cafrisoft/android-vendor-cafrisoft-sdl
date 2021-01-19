@@ -145,7 +145,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\include\SDL_config_windows.h" />
+    <ClInclude Include="..\..\..\source\src\audio\wasapi\SDL_wasapi.h" />
+    <ClInclude Include="..\..\..\source\src\audio\winmm\SDL_winmm.h" />
+    <ClInclude Include="..\..\..\source\src\core\windows\SDL_directx.h" />
+    <ClInclude Include="..\..\..\source\src\core\windows\SDL_hid.h" />
+    <ClInclude Include="..\..\..\source\src\core\windows\SDL_windows.h" />
+    <ClInclude Include="..\..\..\source\src\core\windows\SDL_xinput.h" />
+    <ClInclude Include="..\..\..\source\src\haptic\windows\SDL_dinputhaptic_c.h" />
+    <ClInclude Include="..\..\..\source\src\haptic\windows\SDL_windowshaptic_c.h" />
+    <ClInclude Include="..\..\..\source\src\haptic\windows\SDL_xinputhaptic_c.h" />
+    <ClInclude Include="..\..\..\source\src\joystick\windows\SDL_dinputjoystick_c.h" />
+    <ClInclude Include="..\..\..\source\src\joystick\windows\SDL_rawinputjoystick_c.h" />
+    <ClInclude Include="..\..\..\source\src\joystick\windows\SDL_windowsjoystick_c.h" />
+    <ClInclude Include="..\..\..\source\src\joystick\windows\SDL_xinputjoystick_c.h" />
     <ClInclude Include="..\..\..\source\src\render\direct3d\SDL_shaders_d3d.h" />
+    <ClInclude Include="..\..\..\source\src\sensor\windows\SDL_windowssensor.h" />
     <ClInclude Include="..\..\..\source\src\thread\windows\SDL_systhread_c.h" />
     <ClInclude Include="..\..\..\source\src\video\windows\SDL_msctf.h" />
     <ClInclude Include="..\..\..\source\src\video\windows\SDL_vkeys.h" />
@@ -167,14 +181,36 @@
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\source\src\audio\wasapi\SDL_wasapi.c" />
+    <ClCompile Include="..\..\..\source\src\audio\wasapi\SDL_wasapi_win32.c" />
+    <ClCompile Include="..\..\..\source\src\audio\wasapi\SDL_wasapi_winrt.cpp" />
+    <ClCompile Include="..\..\..\source\src\audio\winmm\SDL_winmm.c" />
+    <ClCompile Include="..\..\..\source\src\core\windows\SDL_hid.c" />
+    <ClCompile Include="..\..\..\source\src\core\windows\SDL_windows.c" />
+    <ClCompile Include="..\..\..\source\src\core\windows\SDL_xinput.c" />
+    <ClCompile Include="..\..\..\source\src\filesystem\windows\SDL_sysfilesystem.c" />
+    <ClCompile Include="..\..\..\source\src\haptic\windows\SDL_dinputhaptic.c" />
+    <ClCompile Include="..\..\..\source\src\haptic\windows\SDL_windowshaptic.c" />
+    <ClCompile Include="..\..\..\source\src\haptic\windows\SDL_xinputhaptic.c" />
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_dinputjoystick.c" />
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_mmjoystick.c" />
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_rawinputjoystick.c" />
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_windowsjoystick.c" />
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_windows_gaming_input.c" />
+    <ClCompile Include="..\..\..\source\src\joystick\windows\SDL_xinputjoystick.c" />
+    <ClCompile Include="..\..\..\source\src\loadso\windows\SDL_sysloadso.c" />
+    <ClCompile Include="..\..\..\source\src\locale\windows\SDL_syslocale.c" />
     <ClCompile Include="..\..\..\source\src\main\android\SDL_android_main.c" />
     <ClCompile Include="..\..\..\source\src\main\windows\SDL_windows_main.c" />
+    <ClCompile Include="..\..\..\source\src\power\windows\SDL_syspower.c" />
     <ClCompile Include="..\..\..\source\src\render\direct3d\SDL_render_d3d.c" />
     <ClCompile Include="..\..\..\source\src\render\direct3d\SDL_shaders_d3d.c" />
+    <ClCompile Include="..\..\..\source\src\sensor\windows\SDL_windowssensor.c" />
     <ClCompile Include="..\..\..\source\src\thread\windows\SDL_sysmutex.c" />
     <ClCompile Include="..\..\..\source\src\thread\windows\SDL_syssem.c" />
     <ClCompile Include="..\..\..\source\src\thread\windows\SDL_systhread.c" />
     <ClCompile Include="..\..\..\source\src\thread\windows\SDL_systls.c" />
+    <ClCompile Include="..\..\..\source\src\timer\windows\SDL_systimer.c" />
     <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsclipboard.c" />
     <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsevents.c" />
     <ClCompile Include="..\..\..\source\src\video\windows\SDL_windowsframebuffer.c" />
