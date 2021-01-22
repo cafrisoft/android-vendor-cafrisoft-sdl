@@ -331,7 +331,7 @@ main(int argc, char **argv)
     if (argv[arg]) {
         filename = argv[arg];
     } else {
-        filename = "testyuv.bmp";
+        filename = "z:\\Pictures\\testyuv.bmp";
     }
     original = SDL_ConvertSurfaceFormat(SDL_LoadBMP(filename), SDL_PIXELFORMAT_RGB24, 0);
     if (!original) {

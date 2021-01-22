@@ -58,9 +58,6 @@
     <Filter Include="source\src\haptic">
       <UniqueIdentifier>{2a611ae6-047b-4774-bdaf-9eef1a306091}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\src\thread\generic">
-      <UniqueIdentifier>{de43df0d-8021-40e7-b369-aab09e85cde7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\src\power">
       <UniqueIdentifier>{d61626ad-1b0e-4241-9140-479645944c83}</UniqueIdentifier>
     </Filter>
@@ -236,12 +233,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\source\src\haptic\SDL_syshaptic.h">
       <Filter>source\src\haptic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\thread\generic\SDL_systhread_c.h">
-      <Filter>source\src\thread\generic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\src\thread\generic\SDL_sysmutex_c.h">
-      <Filter>source\src\thread\generic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\src\power\SDL_syspower.h">
       <Filter>source\src\power</Filter>
@@ -490,21 +481,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\src\haptic\SDL_haptic.c">
       <Filter>source\src\haptic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_syssem.c">
-      <Filter>source\src\thread\generic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_systhread.c">
-      <Filter>source\src\thread\generic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_systls.c">
-      <Filter>source\src\thread\generic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_syscond.c">
-      <Filter>source\src\thread\generic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_sysmutex.c">
-      <Filter>source\src\thread\generic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\src\power\SDL_power.c">
       <Filter>source\src\power</Filter>

@@ -133,6 +133,9 @@
     <Filter Include="source\src\misc\windows">
       <UniqueIdentifier>{84a5633b-aa6c-4e2a-8806-ceddc0ab046f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\src\thread\generic">
+      <UniqueIdentifier>{53ef1aec-4d77-4ee8-9307-f4cf6c50e7d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -442,6 +445,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\src\misc\windows\SDL_sysurl.c">
       <Filter>source\src\misc\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_syscond.c">
+      <Filter>source\src\thread\generic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -229,6 +229,7 @@
     <ClCompile Include="..\..\..\source\src\render\direct3d\SDL_render_d3d.c" />
     <ClCompile Include="..\..\..\source\src\render\direct3d\SDL_shaders_d3d.c" />
     <ClCompile Include="..\..\..\source\src\sensor\windows\SDL_windowssensor.c" />
+    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_syscond.c" />
     <ClCompile Include="..\..\..\source\src\thread\windows\SDL_sysmutex.c" />
     <ClCompile Include="..\..\..\source\src\thread\windows\SDL_syssem.c" />
     <ClCompile Include="..\..\..\source\src\thread\windows\SDL_systhread.c" />

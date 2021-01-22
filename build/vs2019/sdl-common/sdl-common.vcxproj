@@ -205,8 +205,6 @@
     <ClInclude Include="..\..\..\source\src\SDL_internal.h" />
     <ClInclude Include="..\..\..\source\src\sensor\SDL_sensor_c.h" />
     <ClInclude Include="..\..\..\source\src\sensor\SDL_syssensor.h" />
-    <ClInclude Include="..\..\..\source\src\thread\generic\SDL_sysmutex_c.h" />
-    <ClInclude Include="..\..\..\source\src\thread\generic\SDL_systhread_c.h" />
     <ClInclude Include="..\..\..\source\src\thread\SDL_systhread.h" />
     <ClInclude Include="..\..\..\source\src\thread\SDL_thread_c.h" />
     <ClInclude Include="..\..\..\source\src\timer\SDL_timer_c.h" />
@@ -325,11 +323,6 @@
     <ClCompile Include="..\..\..\source\src\test\SDL_test_md5.c" />
     <ClCompile Include="..\..\..\source\src\test\SDL_test_memory.c" />
     <ClCompile Include="..\..\..\source\src\test\SDL_test_random.c" />
-    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_syscond.c" />
-    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_sysmutex.c" />
-    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_syssem.c" />
-    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_systhread.c" />
-    <ClCompile Include="..\..\..\source\src\thread\generic\SDL_systls.c" />
     <ClCompile Include="..\..\..\source\src\thread\SDL_thread.c" />
     <ClCompile Include="..\..\..\source\src\timer\SDL_timer.c" />
     <ClCompile Include="..\..\..\source\src\video\dummy\SDL_nullevents.c" />
