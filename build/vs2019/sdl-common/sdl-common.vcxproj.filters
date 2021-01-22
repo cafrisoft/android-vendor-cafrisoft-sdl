@@ -106,6 +106,12 @@
     <Filter Include="source\src\hidapi">
       <UniqueIdentifier>{61d5b899-18f3-4416-8629-62c3639c2c8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\AAAAA">
+      <UniqueIdentifier>{b85f9ebb-c318-455a-8275-237498f3644c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\src\test">
+      <UniqueIdentifier>{c5abe50f-199f-4516-a370-d103c93d256e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -697,6 +703,54 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\src\hidapi\SDL_hidapi.c">
       <Filter>source\src\hidapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_compare.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_crc32.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_font.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_fuzzer.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_harness.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_imageBlit.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_imageBlitBlend.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_imageFace.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_imagePrimitives.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_imagePrimitivesBlend.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_log.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_md5.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_memory.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_random.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_assert.c">
+      <Filter>source\src\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\test\SDL_test_common.c">
+      <Filter>source\src\test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
