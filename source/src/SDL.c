@@ -209,6 +209,7 @@ SDL_InitSubSystem(Uint32 flags)
 #endif
     }
 
+    CAFRI_LOGD("if ((flags & SDL_INIT_VIDEO)){\n");
     /* Initialize the video subsystem */
     if ((flags & SDL_INIT_VIDEO)){
 #if !SDL_VIDEO_DISABLED
@@ -223,6 +224,7 @@ SDL_InitSubSystem(Uint32 flags)
 #endif
     }
 
+    CAFRI_LOGD("if ((flags & SDL_INIT_AUDIO)){\n");
     /* Initialize the audio subsystem */
     if ((flags & SDL_INIT_AUDIO)){
 #if !SDL_AUDIO_DISABLED
@@ -238,6 +240,7 @@ SDL_InitSubSystem(Uint32 flags)
     }
 
     /* Initialize the joystick subsystem */
+    CAFRI_LOGD("if ((flags & SDL_INIT_JOYSTIC)){\n");
     if ((flags & SDL_INIT_JOYSTICK)){
 #if !SDL_JOYSTICK_DISABLED
         if (SDL_PrivateShouldInitSubsystem(SDL_INIT_JOYSTICK)) {
@@ -251,6 +254,7 @@ SDL_InitSubSystem(Uint32 flags)
 #endif
     }
 
+    CAFRI_LOGD("if ((flags & SDL_INIT_GAMECONTROLLER)){\n");
     if ((flags & SDL_INIT_GAMECONTROLLER)){
 #if !SDL_JOYSTICK_DISABLED
         if (SDL_PrivateShouldInitSubsystem(SDL_INIT_GAMECONTROLLER)) {
@@ -265,6 +269,7 @@ SDL_InitSubSystem(Uint32 flags)
     }
 
     /* Initialize the haptic subsystem */
+    CAFRI_LOGD("if ((flags & SDL_INIT_HAPTIC)){\n");
     if ((flags & SDL_INIT_HAPTIC)){
 #if !SDL_HAPTIC_DISABLED
         if (SDL_PrivateShouldInitSubsystem(SDL_INIT_HAPTIC)) {
@@ -278,6 +283,7 @@ SDL_InitSubSystem(Uint32 flags)
 #endif
     }
 
+    CAFRI_LOGD("if ((flags & SDL_INIT_SENSOR)){\n");
     /* Initialize the sensor subsystem */
     if ((flags & SDL_INIT_SENSOR)){
 #if !SDL_SENSOR_DISABLED
@@ -291,6 +297,8 @@ SDL_InitSubSystem(Uint32 flags)
         return SDL_SetError("SDL not built with sensor support");
 #endif
     }
+
+    CAFRI_LOGD("Finish\n");
 
     return (0);
 }

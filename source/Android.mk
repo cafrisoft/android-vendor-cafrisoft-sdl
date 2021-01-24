@@ -2,17 +2,32 @@ LOCAL_PATH := $(call my-dir)
 
 ###########################
 #
-# SDL shared library
+# hidapi library
 #
 ###########################
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := SDL2
+LOCAL_CPPFLAGS += -std=c++11
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+LOCAL_SRC_FILES := src/hidapi/android/hid.cpp
 
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
+LOCAL_SHARED_LIBRARIES := liblog
+
+LOCAL_MODULE := libhidapi
+#LOCAL_LDLIBS := -llog
+LOCAL_MODULE_TAGS := optional
+
+include $(BUILD_SHARED_LIBRARY)
+
+
+###########################
+#
+# SDL shared library
+#
+###########################
+
+include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,, \
@@ -24,6 +39,7 @@ LOCAL_SRC_FILES := \
 	$(LOCAL_PATH)/src/atomic/SDL_atomic.c.arm \
 	$(LOCAL_PATH)/src/atomic/SDL_spinlock.c.arm \
 	$(wildcard $(LOCAL_PATH)/src/core/android/*.c) \
+	$(wildcard $(LOCAL_PATH)/src/core/aosp/*.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/cpuinfo/*.c) \
 	$(wildcard $(LOCAL_PATH)/src/dynapi/*.c) \
 	$(wildcard $(LOCAL_PATH)/src/events/*.c) \
@@ -56,86 +72,47 @@ LOCAL_SRC_FILES := \
 	$(wildcard $(LOCAL_PATH)/src/video/yuv2rgb/*.c) \
 	$(wildcard $(LOCAL_PATH)/src/test/*.c))
 
-LOCAL_SHARED_LIBRARIES := hidapi
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+LOCAL_C_INCLUDES += $(TOP)/external/googletest/googletest/include
+LOCAL_C_INCLUDES += $(TOP)/system/core/libion/include
 
+LOCAL_CFLAGS := -DANDROID_CAFRISOFT_AOSP 
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES
-LOCAL_CFLAGS += \
-	-Wall -Wextra \
-	-Wdocumentation \
-	-Wdocumentation-unknown-command \
-	-Wmissing-prototypes \
-	-Wunreachable-code-break \
-	-Wunneeded-internal-declaration \
-	-Wmissing-variable-declarations \
-	-Wfloat-conversion \
-	-Wshorten-64-to-32 \
-	-Wunreachable-code-return \
-	-Wshift-sign-overflow \
-	-Wstrict-prototypes \
-	-Wkeyword-macro \
-
-
-# Warnings we haven't fixed (yet)
+LOCAL_CFLAGS += -Wno-error=unused-parameter  -Wno-error=sign-compare
 LOCAL_CFLAGS += -Wno-unused-parameter -Wno-sign-compare
- 
 
-LOCAL_LDLIBS := -ldl -lGLESv1_CM -lGLESv2 -lOpenSLES -llog -landroid
-
-ifeq ($(NDK_DEBUG),1)
-    cmd-strip :=
-endif
+LOCAL_SHARED_LIBRARIES := libhidapi \
+    libandroid \
+	libOpenSLES libEGL libGLESv2 libGLESv1_CM \
+	libstagefright libmedia libmedia_omx libutils libbinder libstagefright_foundation \
+	libjpeg libui libgui libcutils liblog
 
 LOCAL_STATIC_LIBRARIES := cpufeatures
+LOCAL_MODULE := libSDL2
+LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
 
-###########################
-#
-# SDL static library
-#
-###########################
-
-LOCAL_MODULE := SDL2_static
-
-LOCAL_MODULE_FILENAME := libSDL2
-
-LOCAL_LDLIBS := 
-LOCAL_EXPORT_LDLIBS := -ldl -lGLESv1_CM -lGLESv2 -llog -landroid
-
-include $(BUILD_STATIC_LIBRARY)
 
 ###########################
-#
-# SDL main static library
-#
+# test yuv
 ###########################
-
 include $(CLEAR_VARS)
 
+LOCAL_SRC_FILES:= test/testyuv.c test/testyuv_cvt.c
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+  
+#LOCAL_CFLAGS += -DWITHOUT_IFADDRS -Wno-sign-compare
+#LOCAL_CFLAGS += -Wno-error=date-time
+LOCAL_CFLAGS := -DANDROID_CAFRISOFT_AOSP
+LOCAL_CFLAGS += -Wno-error=unused-parameter  -Wno-error=sign-compare
+LOCAL_CFLAGS += -Wno-unused-parameter -Wno-sign-compare
+  
+LOCAL_SHARED_LIBRARIES :=  libbinder libutils libcutils libui libgui \
+        libSDL2
 
-LOCAL_MODULE := SDL2_main
+LOCAL_MODULE:= sdltestyuv
+include $(BUILD_EXECUTABLE)
 
-LOCAL_MODULE_FILENAME := libSDL2main
 
-include $(BUILD_STATIC_LIBRARY)
-
-###########################
-#
-# hidapi library
-#
-###########################
-
-include $(CLEAR_VARS)
-
-LOCAL_CPPFLAGS += -std=c++11
-
-LOCAL_SRC_FILES := src/hidapi/android/hid.cpp
-
-LOCAL_MODULE := libhidapi
-LOCAL_LDLIBS := -llog
-
-include $(BUILD_SHARED_LIBRARY)
-
-$(call import-module,android/cpufeatures)
 

@@ -30,7 +30,13 @@
 
 /* Add any platform that doesn't build using the configure system. */
 #if defined(__WIN32__)
+
+#ifdef ANDROID_CAFRISOFT_AOSP
+#include "SDL_config_android.h"
+#else
 #include "SDL_config_windows.h"
+#endif
+
 #elif defined(__WINRT__)
 #include "SDL_config_winrt.h"
 #elif defined(__MACOSX__)

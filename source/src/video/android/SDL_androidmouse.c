@@ -59,7 +59,7 @@ static SDL_Cursor *
 Android_WrapCursor(int custom_cursor, int system_cursor)
 {
     SDL_Cursor *cursor;
-
+        
     cursor = SDL_calloc(1, sizeof(*cursor));
     if (cursor) {
         SDL_AndroidCursorData *data = (SDL_AndroidCursorData *)SDL_calloc(1, sizeof(*data));

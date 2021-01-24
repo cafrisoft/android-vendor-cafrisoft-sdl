@@ -42,6 +42,7 @@ Android_CreateWindow(_THIS, SDL_Window * window)
     SDL_WindowData *data;
     int retval = 0;
 
+    CAFRI_LOGI("Call Android_ActivityMutex_Lock_Running \n");
     Android_ActivityMutex_Lock_Running();
 
     if (Android_Window) {
@@ -50,6 +51,7 @@ Android_CreateWindow(_THIS, SDL_Window * window)
     }
 
     /* Set orientation */
+    CAFRI_LOGI("Call Android_JNI_SetOrientation W=%d H=%d \n", Android_SurfaceWidth, Android_SurfaceHeight);
     Android_JNI_SetOrientation(window->w, window->h, window->flags & SDL_WINDOW_RESIZABLE, SDL_GetHint(SDL_HINT_ORIENTATIONS));
 
     /* Adjust the window data to match the screen */
@@ -62,7 +64,9 @@ Android_CreateWindow(_THIS, SDL_Window * window)
     window->flags |= SDL_WINDOW_SHOWN;          /* only one window on Android */
 
     /* One window, it always has focus */
+    CAFRI_LOGI("SDL_SetMouseFocus\n");
     SDL_SetMouseFocus(window);
+    CAFRI_LOGI("SDL_SetKeyboardFocus\n");
     SDL_SetKeyboardFocus(window);
 
     data = (SDL_WindowData *) SDL_calloc(1, sizeof(*data));
@@ -75,6 +79,7 @@ Android_CreateWindow(_THIS, SDL_Window * window)
 
     if (!data->native_window) {
         SDL_free(data);
+        CAFRI_LOGI("native_window is NULL\n");
         retval = SDL_SetError("Could not fetch native window");
         goto endfunction;
     }

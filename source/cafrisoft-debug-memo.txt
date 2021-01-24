@@ -1,0 +1,15 @@
+
+
+printf("[%s] ln=%d \n", __func__, __LINE__);
+printf("[%s] [%s] ln=%d \n", __FILE__, __func__, __LINE__);
+
+/D "ANDROID" /D "ANDROID_CAFRISOFT_AOSP" 
+/I "../../../../../bionic/libc/include"  
+/I "../../../../../system/core/libutils/include" 
+/I "../../../../../system/core/libutils/include" 
+/I "../../../../../frameworks/native/libs/binder/include" 
+/I "../../../../../frameworks/native/libs/gui/include" 
+/I "../../../../../frameworks/native/libs/ui/include"  
+/I "../../../../../frameworks/native/headers/media_plugin"   
+/I "../../../../../frameworks/av/media/libstagefright/include"  
+/I "../../../../../frameworks/av/media/libmedia/include" 

@@ -169,6 +169,7 @@ SDL_SetDefaultCursor(SDL_Cursor * cursor)
     if (!mouse->cur_cursor) {
         SDL_SetCursor(cursor);
     }
+    
 }
 
 SDL_Mouse *
@@ -1041,6 +1042,7 @@ SDL_SetCursor(SDL_Cursor * cursor)
             mouse->ShowCursor(NULL);
         }
     }
+    
 }
 
 SDL_Cursor *

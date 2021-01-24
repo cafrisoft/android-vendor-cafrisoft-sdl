@@ -86,6 +86,11 @@
 #endif
 #endif /* SDL_MAIN_HANDLED */
 
+#ifdef ANDROID_CAFRISOFT_AOSP
+#undef SDL_MAIN_AVAILABLE
+#undef SDL_MAIN_NEEDED
+#endif
+
 #ifndef SDLMAIN_DECLSPEC
 #define SDLMAIN_DECLSPEC
 #endif

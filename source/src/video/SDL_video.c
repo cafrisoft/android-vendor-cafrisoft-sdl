@@ -510,6 +510,7 @@ SDL_VideoInit(const char *driver_name)
             }
         }
     }
+
     if (video == NULL) {
         if (driver_name) {
             return SDL_SetError("%s not available", driver_name);
@@ -555,6 +556,7 @@ SDL_VideoInit(const char *driver_name)
        function more like a normal desktop app should explicitly reenable the
        screensaver. */
     if (!SDL_GetHintBoolean(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, SDL_FALSE)) {
+        CAFRI_LOGD("\n");
         SDL_DisableScreenSaver();
     }
 
@@ -1447,6 +1449,7 @@ SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags)
 {
     SDL_Window *window;
 
+    CAFRI_LOGD("Call SDL_Init title=%s x=%d y=%d w=%d h=%d flag=0x%08X \n", title, x, y, w, h, flags);
     if (!_this) {
         /* Initialize the video system if needed */
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -1486,6 +1489,8 @@ SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags)
                          "(%s) or platform", _this->name);
             return NULL;
         }
+
+        CAFRI_LOGD("Call SDL_GL_LoadLibrary\n");
         if (SDL_GL_LoadLibrary(NULL) < 0) {
             return NULL;
         }
@@ -1502,6 +1507,8 @@ SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags)
             SDL_SetError("Vulkan and OpenGL not supported on same window");
             return NULL;
         }
+
+        CAFRI_LOGD("Call SDL_Vulkan_LoadLibrary\n");
         if (SDL_Vulkan_LoadLibrary(NULL) < 0) {
             return NULL;
         }
@@ -1565,6 +1572,8 @@ SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags)
     window->windowed.w = window->w;
     window->windowed.h = window->h;
 
+    CAFRI_LOGD("\n");
+
     if (flags & SDL_WINDOW_FULLSCREEN) {
         SDL_VideoDisplay *display = SDL_GetDisplayForWindow(window);
         int displayIndex;
@@ -1591,7 +1600,9 @@ SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags)
     }
     _this->windows = window;
 
+    CAFRI_LOGD("Call '_this->CreateSDLWindow' \n");
     if (_this->CreateSDLWindow && _this->CreateSDLWindow(_this, window) < 0) {
+        CAFRI_LOGD("Call 'SDL_DestroyWindow' \n");
         SDL_DestroyWindow(window);
         return NULL;
     }
@@ -1617,13 +1628,18 @@ SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags)
     flags = window->flags;
 #endif
 
+    CAFRI_LOGD("\n");
     if (title) {
         SDL_SetWindowTitle(window, title);
     }
+    CAFRI_LOGD("\n");
     SDL_FinishWindowCreation(window, flags);
 
     /* If the window was created fullscreen, make sure the mode code matches */
+    CAFRI_LOGD("\n");
     SDL_UpdateFullscreenMode(window, FULLSCREEN_VISIBLE(window));
+
+    CAFRI_LOGD("\n");
 
     return window;
 }

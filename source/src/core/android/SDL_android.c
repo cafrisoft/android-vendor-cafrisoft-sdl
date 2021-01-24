@@ -50,6 +50,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <dlfcn.h>
+#include <assert.h>
+
+#ifdef ANDROID_CAFRISOFT_AOSP
+#include "../aosp/SDL_aosp.h"
+#endif
 
 #define SDL_JAVA_PREFIX                                 org_libsdl_app
 #define CONCAT1(prefix, class, function)                CONCAT2(prefix, class, function)
@@ -1368,6 +1373,9 @@ static void LocalReferenceHolder_Cleanup(struct LocalReferenceHolder *refholder)
 
 ANativeWindow* Android_JNI_GetNativeWindow(void)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    return (ANativeWindow*)Android_Aosp_GetNativeWindow();
+#else
     ANativeWindow *anw = NULL;
     jobject s;
     JNIEnv *env = Android_JNI_GetEnv();
@@ -1379,10 +1387,16 @@ ANativeWindow* Android_JNI_GetNativeWindow(void)
     }
 
     return anw;
+#endif
 }
 
 void Android_JNI_SetSurfaceViewFormat(int format)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    assert(0);
+#else
+
     JNIEnv *env = Android_JNI_GetEnv();
     int new_format = 0;
 
@@ -1399,42 +1413,69 @@ void Android_JNI_SetSurfaceViewFormat(int format)
     }
 
     (*env)->CallStaticVoidMethod(env, mActivityClass, midSetSurfaceViewFormat, new_format);
+#endif
 }
 
 void Android_JNI_SetActivityTitle(const char *title)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    assert(0);
+    CAFRI_LOGD_ANDROID_JNI("\n");
+#else
     JNIEnv *env = Android_JNI_GetEnv();
 
     jstring jtitle = (*env)->NewStringUTF(env, title);
     (*env)->CallStaticBooleanMethod(env, mActivityClass, midSetActivityTitle, jtitle);
     (*env)->DeleteLocalRef(env, jtitle);
+#endif
 }
 
 void Android_JNI_SetWindowStyle(SDL_bool fullscreen)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    assert(0);
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mActivityClass, midSetWindowStyle, fullscreen ? 1 : 0);
+
+#endif
 }
 
 void Android_JNI_SetOrientation(int w, int h, int resizable, const char *hint)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    Android_Aosp_SetOrientation(w, h, resizable, hint);
+#else
     JNIEnv *env = Android_JNI_GetEnv();
 
     jstring jhint = (*env)->NewStringUTF(env, (hint ? hint : ""));
     (*env)->CallStaticVoidMethod(env, mActivityClass, midSetOrientation, w, h, (resizable? 1 : 0), jhint);
     (*env)->DeleteLocalRef(env, jhint);
+#endif
 }
 
 void Android_JNI_MinizeWindow()
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    assert(0);
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mActivityClass, midMinimizeWindow);
+#endif
 }
 
 SDL_bool Android_JNI_ShouldMinimizeOnFocusLoss()
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    assert(0);
+    return SDL_FALSE;
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midShouldMinimizeOnFocusLoss);
+#endif
 }
 
 SDL_bool Android_JNI_GetAccelerometerValues(float values[3])
@@ -2094,8 +2135,13 @@ int Android_JNI_GetPowerInfo(int *plugged, int *charged, int *battery, int *seco
 
 /* Add all touch devices */
 void Android_JNI_InitTouch() {
+
+#ifdef ANDROID_CAFRISOFT_AOSP
+    CAFRI_LOGD_ANDROID_JNI("\n");
+#else
      JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mActivityClass, midInitTouch);
+#endif
 }
 
 void Android_JNI_PollInputDevices(void)
@@ -2128,10 +2174,15 @@ void Android_JNI_HapticStop(int device_id)
 /* sends message to be handled on the UI event dispatch thread */
 int Android_JNI_SendMessage(int command, int param)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    assert(0);
+    return 0;
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     jboolean success;
     success = (*env)->CallStaticBooleanMethod(env, mActivityClass, midSendMessage, command, param);
     return success ? 0 : -1;
+#endif
 }
 
 void Android_JNI_SuspendScreenSaver(SDL_bool suspend)
@@ -2141,12 +2192,16 @@ void Android_JNI_SuspendScreenSaver(SDL_bool suspend)
 
 void Android_JNI_ShowTextInput(SDL_Rect *inputRect)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    assert(0);
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticBooleanMethod(env, mActivityClass, midShowTextInput,
                                inputRect->x,
                                inputRect->y,
                                inputRect->w,
                                inputRect->h );
+#endif
 }
 
 void Android_JNI_HideTextInput(void)
@@ -2158,15 +2213,24 @@ void Android_JNI_HideTextInput(void)
 
 SDL_bool Android_JNI_IsScreenKeyboardShown(void)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    assert(0);
+    return SDL_FALSE;
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     jboolean is_shown = 0;
     is_shown = (*env)->CallStaticBooleanMethod(env, mActivityClass, midIsScreenKeyboardShown);
     return is_shown;
+#endif
 }
 
 
 int Android_JNI_ShowMessageBox(const SDL_MessageBoxData *messageboxdata, int *buttonid)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    assert(0);
+    return 0;
+#else
     JNIEnv *env;
     jclass clazz;
     jmethodID mid;
@@ -2256,6 +2320,7 @@ int Android_JNI_ShowMessageBox(const SDL_MessageBoxData *messageboxdata, int *bu
     (*env)->DeleteLocalRef(env, colors);
 
     return 0;
+#endif
 }
 
 /*
@@ -2503,26 +2568,46 @@ int Android_JNI_CreateCustomCursor(SDL_Surface *surface, int hot_x, int hot_y)
 
 SDL_bool Android_JNI_SetCustomCursor(int cursorID)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    return SDL_TRUE;
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midSetCustomCursor, cursorID);
+#endif
 }
 
 SDL_bool Android_JNI_SetSystemCursor(int cursorID)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    return SDL_TRUE;
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midSetSystemCursor, cursorID);
+#endif
 }
 
 SDL_bool Android_JNI_SupportsRelativeMouse(void)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    return SDL_FALSE;
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midSupportsRelativeMouse);
+#endif
 }
 
 SDL_bool Android_JNI_SetRelativeMouseEnabled(SDL_bool enabled)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    return SDL_FALSE;
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midSetRelativeMouseEnabled, (enabled == 1));
+#endif
 }
 
 SDL_bool Android_JNI_RequestPermission(const char *permission)

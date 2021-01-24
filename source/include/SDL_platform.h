@@ -28,6 +28,22 @@
 #ifndef SDL_platform_h_
 #define SDL_platform_h_
 
+#ifdef ANDROID_CAFRISOFT_AOSP
+//#define CAFRI_LOGD(...) printf(CLOG_TAG, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
+#define CAFRI_LOGI(fmt, ...) printf("<I>[%s:%s %d] " fmt, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
+#define CAFRI_LOGD(fmt, ...) printf("<D>[%s:%s %d] " fmt, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
+
+
+//#define CAFRI_LOGD_APP CAFRI_LOGD
+#define CAFRI_LOGD_APP 
+
+//#define CAFRI_LOGD_MOUSE(fmt, ...) printf("<D>[%s:%s %d] " fmt, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
+#define CAFRI_LOGD_MOUSE
+
+#define CAFRI_LOGD_ANDROID_JNI CAFRI_LOGD
+
+#endif
+
 #if defined(_AIX)
 #undef __AIX__
 #define __AIX__     1

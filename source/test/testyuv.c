@@ -17,6 +17,10 @@
 #include "SDL_test_font.h"
 #include "testyuv_cvt.h"
 
+#ifdef ANDROID_CAFRISOFT_AOSP
+#include <unistd.h>
+#endif
+
 
 /* 422 (YUY2, etc) formats are the largest */
 #define MAX_YUV_SURFACE_SIZE(W, H, P)  (H*4*(W+P+1)/2)
@@ -216,8 +220,26 @@ done:
     return result;
 }
 
-int
-main(int argc, char **argv)
+#ifdef ANDROID_CAFRISOFT_AOSP
+extern void Aosp_Print_DisplayInfo();
+extern void Aosp_Init();
+extern void Aosp_TestEx1();
+#endif
+
+static int  main_test(int argc, char** argv) {
+
+    Aosp_Init();
+    Aosp_TestEx1();
+
+    return 0;
+}
+
+int  main(int argc, char** argv) {
+    main_test(argc, argv);
+    return 0;
+}
+
+int  main_testyuv(int argc, char **argv)
 {
     struct {
         SDL_bool enable_intrinsics;
@@ -266,6 +288,10 @@ main(int argc, char **argv)
     Uint32 then, now, i, iterations = 100;
     SDL_bool should_run_automated_tests = SDL_FALSE;
 
+#ifdef ANDROID_CAFRISOFT_AOSP
+    Aosp_Init();
+#endif
+
 //    SDL_calloc(10, 10);
 
     while (argv[arg] && *argv[arg] == '-') {
@@ -313,7 +339,7 @@ main(int argc, char **argv)
         }
         ++arg;
     }
-
+    printf("[%s] ln=%d \n", __func__, __LINE__);
     /* Run automated tests */
     if (should_run_automated_tests) {
         for (i = 0; i < SDL_arraysize(automated_test_params); ++i) {
@@ -328,11 +354,18 @@ main(int argc, char **argv)
         return 0;
     }
 
+    printf("[%s] ln=%d \n", __func__, __LINE__);
     if (argv[arg]) {
         filename = argv[arg];
     } else {
+#ifdef ANDROID_CAFRISOFT_AOSP
+        filename = "/data/SDL/testyuv.bmp";
+#else
         filename = "z:\\Pictures\\testyuv.bmp";
+#endif
     }
+
+    CAFRI_LOGD_APP("SDL_ConvertSurfaceFormat\n");
     original = SDL_ConvertSurfaceFormat(SDL_LoadBMP(filename), SDL_PIXELFORMAT_RGB24, 0);
     if (!original) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load %s: %s\n", filename, SDL_GetError());
@@ -345,6 +378,7 @@ main(int argc, char **argv)
         0, 100);
     pitch = CalculateYUVPitch(yuv_format, original->w);
 
+    CAFRI_LOGD_APP("SDL_CreateRGBSurfaceWithFormat\n");
     converted = SDL_CreateRGBSurfaceWithFormat(0, original->w, original->h, 0, rgb_format);
     if (!converted) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create converted surface: %s\n", SDL_GetError());
@@ -358,6 +392,7 @@ main(int argc, char **argv)
     now = SDL_GetTicks();
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "%d iterations in %d ms, %.2fms each\n", iterations, (now - then), (float)(now - then)/iterations);
 
+    CAFRI_LOGD_APP("SDL_CreateWindow\n");
     window = SDL_CreateWindow("YUV test",
                               SDL_WINDOWPOS_UNDEFINED,
                               SDL_WINDOWPOS_UNDEFINED,
@@ -368,21 +403,27 @@ main(int argc, char **argv)
         return 4;
     }
 
+    CAFRI_LOGD_APP("SDL_CreateRenderer\n");
     renderer = SDL_CreateRenderer(window, -1, 0);
     if (!renderer) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create renderer: %s\n", SDL_GetError());
         return 4;
     }
 
+    CAFRI_LOGD_APP("SDL_CreateTextureFromSurface[0] \n");
     output[0] = SDL_CreateTextureFromSurface(renderer, original);
+    CAFRI_LOGD_APP("SDL_CreateTextureFromSurface[1]\n");
     output[1] = SDL_CreateTextureFromSurface(renderer, converted);
+    CAFRI_LOGD_APP("SDL_CreateTextureFromSurface[2]\n");
     output[2] = SDL_CreateTexture(renderer, yuv_format, SDL_TEXTUREACCESS_STREAMING, original->w, original->h);
     if (!output[0] || !output[1] || !output[2]) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't set create texture: %s\n", SDL_GetError());
         return 5;
     }
+    CAFRI_LOGD_APP("SDL_UpdateTexture(output[2], NULL, raw_yuv, pitch);\n");
     SDL_UpdateTexture(output[2], NULL, raw_yuv, pitch);
     
+    CAFRI_LOGD_APP("yuv_name = SDL_GetPixelFormatName(yuv_format);\n");
     yuv_name = SDL_GetPixelFormatName(yuv_format);
     if (SDL_strncmp(yuv_name, "SDL_PIXELFORMAT_", 16) == 0) {
         yuv_name += 16;
@@ -390,18 +431,26 @@ main(int argc, char **argv)
 
     switch (SDL_GetYUVConversionModeForResolution(original->w, original->h)) {
     case SDL_YUV_CONVERSION_JPEG:
+        CAFRI_LOGD_APP("SDL_YUV_CONVERSION_JPEG\n");
         yuv_mode = "JPEG";
         break;
     case SDL_YUV_CONVERSION_BT601:
+        CAFRI_LOGD_APP("SDL_YUV_CONVERSION_BT601\n");
         yuv_mode = "BT.601";
+        CAFRI_LOGD_APP("SDL_YUV_CONVERSION_BT601 11\n");
         break;
     case SDL_YUV_CONVERSION_BT709:
+        CAFRI_LOGD_APP("SDL_YUV_CONVERSION_BT709\n");
         yuv_mode = "BT.709";
         break;
     default:
+        CAFRI_LOGD_APP("SDL_YUV_ Unknownn");
         yuv_mode = "UNKNOWN";
         break;
     }
+
+    CAFRI_LOGD("Wait for events.. \n");
+    sleep(1);
 
     { int done = 0;
         while ( !done )
