@@ -18,6 +18,7 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+
 #include "../../SDL_internal.h"
 
 #include "SDL_stdinc.h"
@@ -27,6 +28,13 @@
 #include "SDL_timer.h"
 
 #ifdef __ANDROID__
+
+#define LOG_TAG "SDL_android"
+#define ATRACE_TAG ATRACE_TAG_GRAPHICS
+#define LOG_NDEBUG 0
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
 
 #include "SDL_system.h"
 #include "SDL_android.h"
@@ -1393,8 +1401,7 @@ ANativeWindow* Android_JNI_GetNativeWindow(void)
 void Android_JNI_SetSurfaceViewFormat(int format)
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
-    CAFRI_LOGD_ANDROID_JNI("\n");
-    assert(0);
+    Android_Aosp_SetSurfaceViewFormat(format);
 #else
 
     JNIEnv *env = Android_JNI_GetEnv();
@@ -1419,8 +1426,7 @@ void Android_JNI_SetSurfaceViewFormat(int format)
 void Android_JNI_SetActivityTitle(const char *title)
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
-    assert(0);
-    CAFRI_LOGD_ANDROID_JNI("\n");
+    Android_Aosp_SetActivityTitle(title);
 #else
     JNIEnv *env = Android_JNI_GetEnv();
 
@@ -2175,7 +2181,7 @@ void Android_JNI_HapticStop(int device_id)
 int Android_JNI_SendMessage(int command, int param)
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
-    assert(0);
+    //assert(0);
     return 0;
 #else
     JNIEnv *env = Android_JNI_GetEnv();

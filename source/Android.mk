@@ -79,7 +79,7 @@ LOCAL_C_INCLUDES += $(TOP)/system/core/libion/include
 LOCAL_CFLAGS := -DANDROID_CAFRISOFT_AOSP 
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES
 LOCAL_CFLAGS += -Wno-error=unused-parameter  -Wno-error=sign-compare
-LOCAL_CFLAGS += -Wno-unused-parameter -Wno-sign-compare
+LOCAL_CFLAGS += -Wno-unused-parameter -Wno-sign-compare  
 
 LOCAL_SHARED_LIBRARIES := libhidapi \
     libandroid \

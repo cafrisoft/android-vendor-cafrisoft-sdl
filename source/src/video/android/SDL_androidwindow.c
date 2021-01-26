@@ -87,7 +87,10 @@ Android_CreateWindow(_THIS, SDL_Window * window)
     /* Do not create EGLSurface for Vulkan window since it will then make the window
        incompatible with vkCreateAndroidSurfaceKHR */
     if ((window->flags & SDL_WINDOW_OPENGL) != 0) {
+
+        CAFRI_LOGD("\n");
         data->egl_surface = SDL_EGL_CreateSurface(_this, (NativeWindowType) data->native_window);
+        CAFRI_LOGD("\n");
 
         if (data->egl_surface == EGL_NO_SURFACE) {
             ANativeWindow_release(data->native_window);
@@ -96,6 +99,8 @@ Android_CreateWindow(_THIS, SDL_Window * window)
             goto endfunction;
         }
     }
+
+    CAFRI_LOGD("\n");
 
     window->driverdata = data;
     Android_Window = window;

@@ -221,25 +221,30 @@ done:
 }
 
 #ifdef ANDROID_CAFRISOFT_AOSP
-extern void Aosp_Print_DisplayInfo();
 extern void Aosp_Init();
-extern void Aosp_TestEx1();
 #endif
+
+static int  main_testyuv(int argc, char** argv);
 
 static int  main_test(int argc, char** argv) {
 
-    Aosp_Init();
-    Aosp_TestEx1();
+    //Aosp_Init();
+    //Aosp_TestEx1();
 
     return 0;
 }
 
 int  main(int argc, char** argv) {
-    main_test(argc, argv);
-    return 0;
+    int iret;
+
+    Aosp_Init();
+
+    //main_test(argc, argv);
+    iret = main_testyuv(argc, argv);
+    return iret;
 }
 
-int  main_testyuv(int argc, char **argv)
+static int  main_testyuv(int argc, char **argv)
 {
     struct {
         SDL_bool enable_intrinsics;
@@ -287,10 +292,6 @@ int  main_testyuv(int argc, char **argv)
     Uint8 *raw_yuv;
     Uint32 then, now, i, iterations = 100;
     SDL_bool should_run_automated_tests = SDL_FALSE;
-
-#ifdef ANDROID_CAFRISOFT_AOSP
-    Aosp_Init();
-#endif
 
 //    SDL_calloc(10, 10);
 

@@ -1,68 +1,17 @@
 #define LOG_TAG "SDL_aosp"
 #define ATRACE_TAG ATRACE_TAG_GRAPHICS
+#define LOG_NDEBUG 0
 
-#ifdef NDEBUG
-#undef NDEBUG
-#endif
-
-#include <assert.h>
-#include <ctype.h>
-#include <fcntl.h>
-#include <inttypes.h>
-#include <getopt.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/mman.h>
-
-#include <termios.h>
-#include <unistd.h>
-
-//#define LOG_NDEBUG 0
-#include <utils/Log.h>
-
-#include <binder/IPCThreadState.h>
-#include <utils/Errors.h>
-#include <utils/Timers.h>
-#include <utils/Trace.h>
-
-#include <gui/Surface.h>
 #include <gui/SurfaceComposerClient.h>
 #include <gui/ISurfaceComposer.h>
+#include <gui/Surface.h>
 #include <ui/DisplayInfo.h>
-#include <media/openmax/OMX_IVCommon.h>
-#include <media/stagefright/foundation/ABuffer.h>
-#include <media/stagefright/foundation/AMessage.h>
-#include <media/stagefright/MediaCodec.h>
-#include <media/stagefright/MediaErrors.h>
-#include <media/stagefright/MediaMuxer.h>
-#include <media/stagefright/PersistentSurface.h>
-#include <media/ICrypto.h>
-#include <media/MediaCodecBuffer.h>
 
-
-//#include <gtest/gtest.h>
-//#include <android/hardware/configstore/1.0/ISurfaceFlingerConfigs.h>
-#include <binder/ProcessState.h>
-//#include <configstore/Utils.h>
-//#include <cutils/properties.h>
-#include <inttypes.h>
-#include <gui/BufferItemConsumer.h>
-#include <gui/IDisplayEventConnection.h>
-#include <gui/IProducerListener.h>
-#include <gui/ISurfaceComposer.h>
-#include <gui/Surface.h>
-#include <gui/SurfaceComposerClient.h>
-#include <private/gui/ComposerService.h>
-#include <ui/Rect.h>
-#include <utils/String8.h>
-
-#include <ion/ion.h>
-
+#include <EGL/egl.h>
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+#include "EGLUtils.h"
+#include "WindowSurface.h"
 
 #include "SDL_aosp.h"
 #include "../android/SDL_android.h"
@@ -70,177 +19,239 @@
 
 using namespace android;
 
-void Aosp_Print_DisplayInfo() {
+static int s_UserWindowWidth = 1920;
+static int s_UserWindowHeight = 1080;
+static bool s_IsAospInit = false;
 
-    DisplayInfo display_info;
-    sp<IBinder> display(SurfaceComposerClient::getBuiltInDisplay(ISurfaceComposer::eDisplayIdMain));
-    SurfaceComposerClient::getDisplayInfo(display, &display_info);
+static EGLDisplay eglDisplay;
+static EGLSurface eglSurface;
+static EGLContext eglContext;
+static GLuint texture;
 
-    ALOGI("[CMmpRenderer_AndroidSurfaceEx2::Open] DisplayInfo Resol(%d, %d) DPI(%3.1f %3.1f) density=%3.1f orientation=%d ",
-        display_info.w, display_info.h,
-        display_info.xdpi, display_info.ydpi,
-        display_info.density,
-        display_info.orientation
-        );
-    
+static void gluLookAt(float eyeX, float eyeY, float eyeZ,
+    float centerX, float centerY, float centerZ, float upX, float upY,
+    float upZ)
+{
+    // See the OpenGL GLUT documentation for gluLookAt for a description
+    // of the algorithm. We implement it in a straightforward way:
+
+    float fx = centerX - eyeX;
+    float fy = centerY - eyeY;
+    float fz = centerZ - eyeZ;
+
+    // Normalize f
+    float rlf = 1.0f / sqrtf(fx * fx + fy * fy + fz * fz);
+    fx *= rlf;
+    fy *= rlf;
+    fz *= rlf;
+
+    // Normalize up
+    float rlup = 1.0f / sqrtf(upX * upX + upY * upY + upZ * upZ);
+    upX *= rlup;
+    upY *= rlup;
+    upZ *= rlup;
+
+    // compute s = f x up (x means "cross product")
+
+    float sx = fy * upZ - fz * upY;
+    float sy = fz * upX - fx * upZ;
+    float sz = fx * upY - fy * upX;
+
+    // compute u = s x f
+    float ux = sy * fz - sz * fy;
+    float uy = sz * fx - sx * fz;
+    float uz = sx * fy - sy * fx;
+
+    float m[16];
+    m[0] = sx;
+    m[1] = ux;
+    m[2] = -fx;
+    m[3] = 0.0f;
+
+    m[4] = sy;
+    m[5] = uy;
+    m[6] = -fy;
+    m[7] = 0.0f;
+
+    m[8] = sz;
+    m[9] = uz;
+    m[10] = -fz;
+    m[11] = 0.0f;
+
+    m[12] = 0.0f;
+    m[13] = 0.0f;
+    m[14] = 0.0f;
+    m[15] = 1.0f;
+
+    glMultMatrixf(m);
+    glTranslatef(-eyeX, -eyeY, -eyeZ);
 }
 
-static sp<Surface> s_Surface;
-static sp<SurfaceComposerClient> s_ComposerClient;
-static sp<SurfaceControl> s_SurfaceControl;
-static DisplayInfo s_display_info;
-static sp<ANativeWindow> s_NativeWindow;
+static void printGLString(const char* name, GLenum s) {
+    const char* v = (const char*)glGetString(s);
+    fprintf(stderr, "GL %s = %s\n", name, v);
+}
 
-static int s_UserWindowWidth;
-static int s_UserWindowHeight;
+static int init_gl_surface(const WindowSurface* pWindowSurface)
+{
+    EGLConfig myConfig = { 0 };
+    EGLint attrib[] =
+    {
+            EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+            EGL_NONE
+    };
 
-void Aosp_Init() {
+    if ((eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY)) == EGL_NO_DISPLAY)
+    {
+        printf("eglGetDisplay failed\n");
+        return 0;
+    }
 
-    sp<IBinder> display(SurfaceComposerClient::getBuiltInDisplay(ISurfaceComposer::eDisplayIdMain));
-    SurfaceComposerClient::getDisplayInfo(display, &s_display_info);
-
-
-    Android_SetScreenResolution(s_display_info.w, s_display_info.h, s_display_info.w, s_display_info.h, 0, 30);
-
-    s_ComposerClient = new SurfaceComposerClient;
-    if (s_ComposerClient->initCheck() != NO_ERROR) {
-        //MMPDEBUGMSG(MMPZONE_ERROR, (TEXT("[CMmpRenderer_AndroidSurfaceEx2::Open] FAIL: mComposerClient = new SurfaceComposerClient")));
-        //mmpResult = MMP_SUCCESS;
-        assert(0);
+    if (eglInitialize(eglDisplay, NULL, NULL) != EGL_TRUE)
+    {
+        printf("eglInitialize failed\n");
+        return 0;
     }
 
 #if 0
-    s_SurfaceControl = s_ComposerClient->createSurface(String8("CMmpRenderer_AndroidSurfaceEx2"), s_display_info.w, s_display_info.h, PIXEL_FORMAT_BGRA_8888, 0);
-    if (s_SurfaceControl == NULL) {
-        //mmpResult = MMP_FAILURE;
-        //MMPDEBUGMSG(MMPZONE_ERROR, (TEXT("[CMmpRenderer_AndroidSurfaceEx2::Open] FAIL: m_ComposerClient->createSurface")));
-        assert(0);
-    }
-    else {
-        if (s_SurfaceControl->isValid() != 1) {
-            //mmpResult = MMP_FAILURE;
-            //MMPDEBUGMSG(MMPZONE_ERROR, (TEXT("[CMmpRenderer_AndroidSurfaceEx2::Open] ERROR : m_SurfaceControl->isValid() ")));
-            assert(0);
-        }
-    }
-
-    SurfaceComposerClient::openGlobalTransaction();
-    s_SurfaceControl->setLayer(0x7fffffff);
-    //m_SurfaceControl->setLayer(0xffffffff);
-    s_SurfaceControl->show();
-    SurfaceComposerClient::closeGlobalTransaction();
-
-    s_Surface = s_SurfaceControl->getSurface();
-    if (s_Surface == NULL) {
-        //mmpResult = MMP_FAILURE;
-        //MMPDEBUGMSG(MMPZONE_ERROR, (TEXT("[CMmpRenderer_AndroidSurfaceEx2::Open] FAIL: m_SurfaceControl->getSurface ")));
-        assert(0);
-    }
-    else {
-        //sp<ANativeWindow> wnd(s_Surface);
-        ///s_NativeWindow = wnd;//new ANativeWindow(m_Surface);
-
+    if (!printEGLConfigurations(eglDisplay)) {
+        printf("printEGLConfigurations failed.\n");
+        return 0;
     }
 #endif
 
+    EGLNativeWindowType window = pWindowSurface->getSurface();
+    EGLUtils::selectConfigForNativeWindow(eglDisplay, attrib, window, &myConfig);
+
+    if ((eglSurface = eglCreateWindowSurface(eglDisplay, myConfig,
+        window, 0)) == EGL_NO_SURFACE)
+    {
+        printf("eglCreateWindowSurface failed\n");
+        return 0;
+    }
+
+    if ((eglContext = eglCreateContext(eglDisplay, myConfig, 0, 0)) == EGL_NO_CONTEXT)
+    {
+        printf("eglCreateContext failed\n");
+        return 0;
+    }
+
+    if (eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext) != EGL_TRUE)
+    {
+        printf("eglMakeCurrent failed\n");
+        return 0;
+    }
+
+    int w, h;
+
+    eglQuerySurface(eglDisplay, eglSurface, EGL_WIDTH, &w);
+    //checkEglError("eglQuerySurface");
+    eglQuerySurface(eglDisplay, eglSurface, EGL_HEIGHT, &h);
+    //checkEglError("eglQuerySurface");
+
+    fprintf(stderr, "Window dimensions: %d x %d\n", w, h);
+
+    printGLString("Version", GL_VERSION);
+    printGLString("Vendor", GL_VENDOR);
+    printGLString("Renderer", GL_RENDERER);
+    printGLString("Extensions", GL_EXTENSIONS);
+
+    return 1;
+}
+
+static void free_gl_surface(void)
+{
+    if (eglDisplay != EGL_NO_DISPLAY)
+    {
+        eglMakeCurrent(EGL_NO_DISPLAY, EGL_NO_SURFACE,
+            EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        eglDestroyContext(eglDisplay, eglContext);
+        eglDestroySurface(eglDisplay, eglSurface);
+        eglTerminate(eglDisplay);
+        eglDisplay = EGL_NO_DISPLAY;
+    }
+}
+
+void init_scene(void)
+{
+    glDisable(GL_DITHER);
+    glEnable(GL_CULL_FACE);
+    float ratio = 320.0f / 480.0f;
+    glViewport(0, 0, 320, 480);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustumf(-ratio, ratio, -1, 1, 1, 10);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(
+        0, 0, 3,  // eye
+        0, 0, 0,  // center
+        0, 1, 0); // up
+    glEnable(GL_TEXTURE_2D);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+}
+
+void Aosp_Init() {
+
+    sp<IBinder> mainDpy = SurfaceComposerClient::getBuiltInDisplay(ISurfaceComposer::eDisplayIdMain);
+    DisplayInfo mainDpyInfo;
+    int err = SurfaceComposerClient::getDisplayInfo(mainDpy, &mainDpyInfo);
+    if (err != NO_ERROR) {
+        fprintf(stderr, "ERROR: unable to get display characteristics\n");
+        assert(0);
+        return;
+    }
+
+    uint32_t width, height;
+    if (mainDpyInfo.orientation != DISPLAY_ORIENTATION_0 &&
+        mainDpyInfo.orientation != DISPLAY_ORIENTATION_180) {
+        // rotated
+        width = mainDpyInfo.h;
+        height = mainDpyInfo.w;
+    }
+    else {
+        width = mainDpyInfo.w;
+        height = mainDpyInfo.h;
+    }
+
+    Android_SetScreenResolution(width, height, width, height, PIXEL_FORMAT_RGBX_8888, 30);
 }
 
 void Android_Aosp_SetOrientation(int w, int h, int resizable, const char* hint) {
+
+    CAFRI_LOGD("w=%d h=%d \n", w, h);
 
     s_UserWindowWidth = w;
     s_UserWindowHeight = h;
 }
 
+static WindowSurface* s_windowSurface = NULL;
+static EGLNativeWindowType s_ANW;
 void* Android_Aosp_GetNativeWindow(void) {
-    
-    void* native_hdl = NULL;
-    sp<SurfaceControl> surfaceCtrl = s_ComposerClient->createSurface(String8("MySurface"), s_UserWindowWidth, s_UserWindowHeight, PIXEL_FORMAT_BGRA_8888, 0);
-    if (surfaceCtrl == NULL) {
-        assert(0);
-    }
-    else {
-        if (surfaceCtrl->isValid() != 1) {
-            assert(0);
-        }
-    }
 
-    //SurfaceComposerClient::openGlobalTransaction();
-    //surfaceCtrl->setLayer(0x7fffffff);
-    //surfaceCtrl->show();
-    //SurfaceComposerClient::closeGlobalTransaction();
+    assert(s_windowSurface == NULL);
 
-    sp<Surface> surface = surfaceCtrl->getSurface();
-    if (surface == NULL) {
-        assert(0);
+    WindowSurface* windowSurface = new WindowSurface(s_UserWindowWidth, s_UserWindowHeight);
+    s_ANW = windowSurface->getSurface();
+#if 0
+    if (!init_gl_surface(windowSurface))
+    {
+        printf("GL initialisation failed - exiting\n");
+        return 0;
     }
-    else {
-        sp<ANativeWindow> anw(surface);
-        s_NativeWindow = anw;
-        native_hdl = (void*)s_NativeWindow.get();
-    }
+    //init_scene();
+#endif
 
-    return native_hdl;
+    return (void*)s_ANW;
 }
 
+void Android_Aosp_SetSurfaceViewFormat(int format) {
 
-void Aosp_TestEx1() {
+    assert(s_windowSurface);
+    native_window_set_buffers_format(s_ANW, format);
+}
 
-    const int bufferCount = 3;
-    const int pixel_format = HAL_PIXEL_FORMAT_RGBA_8888;
-    unsigned int usage = 0;
-    int err;
+void Android_Aosp_SetActivityTitle(const char* title) {
 
-    CAFRI_LOGD("s_display_info.w=%d, s_display_info.h=%d \n", s_display_info.w, s_display_info.h);
-
-    void* native_hdl = NULL;
-    sp<SurfaceControl> surfaceCtrl = s_ComposerClient->createSurface(String8("MySurface"), s_display_info.w, s_display_info.h, PIXEL_FORMAT_BGRA_8888, 0);
-    ALOG_ASSERT(surfaceCtrl);
-    ALOG_ASSERT(surfaceCtrl->isValid());
-
-    sp<Surface> surface = surfaceCtrl->getSurface();
-    ALOG_ASSERT(surface);
-
-    sp<ANativeWindow> anw(surface);
-    ALOG_ASSERT(native_window_api_connect(anw.get(), NATIVE_WINDOW_API_CPU) == NO_ERROR);
-    ALOG_ASSERT(native_window_set_buffer_count(anw.get(), bufferCount) == NO_ERROR);
-    ALOG_ASSERT(native_window_set_scaling_mode(anw.get(), NATIVE_WINDOW_SCALING_MODE_SCALE_TO_WINDOW) == NO_ERROR);
-    ALOG_ASSERT(native_window_set_buffers_format(anw.get(), pixel_format /*HAL_PIXEL_FORMAT_YV12*/) == NO_ERROR);
-    ALOG_ASSERT(native_window_set_buffers_geometry(anw.get(), s_display_info.w, s_display_info.h, pixel_format) == NO_ERROR);
-    ALOG_ASSERT(native_window_set_usage(anw.get(), usage | GRALLOC_USAGE_HW_TEXTURE | GRALLOC_USAGE_EXTERNAL_DISP) == NO_ERROR);
-
-    int loop = 0;
-    //for (int i = 0; i < bufferCount; i++) {
-    while (true) {
-
-        ANativeWindowBuffer* buf = NULL;
-
-        err = native_window_dequeue_buffer_and_wait(anw.get(), &buf);
-        ALOG_ASSERT(err == NO_ERROR);
-
-        printf("Dequeue loop=%d err=%d \n", loop, err);
-        sleep(1);
-
-        if ((buf != NULL) && (err == 0)) {
-
-            int bufSize = s_display_info.w * s_display_info.h *4;
-            int ion_fd = buf->handle->data[0];
-            void* virAddr = (void*)mmap(NULL, bufSize, (PROT_READ | PROT_WRITE), MAP_SHARED, ion_fd, 0);
-            memset(virAddr, 0x00, bufSize);
-            munmap(virAddr, bufSize);
-
-            err = anw->queueBuffer(anw.get(), buf, -1);
-            ALOG_ASSERT(err == NO_ERROR);
-            printf("EnQueeu loop=%d err=%d  ion_fd=%d virAddr=0x%08LLX\n", loop, err, ion_fd, (long long)virAddr);
-        }
-        else {
-            ALOG_ASSERT(false, "Buf is NULL");
-        }
-    
-
-        loop++;
-    }
-
-    while (true) {
-        sleep(1);
-    }
 }

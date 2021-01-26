@@ -10,6 +10,8 @@ extern "C" {
 
     extern void* Android_Aosp_GetNativeWindow(void);
     extern void Android_Aosp_SetOrientation(int w, int h, int resizable, const char* hint);
+    extern void Android_Aosp_SetSurfaceViewFormat(int format);
+    extern void Android_Aosp_SetActivityTitle(const char* title);
 
     extern void Aosp_TestEx1();
 
