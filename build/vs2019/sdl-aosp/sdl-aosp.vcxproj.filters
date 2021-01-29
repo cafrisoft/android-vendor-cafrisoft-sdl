@@ -19,15 +19,36 @@
     <Filter Include="source\AAAAA">
       <UniqueIdentifier>{31688d08-15e2-4118-af72-48a94f393f6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\core">
+      <UniqueIdentifier>{46b24122-d409-4fba-aefd-6ce3260cf436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\core\aosp">
+      <UniqueIdentifier>{4c12975f-527a-4e3d-9db1-60496e36edcc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\source\src\core\aosp\SDL_aosp.h">
+      <Filter>source\core\aosp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\core\aosp\WindowSurface.h">
+      <Filter>source\core\aosp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\src\core\aosp\EGLUtils.h">
+      <Filter>source\core\aosp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sdl-aosp.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\core\aosp\SDL_WindowSurface.cpp">
+      <Filter>source\core\aosp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\src\core\aosp\SDL_aosp.cpp">
+      <Filter>source\core\aosp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

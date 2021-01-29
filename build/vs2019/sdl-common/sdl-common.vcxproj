@@ -147,6 +147,7 @@
     <ClInclude Include="..\..\..\source\include\SDL.h" />
     <ClInclude Include="..\..\..\source\include\SDL_config.h" />
     <ClInclude Include="..\..\..\source\include\SDL_config_windows.h" />
+    <ClInclude Include="..\..\..\source\include\SDL_platform.h" />
     <ClInclude Include="..\..\..\source\src\audio\SDL_audiodev_c.h" />
     <ClInclude Include="..\..\..\source\src\audio\SDL_audio_c.h" />
     <ClInclude Include="..\..\..\source\src\audio\SDL_sysaudio.h" />

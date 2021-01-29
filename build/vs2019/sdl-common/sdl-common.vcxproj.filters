@@ -360,6 +360,9 @@
     <ClInclude Include="..\..\..\source\src\video\yuv2rgb\yuv_rgb.h">
       <Filter>source\src\video\yuv2rgb</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\source\include\SDL_platform.h">
+      <Filter>source\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sdl-common.cpp">

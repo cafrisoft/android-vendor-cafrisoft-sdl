@@ -147,9 +147,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\source\src\core\aosp\EGLUtils.h" />
+    <ClInclude Include="..\..\..\source\src\core\aosp\SDL_aosp.h" />
+    <ClInclude Include="..\..\..\source\src\core\aosp\WindowSurface.h" />
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\source\src\core\aosp\SDL_aosp.cpp" />
+    <ClCompile Include="..\..\..\source\src\core\aosp\SDL_WindowSurface.cpp" />
     <ClCompile Include="sdl-aosp.cpp" />
   </ItemGroup>
   <ItemGroup>

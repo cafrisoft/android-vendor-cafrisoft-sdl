@@ -237,7 +237,9 @@ static int  main_test(int argc, char** argv) {
 int  main(int argc, char** argv) {
     int iret;
 
+#ifdef ANDROID_CAFRISOFT_AOSP
     Aosp_Init();
+#endif
 
     //main_test(argc, argv);
     iret = main_testyuv(argc, argv);
@@ -451,8 +453,7 @@ static int  main_testyuv(int argc, char **argv)
     }
 
     CAFRI_LOGD("Wait for events.. \n");
-    sleep(1);
-
+    
     { int done = 0;
         while ( !done )
         {
