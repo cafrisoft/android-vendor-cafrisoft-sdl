@@ -2,6 +2,14 @@
 #define ATRACE_TAG ATRACE_TAG_GRAPHICS
 #define LOG_NDEBUG 0
 
+
+#ifdef SDL_AOSP_WIN
+#include <math.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stdio.h>
+
+#else
 #include <gui/SurfaceComposerClient.h>
 #include <gui/ISurfaceComposer.h>
 #include <gui/Surface.h>
@@ -13,20 +21,29 @@
 #include "EGLUtils.h"
 #include "WindowSurface.h"
 
-#include "SDL_aosp.h"
 #include "../android/SDL_android.h"
 #include "../../video/android/SDL_androidvideo.h"
 
 using namespace android;
+#endif
+
+#include "SDL_aosp.h"
+
+
 
 static int s_UserWindowWidth = 1920;
 static int s_UserWindowHeight = 1080;
 static bool s_IsAospInit = false;
 
+#ifdef SDL_AOSP_WIN
+
+#else
 static EGLDisplay eglDisplay;
 static EGLSurface eglSurface;
 static EGLContext eglContext;
 static GLuint texture;
+
+#endif
 
 static void gluLookAt(float eyeX, float eyeY, float eyeZ,
     float centerX, float centerY, float centerZ, float upX, float upY,
