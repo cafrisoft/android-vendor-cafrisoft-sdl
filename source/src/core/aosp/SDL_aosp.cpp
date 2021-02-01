@@ -30,6 +30,8 @@ using namespace android;
 #include "SDL_aosp.h"
 
 
+static int s_ScreenWidth = 1920;
+static int s_ScreenHeight = 1080;
 
 static int s_UserWindowWidth = 1920;
 static int s_UserWindowHeight = 1080;
@@ -232,6 +234,9 @@ void Aosp_Init() {
         height = mainDpyInfo.h;
     }
 
+    s_ScreenWidth = width;
+    s_ScreenHeight = height;
+
     Android_SetScreenResolution(width, height, width, height, PIXEL_FORMAT_RGBX_8888, 30);
 }
 
@@ -249,7 +254,8 @@ void* Android_Aosp_GetNativeWindow(void) {
 
     assert(s_windowSurface == NULL);
 
-    WindowSurface* windowSurface = new WindowSurface(s_UserWindowWidth, s_UserWindowHeight);
+    //WindowSurface* windowSurface = new WindowSurface(s_UserWindowWidth, s_UserWindowHeight);
+    WindowSurface* windowSurface = new WindowSurface(s_ScreenWidth, s_ScreenHeight);
     s_ANW = windowSurface->getSurface();
 #if 0
     if (!init_gl_surface(windowSurface))

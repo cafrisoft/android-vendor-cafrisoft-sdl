@@ -2,5 +2,5 @@
 LOCAL_PATH:=vendor/cafrisoft/sdl
 
 PRODUCT_PACKAGES += \
-       libSDL2
+       libSDL2 libhidapi
 
