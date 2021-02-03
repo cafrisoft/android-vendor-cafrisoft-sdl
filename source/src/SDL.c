@@ -240,15 +240,21 @@ SDL_InitSubSystem(Uint32 flags)
     }
 
     /* Initialize the joystick subsystem */
-    CAFRI_LOGD("if ((flags & SDL_INIT_JOYSTIC)){\n");
+    CAFRI_LOGD("if ((flags & SDL_INIT_JOYSTIC))\n");
     if ((flags & SDL_INIT_JOYSTICK)){
 #if !SDL_JOYSTICK_DISABLED
+        CAFRI_LOGD("if ((flags & SDL_INIT_JOYSTIC))\n");
         if (SDL_PrivateShouldInitSubsystem(SDL_INIT_JOYSTICK)) {
+            CAFRI_LOGD("if ((flags & SDL_INIT_JOYSTIC))\n");
            if (SDL_JoystickInit() < 0) {
+               CAFRI_LOGD("if ((flags & SDL_INIT_JOYSTIC))\n");
                return (-1);
            }
+           CAFRI_LOGD("if ((flags & SDL_INIT_JOYSTIC))\n");
         }
+        CAFRI_LOGD("if ((flags & SDL_INIT_JOYSTIC))\n");
         SDL_PrivateSubsystemRefCountIncr(SDL_INIT_JOYSTICK);
+        CAFRI_LOGD("if ((flags & SDL_INIT_JOYSTIC))\n");
 #else
         return SDL_SetError("SDL not built with joystick support");
 #endif

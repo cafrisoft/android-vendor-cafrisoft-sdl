@@ -22,7 +22,7 @@ echo ""
 echo "------------------------------------------------------------------"
 echo "copy SDL Shared Library"
 echo "------------------------------------------------------------------"
-SDL_SHARED_LIBS=("libSDL2.so" "libhidapi.so" )
+SDL_SHARED_LIBS=("libSDL2.so" "libhidapi.so" "libSDL2_ttf.so")
 echo "SDL_SHARED_LIBS = ${SDL_SHARED_LIBS[@]}"
 echo SDL_SHARED_LIBS count : ${#SDL_SHARED_LIBS[@]}
 for (( i = 0 ; i < ${#SDL_SHARED_LIBS[@]} ; i++ )) ; do
@@ -32,15 +32,3 @@ for (( i = 0 ; i < ${#SDL_SHARED_LIBS[@]} ; i++ )) ; do
 done
 echo ""
 
-echo "------------------------------------------------------------------"
-echo "copy *SDL Shared Library"
-echo "------------------------------------------------------------------"
-SDL_SHARED_LIBS=("libSDL2.so" "libhidapi.so" )
-echo "SDL_SHARED_LIBS = ${SDL_SHARED_LIBS[@]}"
-echo SDL_SHARED_LIBS count : ${#SDL_SHARED_LIBS[@]}
-for (( i = 0 ; i < ${#SDL_SHARED_LIBS[@]} ; i++ )) ; do
-        cmd="$adb $1 $2 push $host_OUTT/$libpath/${SDL_SHARED_LIBS[$i]} /$libpath"
-        echo $cmd
-        $cmd
-done
-echo ""

@@ -59,6 +59,10 @@
 #include <unistd.h>
 #include <dlfcn.h>
 #include <assert.h>
+#include <utils/Log.h>
+
+#define CAFRISOFT_ASSERT(value)
+#define CAFRI_LOGD_ANDROID_JNI(fmt, ...) ALOGI("<D>[%s:%s %d] " fmt, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 
 #ifdef ANDROID_CAFRISOFT_AOSP
 #include "../aosp/SDL_aosp.h"
@@ -449,6 +453,9 @@ JNIEnv* Android_JNI_GetEnv(void)
 /* Set up an external thread for using JNI with Android_JNI_GetEnv() */
 int Android_JNI_SetupThread(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env;
     int status;
 
@@ -478,6 +485,9 @@ int Android_JNI_SetupThread(void)
 static void
 Android_JNI_ThreadDestroyed(void *value)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     /* The thread is being destroyed, detach it from the Java VM and set the mThreadKey value to NULL as required */
     JNIEnv *env = (JNIEnv *) value;
     if (env != NULL) {
@@ -490,6 +500,9 @@ Android_JNI_ThreadDestroyed(void *value)
 static void
 Android_JNI_CreateKey(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     int status = pthread_key_create(&mThreadKey, Android_JNI_ThreadDestroyed);
     if (status < 0) {
         __android_log_print(ANDROID_LOG_ERROR, "SDL", "Error initializing mThreadKey with pthread_key_create() (err=%d)", status);
@@ -499,6 +512,9 @@ Android_JNI_CreateKey(void)
 static void
 Android_JNI_CreateKey_once(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     int status = pthread_once(&key_once, Android_JNI_CreateKey);
     if (status < 0) {
         __android_log_print(ANDROID_LOG_ERROR, "SDL", "Error initializing mThreadKey with pthread_once() (err=%d)", status);
@@ -508,6 +524,9 @@ Android_JNI_CreateKey_once(void)
 static void
 register_methods(JNIEnv *env, const char *classname, JNINativeMethod *methods, int nb)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     jclass clazz = (*env)->FindClass(env, classname);
     if (clazz == NULL || (*env)->RegisterNatives(env, clazz, methods, nb) < 0) {
         __android_log_print(ANDROID_LOG_ERROR, "SDL", "Failed to register methods of %s", classname);
@@ -518,6 +537,9 @@ register_methods(JNIEnv *env, const char *classname, JNINativeMethod *methods, i
 /* Library init */
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     mJavaVM = vm;
     JNIEnv *env = NULL;
 
@@ -536,6 +558,9 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
 
 void checkJNIReady(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     if (!mActivityClass || !mAudioManagerClass || !mControllerManagerClass) {
         /* We aren't fully initialized, let's just return. */
         return;
@@ -547,6 +572,9 @@ void checkJNIReady(void)
 /* Activity initialization -- called before SDL_main() to initialize JNI bindings */
 JNIEXPORT void JNICALL SDL_JAVA_INTERFACE(nativeSetupJNI)(JNIEnv *env, jclass cls)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     __android_log_print(ANDROID_LOG_VERBOSE, "SDL", "nativeSetupJNI()");
 
     /*
@@ -654,6 +682,9 @@ JNIEXPORT void JNICALL SDL_JAVA_INTERFACE(nativeSetupJNI)(JNIEnv *env, jclass cl
 /* Audio initialization -- called before SDL_main() to initialize JNI bindings */
 JNIEXPORT void JNICALL SDL_JAVA_AUDIO_INTERFACE(nativeSetupJNI)(JNIEnv *env, jclass cls)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     __android_log_print(ANDROID_LOG_VERBOSE, "SDL", "AUDIO nativeSetupJNI()");
 
     mAudioManagerClass = (jclass)((*env)->NewGlobalRef(env, cls));
@@ -692,6 +723,9 @@ JNIEXPORT void JNICALL SDL_JAVA_AUDIO_INTERFACE(nativeSetupJNI)(JNIEnv *env, jcl
 /* Controller initialization -- called before SDL_main() to initialize JNI bindings */
 JNIEXPORT void JNICALL SDL_JAVA_CONTROLLER_INTERFACE(nativeSetupJNI)(JNIEnv *env, jclass cls)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     __android_log_print(ANDROID_LOG_VERBOSE, "SDL", "CONTROLLER nativeSetupJNI()");
 
     mControllerManagerClass = (jclass)((*env)->NewGlobalRef(env, cls));
@@ -718,6 +752,9 @@ typedef int (*SDL_main_func)(int argc, char *argv[]);
 /* Start up the SDL app */
 JNIEXPORT int JNICALL SDL_JAVA_INTERFACE(nativeRunMain)(JNIEnv *env, jclass cls, jstring library, jstring function, jobject array)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     int status = -1;
     const char *library_file;
     void *library_handle;
@@ -817,6 +854,10 @@ JNIEXPORT void JNICALL SDL_JAVA_INTERFACE(onNativeDropFile)(
                                     JNIEnv *env, jclass jcls,
                                     jstring filename)
 {
+
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     const char *path = (*env)->GetStringUTFChars(env, filename, NULL);
     SDL_SendDropFile(NULL, path);
     (*env)->ReleaseStringUTFChars(env, filename, path);
@@ -953,6 +994,10 @@ JNIEXPORT jint JNICALL SDL_JAVA_CONTROLLER_INTERFACE(nativeAddJoystick)(
                                     jint vendor_id, jint product_id, jboolean is_accelerometer,
                                     jint button_mask, jint naxes, jint nhats, jint nballs)
 {
+
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     int retval;
     const char *name = (*env)->GetStringUTFChars(env, device_name, NULL);
     const char *desc = (*env)->GetStringUTFChars(env, device_desc, NULL);
@@ -969,12 +1014,19 @@ JNIEXPORT jint JNICALL SDL_JAVA_CONTROLLER_INTERFACE(nativeRemoveJoystick)(
                                     JNIEnv *env, jclass jcls,
                                     jint device_id)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     return Android_RemoveJoystick(device_id);
 }
 
 JNIEXPORT jint JNICALL SDL_JAVA_CONTROLLER_INTERFACE(nativeAddHaptic)(
     JNIEnv *env, jclass jcls, jint device_id, jstring device_name)
 {
+
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     int retval;
     const char *name = (*env)->GetStringUTFChars(env, device_name, NULL);
 
@@ -988,6 +1040,9 @@ JNIEXPORT jint JNICALL SDL_JAVA_CONTROLLER_INTERFACE(nativeAddHaptic)(
 JNIEXPORT jint JNICALL SDL_JAVA_CONTROLLER_INTERFACE(nativeRemoveHaptic)(
     JNIEnv *env, jclass jcls, jint device_id)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     return Android_RemoveHaptic(device_id);
 }
 
@@ -1299,6 +1354,9 @@ JNIEXPORT void JNICALL SDL_JAVA_INTERFACE_INPUT_CONNECTION(nativeSetComposingTex
                                     JNIEnv *env, jclass cls,
                                     jstring text, jint newCursorPosition)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     const char *utftext = (*env)->GetStringUTFChars(env, text, NULL);
 
     SDL_SendEditingText(utftext, 0, 0);
@@ -1310,6 +1368,9 @@ JNIEXPORT jstring JNICALL SDL_JAVA_INTERFACE(nativeGetHint)(
                                     JNIEnv *env, jclass cls,
                                     jstring name)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     const char *utfname = (*env)->GetStringUTFChars(env, name, NULL);
     const char *hint = SDL_GetHint(utfname);
 
@@ -1323,6 +1384,9 @@ JNIEXPORT void JNICALL SDL_JAVA_INTERFACE(nativeSetenv)(
                                     JNIEnv *env, jclass cls,
                                     jstring name, jstring value)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     const char *utfname = (*env)->GetStringUTFChars(env, name, NULL);
     const char *utfvalue = (*env)->GetStringUTFChars(env, value, NULL);
 
@@ -1369,6 +1433,9 @@ static SDL_bool LocalReferenceHolder_Init(struct LocalReferenceHolder *refholder
 
 static void LocalReferenceHolder_Cleanup(struct LocalReferenceHolder *refholder)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
 #ifdef DEBUG_JNI
     SDL_Log("Leaving function %s", refholder->m_func);
 #endif
@@ -1440,7 +1507,7 @@ void Android_JNI_SetWindowStyle(SDL_bool fullscreen)
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
     CAFRI_LOGD_ANDROID_JNI("\n");
-    assert(0);
+    CAFRISOFT_ASSERT(0);
 #else
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mActivityClass, midSetWindowStyle, fullscreen ? 1 : 0);
@@ -1465,7 +1532,7 @@ void Android_JNI_MinizeWindow()
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
     CAFRI_LOGD_ANDROID_JNI("\n");
-    assert(0);
+    CAFRISOFT_ASSERT(0);
 #else
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mActivityClass, midMinimizeWindow);
@@ -1476,7 +1543,7 @@ SDL_bool Android_JNI_ShouldMinimizeOnFocusLoss()
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
     CAFRI_LOGD_ANDROID_JNI("\n");
-    assert(0);
+    CAFRISOFT_ASSERT(0);
     return SDL_FALSE;
 #else
     JNIEnv *env = Android_JNI_GetEnv();
@@ -1486,6 +1553,8 @@ SDL_bool Android_JNI_ShouldMinimizeOnFocusLoss()
 
 SDL_bool Android_JNI_GetAccelerometerValues(float values[3])
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
     int i;
     SDL_bool retval = SDL_FALSE;
 
@@ -1511,6 +1580,9 @@ static jobject captureBuffer = NULL;
 
 int Android_JNI_OpenAudioDevice(int iscapture, SDL_AudioSpec *spec)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     int audioformat;
     jobject jbufobj = NULL;
     jobject result;
@@ -1644,6 +1716,9 @@ SDL_DisplayOrientation Android_JNI_GetDisplayOrientation(void)
 
 int Android_JNI_GetDisplayDPI(float *ddpi, float *xdpi, float *ydpi)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
 
     jobject jDisplayObj = (*env)->CallStaticObjectMethod(env, mActivityClass, midGetDisplayDPI);
@@ -1681,6 +1756,9 @@ void * Android_JNI_GetAudioBuffer(void)
 
 void Android_JNI_WriteAudioBuffer(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
 
     switch (audioBufferFormat) {
@@ -1706,6 +1784,9 @@ void Android_JNI_WriteAudioBuffer(void)
 
 int Android_JNI_CaptureAudioBuffer(void *buffer, int buflen)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     jboolean isCopy = JNI_FALSE;
     jint br = -1;
@@ -1749,6 +1830,9 @@ int Android_JNI_CaptureAudioBuffer(void *buffer, int buflen)
 
 void Android_JNI_FlushCapturedAudio(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
 #if 0  /* !!! FIXME: this needs API 23, or it'll do blocking reads and never end. */
     switch (captureBufferFormat) {
@@ -1794,6 +1878,9 @@ void Android_JNI_FlushCapturedAudio(void)
 
 void Android_JNI_CloseAudioDevice(const int iscapture)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
 
     if (iscapture) {
@@ -1814,6 +1901,9 @@ void Android_JNI_CloseAudioDevice(const int iscapture)
 
 void Android_JNI_AudioSetThreadPriority(int iscapture, int device_id)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mAudioManagerClass, midAudioSetThreadPriority, iscapture, device_id);
 }
@@ -1822,6 +1912,9 @@ void Android_JNI_AudioSetThreadPriority(int iscapture, int device_id)
 /* If the parameter silent is truthy then SDL_SetError() will not be called. */
 static SDL_bool Android_JNI_ExceptionOccurred(SDL_bool silent)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     jthrowable exception;
 
@@ -1867,6 +1960,9 @@ static SDL_bool Android_JNI_ExceptionOccurred(SDL_bool silent)
 }
 
 static void Internal_Android_Create_AssetManager() {
+
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
 
     struct LocalReferenceHolder refs = LocalReferenceHolder_Setup(__FUNCTION__);
     JNIEnv *env = Android_JNI_GetEnv();
@@ -2181,7 +2277,7 @@ void Android_JNI_HapticStop(int device_id)
 int Android_JNI_SendMessage(int command, int param)
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
-    //assert(0);
+    //CAFRISOFT_ASSERT(0);
     return 0;
 #else
     JNIEnv *env = Android_JNI_GetEnv();
@@ -2199,7 +2295,7 @@ void Android_JNI_SuspendScreenSaver(SDL_bool suspend)
 void Android_JNI_ShowTextInput(SDL_Rect *inputRect)
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
-    assert(0);
+    CAFRISOFT_ASSERT(0);
 #else
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticBooleanMethod(env, mActivityClass, midShowTextInput,
@@ -2220,7 +2316,7 @@ void Android_JNI_HideTextInput(void)
 SDL_bool Android_JNI_IsScreenKeyboardShown(void)
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
-    assert(0);
+    CAFRISOFT_ASSERT(0);
     return SDL_FALSE;
 #else
     JNIEnv *env = Android_JNI_GetEnv();
@@ -2234,7 +2330,7 @@ SDL_bool Android_JNI_IsScreenKeyboardShown(void)
 int Android_JNI_ShowMessageBox(const SDL_MessageBoxData *messageboxdata, int *buttonid)
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
-    assert(0);
+    CAFRISOFT_ASSERT(0);
     return 0;
 #else
     JNIEnv *env;

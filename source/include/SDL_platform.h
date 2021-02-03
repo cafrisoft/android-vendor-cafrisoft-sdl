@@ -35,7 +35,6 @@
 #define CAFRI_LOGD_APP 
 //#define CAFRI_LOGD_MOUSE(fmt, ...) printf("<D>[%s:%s %d] " fmt, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 #define CAFRI_LOGD_MOUSE
-#define CAFRI_LOGD_ANDROID_JNI CAFRI_LOGD
 
 #if defined(_AIX)
 #undef __AIX__
