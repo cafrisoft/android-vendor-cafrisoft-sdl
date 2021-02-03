@@ -12,8 +12,18 @@ extern "C" {
     extern void Android_Aosp_SetOrientation(int w, int h, int resizable, const char* hint);
     extern void Android_Aosp_SetSurfaceViewFormat(int format);
     extern void Android_Aosp_SetActivityTitle(const char* title);
+    extern const char* SDL_AospGetInternalStoragePath(void);
 
     extern void Aosp_TestEx1();
+
+    extern int Android_Aosp_FileOpen(SDL_RWops* ctx, const char* fileName, const char* mode);
+    extern int Android_Aosp_FileClose(SDL_RWops* ctx);
+    extern size_t Android_Aosp_FileRead(SDL_RWops* ctx, void* buffer, size_t size, size_t maxnum);
+    extern size_t Android_Aosp_FileWrite(SDL_RWops* ctx, const void* buffer, size_t size, size_t num);
+    extern Sint64 Android_Aosp_FileSize(SDL_RWops* ctx);
+    extern Sint64 Android_Aosp_FileSeek(SDL_RWops* ctx, Sint64 offset, int whence);
+    
+    extern void Android_Aosp_PollInputDevices(void);
 
 #ifdef __cplusplus
 }

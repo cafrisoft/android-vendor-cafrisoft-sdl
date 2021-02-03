@@ -61,7 +61,7 @@
 #include <assert.h>
 #include <utils/Log.h>
 
-#define CAFRISOFT_ASSERT(value)
+#define CAFRISOFT_ASSERT assert
 #define CAFRI_LOGD_ANDROID_JNI(fmt, ...) ALOGI("<D>[%s:%s %d] " fmt, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 
 #ifdef ANDROID_CAFRISOFT_AOSP
@@ -453,6 +453,10 @@ JNIEnv* Android_JNI_GetEnv(void)
 /* Set up an external thread for using JNI with Android_JNI_GetEnv() */
 int Android_JNI_SetupThread(void)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    // see src/thread/SDL_systhread.c 
+    return 1;
+#else
     CAFRI_LOGD_ANDROID_JNI("\n");
     CAFRISOFT_ASSERT(0);
 
@@ -479,6 +483,7 @@ int Android_JNI_SetupThread(void)
     }
 
     return 1;
+#endif
 }
 
 /* Destructor called for each thread where mThreadKey is not NULL */
@@ -2001,6 +2006,11 @@ static void Internal_Android_Create_AssetManager() {
 }
 
 static void Internal_Android_Destroy_AssetManager() {
+
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
+
     JNIEnv *env = Android_JNI_GetEnv();
 
     if (asset_manager) {
@@ -2012,6 +2022,9 @@ static void Internal_Android_Destroy_AssetManager() {
 int Android_JNI_FileOpen(SDL_RWops *ctx,
         const char *fileName, const char *mode)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    return Android_Aosp_FileOpen(ctx, fileName, mode);
+#else
     AAsset *asset = NULL;
     ctx->hidden.androidio.asset = NULL;
 
@@ -2031,11 +2044,15 @@ int Android_JNI_FileOpen(SDL_RWops *ctx,
 
     ctx->hidden.androidio.asset = (void*) asset;
     return 0;
+#endif
 }
 
 size_t Android_JNI_FileRead(SDL_RWops* ctx, void* buffer,
         size_t size, size_t maxnum)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    return Android_Aosp_FileRead(ctx, buffer, size, maxnum);
+#else
     size_t result;
     AAsset *asset = (AAsset*) ctx->hidden.androidio.asset;
     result = AAsset_read(asset, buffer, size * maxnum);
@@ -2047,40 +2064,61 @@ size_t Android_JNI_FileRead(SDL_RWops* ctx, void* buffer,
         /* Error or EOF */
         return result;
     }
+#endif
 }
 
 size_t Android_JNI_FileWrite(SDL_RWops *ctx, const void *buffer,
         size_t size, size_t num)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    return Android_Aosp_FileWrite(ctx, buffer, size, num);
+#else
     SDL_SetError("Cannot write to Android package filesystem");
     return 0;
+#endif
 }
 
 Sint64 Android_JNI_FileSize(SDL_RWops *ctx)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    return Android_Aosp_FileSize(ctx);
+#else
     off64_t result;
     AAsset *asset = (AAsset*) ctx->hidden.androidio.asset;
     result = AAsset_getLength64(asset);
     return result;
+#endif
 }
 
 Sint64 Android_JNI_FileSeek(SDL_RWops* ctx, Sint64 offset, int whence)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    return Android_Aosp_FileSeek(ctx, offset, whence);
+#else
     off64_t result;
     AAsset *asset = (AAsset*) ctx->hidden.androidio.asset;
     result = AAsset_seek64(asset, offset, whence);
     return result;
+#endif
 }
 
 int Android_JNI_FileClose(SDL_RWops *ctx)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    return Android_Aosp_FileClose(ctx);
+#else
     AAsset *asset = (AAsset*) ctx->hidden.androidio.asset;
     AAsset_close(asset);
     return 0;
+#endif
 }
 
 int Android_JNI_SetClipboardText(const char *text)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
+
     JNIEnv *env = Android_JNI_GetEnv();
     jstring string = (*env)->NewStringUTF(env, text);
     (*env)->CallStaticVoidMethod(env, mActivityClass, midClipboardSetText, string);
@@ -2090,6 +2128,9 @@ int Android_JNI_SetClipboardText(const char *text)
 
 char* Android_JNI_GetClipboardText(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     char *text = NULL;
     jstring string;
@@ -2109,6 +2150,9 @@ char* Android_JNI_GetClipboardText(void)
 
 SDL_bool Android_JNI_HasClipboardText(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     jboolean retval = (*env)->CallStaticBooleanMethod(env, mActivityClass, midClipboardHasText);
     return (retval == JNI_TRUE) ? SDL_TRUE : SDL_FALSE;
@@ -2120,6 +2164,9 @@ SDL_bool Android_JNI_HasClipboardText(void)
  */
 int Android_JNI_GetPowerInfo(int *plugged, int *charged, int *battery, int *seconds, int *percent)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+    
     struct LocalReferenceHolder refs = LocalReferenceHolder_Setup(__FUNCTION__);
     JNIEnv *env = Android_JNI_GetEnv();
     jmethodID mid;
@@ -2248,24 +2295,40 @@ void Android_JNI_InitTouch() {
 
 void Android_JNI_PollInputDevices(void)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+    Android_Aosp_PollInputDevices();
+#else
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mControllerManagerClass, midPollInputDevices);
+#endif
 }
 
 void Android_JNI_PollHapticDevices(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mControllerManagerClass, midPollHapticDevices);
 }
 
 void Android_JNI_HapticRun(int device_id, float intensity, int length)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mControllerManagerClass, midHapticRun, device_id, intensity, length);
 }
 
 void Android_JNI_HapticStop(int device_id)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mControllerManagerClass, midHapticStop, device_id);
 }
@@ -2439,6 +2502,10 @@ void *SDL_AndroidGetJNIEnv(void)
 
 void *SDL_AndroidGetActivity(void)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+ 
+    CAFRISOFT_ASSERT(0);
+#else
     /* See SDL_system.h for caveats on using this function. */
 
     JNIEnv *env = Android_JNI_GetEnv();
@@ -2448,6 +2515,7 @@ void *SDL_AndroidGetActivity(void)
 
     /* return SDLActivity.getContext(); */
     return (*env)->CallStaticObjectMethod(env, mActivityClass, midGetContext);
+#endif
 }
 
 int SDL_GetAndroidSDKVersion(void)
@@ -2464,36 +2532,58 @@ int SDL_GetAndroidSDKVersion(void)
 
 SDL_bool SDL_IsAndroidTablet(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midIsTablet);
 }
 
 SDL_bool SDL_IsAndroidTV(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
+
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midIsAndroidTV);
 }
 
 SDL_bool SDL_IsChromebook(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midIsChromebook);
 }
 
 SDL_bool SDL_IsDeXMode(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midIsDeXMode);
 }
 
 void SDL_AndroidBackButton(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mActivityClass, midManualBackButton);
 }
 
 const char * SDL_AndroidGetInternalStoragePath(void)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP 
+    return SDL_AospGetInternalStoragePath();
+#else
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     static char *s_AndroidInternalFilesPath = NULL;
 
     if (!s_AndroidInternalFilesPath) {
@@ -2544,10 +2634,14 @@ const char * SDL_AndroidGetInternalStoragePath(void)
         LocalReferenceHolder_Cleanup(&refs);
     }
     return s_AndroidInternalFilesPath;
+#endif
 }
 
 int SDL_AndroidGetExternalStorageState(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     struct LocalReferenceHolder refs = LocalReferenceHolder_Setup(__FUNCTION__);
     jmethodID mid;
     jclass cls;
@@ -2587,6 +2681,9 @@ int SDL_AndroidGetExternalStorageState(void)
 
 const char * SDL_AndroidGetExternalStoragePath(void)
 {
+    CAFRI_LOGD_ANDROID_JNI("\n");
+    CAFRISOFT_ASSERT(0);
+
     static char *s_AndroidExternalFilesPath = NULL;
 
     if (!s_AndroidExternalFilesPath) {
@@ -2637,6 +2734,10 @@ SDL_bool SDL_AndroidRequestPermission(const char *permission)
 
 void Android_JNI_GetManifestEnvironmentVariables(void)
 {
+#ifdef ANDROID_CAFRISOFT_AOSP
+
+#else
+
     if (!mActivityClass || !midGetManifestEnvironmentVariables) {
         __android_log_print(ANDROID_LOG_WARN, "SDL", "Request to get environment variables before JNI is ready");
         return;
@@ -2649,6 +2750,7 @@ void Android_JNI_GetManifestEnvironmentVariables(void)
             bHasEnvironmentVariables = SDL_TRUE;
         }
     }
+#endif
 }
 
 int Android_JNI_CreateCustomCursor(SDL_Surface *surface, int hot_x, int hot_y)

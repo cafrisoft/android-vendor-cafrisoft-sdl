@@ -278,3 +278,79 @@ void Android_Aosp_SetSurfaceViewFormat(int format) {
 void Android_Aosp_SetActivityTitle(const char* title) {
 
 }
+
+const char* SDL_AospGetInternalStoragePath(void) {
+
+    return "/data/SDL";
+}
+
+int Android_Aosp_FileOpen(SDL_RWops* ctx, const char* fileName, const char* mode) {
+
+    int iret;
+    FILE* fp = fopen(fileName, mode);
+    if (fp) {
+        ctx->hidden.androidio.asset = (void*)fp;
+        iret = 0;
+    }
+    else {
+        ctx->hidden.androidio.asset = (void*)NULL;
+        iret = -1;
+    }
+    return iret;
+}
+
+int Android_Aosp_FileClose(SDL_RWops* ctx) {
+
+    FILE* fp = (FILE*)ctx->hidden.androidio.asset;
+    if (fp) {
+        fclose(fp);
+    }
+    ctx->hidden.androidio.asset = (void*)NULL;
+    return 0;
+}
+
+size_t Android_Aosp_FileRead(SDL_RWops* ctx, void* buffer, size_t size, size_t maxnum) {
+
+    size_t rdsz = 0;
+    FILE* fp = (FILE*)ctx->hidden.androidio.asset;
+    if (fp) {
+        rdsz = fread(buffer, size, maxnum, fp);
+    }
+    return rdsz;
+}
+
+size_t Android_Aosp_FileWrite(SDL_RWops* ctx, const void* buffer, size_t size, size_t num) {
+    size_t wrsz = 0;
+    FILE* fp = (FILE*)ctx->hidden.androidio.asset;
+    if (fp) {
+        wrsz = fwrite(buffer, size, num, fp);
+    }
+    return wrsz;
+}
+
+Sint64 Android_Aosp_FileSize(SDL_RWops* ctx) {
+    Sint64 fsize = 0;
+    FILE* fp = (FILE*)ctx->hidden.androidio.asset;
+    if (fp) {
+        long long fpos = ftello(fp);
+        fseeko(fp, 0, SEEK_END);
+        fsize = ftello(fp);
+        fseeko(fp, fpos, SEEK_SET);
+    }
+    return fsize;
+}
+
+Sint64 Android_Aosp_FileSeek(SDL_RWops* ctx, Sint64 offset, int whence) {
+
+    Sint64 fpos = 0;
+    FILE* fp = (FILE*)ctx->hidden.androidio.asset;
+    if (fp) {
+        fseeko(fp, offset, whence);
+        fpos = ftello(fp);
+    }
+    return fpos;
+}
+
+void Android_Aosp_PollInputDevices(void) {
+
+}
