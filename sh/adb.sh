@@ -3,7 +3,8 @@ adb="adb"
 
 binpath="system/bin"
 libpath="system/lib64"
-host_OUTT="out/target/product/odroidn2"
+#host_OUTT="out/target/product/odroidn2"
+host_OUTT="OUTT"
 
 echo "------------------------------------------------------------------"
 echo "copy SDLTest App"
