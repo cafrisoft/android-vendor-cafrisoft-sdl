@@ -220,21 +220,9 @@ done:
     return result;
 }
 
-#ifdef ANDROID_CAFRISOFT_AOSP
-extern void Aosp_Init();
-#endif
-
-static int  main_testyuv(int argc, char** argv);
-
-static int  main_test(int argc, char** argv) {
-
-    //Aosp_Init();
-    //Aosp_TestEx1();
-
-    return 0;
-}
-
+#if 0
 int  main(int argc, char** argv) {
+
     int iret;
 
 #ifdef ANDROID_CAFRISOFT_AOSP
@@ -245,8 +233,13 @@ int  main(int argc, char** argv) {
     iret = main_testyuv(argc, argv);
     return iret;
 }
+#endif
 
-static int  main_testyuv(int argc, char **argv)
+#ifdef CAFRISOFT_TEST_MAIN
+int  main_testyuv(int argc, char** argv)
+#else
+int  main(int argc, char** argv)
+#endif
 {
     struct {
         SDL_bool enable_intrinsics;

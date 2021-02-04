@@ -31,10 +31,12 @@
 //#define CAFRI_LOGD(...) printf(CLOG_TAG, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 #define CAFRI_LOGI(fmt, ...) printf("<I>[%s:%s %d] " fmt, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 #define CAFRI_LOGD(fmt, ...) printf("<D>[%s:%s %d] " fmt, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
+
 //#define CAFRI_LOGD_APP CAFRI_LOGD
 #define CAFRI_LOGD_APP 
 //#define CAFRI_LOGD_MOUSE(fmt, ...) printf("<D>[%s:%s %d] " fmt, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 #define CAFRI_LOGD_MOUSE
+
 
 #if defined(_AIX)
 #undef __AIX__
