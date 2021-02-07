@@ -50,6 +50,9 @@
     <ClCompile Include="..\..\..\source\src\core\aosp\SDL_aosp.cpp">
       <Filter>source\core\aosp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\src\core\aosp\SDL_getevent.cpp">
+      <Filter>source\core\aosp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\source\Android.mk.org.backup">

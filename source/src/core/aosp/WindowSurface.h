@@ -18,7 +18,6 @@
 #define OPENGL_TESTS_WINDOWSURFACE_H
 
 #include <gui/SurfaceControl.h>
-
 #include <EGL/egl.h>
 
 namespace android {

@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppAospEx1", "AppAospEx1\Ap
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sdl-aosp-win", "sdl-aosp-win\sdl-aosp-win.vcxproj", "{D97B889D-4C77-4671-A9BA-93A85BAC1F40}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libComm", "..\..\..\lib\os\win\libComm\libComm.vcxproj", "{8C579F00-0AE0-467E-AEF3-6EFB1F8E7EA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{D97B889D-4C77-4671-A9BA-93A85BAC1F40}.Release|x64.Build.0 = Release|x64
 		{D97B889D-4C77-4671-A9BA-93A85BAC1F40}.Release|x86.ActiveCfg = Release|Win32
 		{D97B889D-4C77-4671-A9BA-93A85BAC1F40}.Release|x86.Build.0 = Release|Win32
+		{8C579F00-0AE0-467E-AEF3-6EFB1F8E7EA1}.Debug|x64.ActiveCfg = Debug|x64
+		{8C579F00-0AE0-467E-AEF3-6EFB1F8E7EA1}.Debug|x64.Build.0 = Debug|x64
+		{8C579F00-0AE0-467E-AEF3-6EFB1F8E7EA1}.Debug|x86.ActiveCfg = Debug|Win32
+		{8C579F00-0AE0-467E-AEF3-6EFB1F8E7EA1}.Debug|x86.Build.0 = Debug|Win32
+		{8C579F00-0AE0-467E-AEF3-6EFB1F8E7EA1}.Release|x64.ActiveCfg = Release|x64
+		{8C579F00-0AE0-467E-AEF3-6EFB1F8E7EA1}.Release|x64.Build.0 = Release|x64
+		{8C579F00-0AE0-467E-AEF3-6EFB1F8E7EA1}.Release|x86.ActiveCfg = Release|Win32
+		{8C579F00-0AE0-467E-AEF3-6EFB1F8E7EA1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

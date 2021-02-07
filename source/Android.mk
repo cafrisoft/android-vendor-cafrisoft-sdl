@@ -40,6 +40,7 @@ LOCAL_SRC_FILES := \
 	$(LOCAL_PATH)/src/atomic/SDL_spinlock.c.arm \
 	$(wildcard $(LOCAL_PATH)/src/core/android/*.c) \
 	$(wildcard $(LOCAL_PATH)/src/core/aosp/*.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/core/aosp/*.c) \
 	$(wildcard $(LOCAL_PATH)/src/cpuinfo/*.c) \
 	$(wildcard $(LOCAL_PATH)/src/dynapi/*.c) \
 	$(wildcard $(LOCAL_PATH)/src/events/*.c) \
@@ -75,8 +76,9 @@ LOCAL_SRC_FILES := \
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
 LOCAL_C_INCLUDES += $(TOP)/external/googletest/googletest/include
 LOCAL_C_INCLUDES += $(TOP)/system/core/libion/include
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../lib
 
-LOCAL_CFLAGS := -DANDROID_CAFRISOFT_AOSP 
+LOCAL_CFLAGS := -DANDROID_CAFRISOFT_AOSP
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES
 LOCAL_CFLAGS += -Wno-error=unused-parameter  -Wno-error=sign-compare
 LOCAL_CFLAGS += -Wno-unused-parameter -Wno-sign-compare  
@@ -85,7 +87,8 @@ LOCAL_SHARED_LIBRARIES := libhidapi \
     libandroid \
 	libOpenSLES libEGL libGLESv2 libGLESv1_CM \
 	libstagefright libmedia libmedia_omx libutils libbinder libstagefright_foundation \
-	libjpeg libui libgui libcutils liblog
+	libjpeg libui libgui libcutils liblog \
+	libCafriComm
 
 LOCAL_STATIC_LIBRARIES := cpufeatures
 LOCAL_MODULE := libSDL2

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+#ifdef WIN_CAFRISOFT_AOSP
+
+
+#else
+
 #include "WindowSurface.h"
 
 #include <gui/SurfaceComposerClient.h>
@@ -78,3 +83,4 @@ EGLNativeWindowType WindowSurface::getSurface() const {
     return (EGLNativeWindowType)anw.get();
 }
 
+#endif //#ifdef WIN_CAFRISOFT_AOSP

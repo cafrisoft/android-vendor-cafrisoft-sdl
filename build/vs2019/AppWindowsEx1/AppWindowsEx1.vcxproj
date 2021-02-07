@@ -117,7 +117,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(Project_Dir)..\..\..\source\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/D "CAFRISOFT_TEST_MAIN" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D "CAFRISOFT_TEST_MAIN" /I "../../../../lib" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,7 +149,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\source\test\TestMain.c" />
+    <ClCompile Include="..\..\..\source\test\TestMain.cpp" />
     <ClCompile Include="..\..\..\source\test\testyuv.c" />
     <ClCompile Include="..\..\..\source\test\testyuv_cvt.c" />
     <ClCompile Include="AppWindowsEx1.cpp" />
@@ -162,6 +162,12 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\lib\os\win\libComm\libComm.vcxproj">
+      <Project>{8c579f00-0ae0-467e-aef3-6efb1f8e7ea1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\sdl-aosp-win\sdl-aosp-win.vcxproj">
+      <Project>{d97b889d-4c77-4671-a9ba-93a85bac1f40}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\sdl-common\sdl-common.vcxproj">
       <Project>{afa97111-9783-4e70-8e47-e135a1735290}</Project>
     </ProjectReference>

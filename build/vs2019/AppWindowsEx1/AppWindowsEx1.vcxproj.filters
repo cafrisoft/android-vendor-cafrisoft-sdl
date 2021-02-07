@@ -44,7 +44,7 @@
     <ClCompile Include="..\..\..\source\test\testyuv_cvt.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\test\TestMain.c">
+    <ClCompile Include="..\..\..\source\test\TestMain.cpp">
       <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>

@@ -154,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\src\core\aosp\SDL_aosp.cpp" />
+    <ClCompile Include="..\..\..\source\src\core\aosp\SDL_getevent.cpp" />
     <ClCompile Include="..\..\..\source\src\core\aosp\SDL_WindowSurface.cpp" />
     <ClCompile Include="sdl-aosp.cpp" />
   </ItemGroup>

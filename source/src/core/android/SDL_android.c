@@ -1511,8 +1511,9 @@ void Android_JNI_SetActivityTitle(const char *title)
 void Android_JNI_SetWindowStyle(SDL_bool fullscreen)
 {
 #ifdef ANDROID_CAFRISOFT_AOSP
-    CAFRI_LOGD_ANDROID_JNI("\n");
-    CAFRISOFT_ASSERT(0);
+    //CAFRI_LOGD_ANDROID_JNI("\n");
+    //CAFRISOFT_ASSERT(0);
+    Android_Aosp_SetWindowStyle(fullscreen);
 #else
     JNIEnv *env = Android_JNI_GetEnv();
     (*env)->CallStaticVoidMethod(env, mActivityClass, midSetWindowStyle, fullscreen ? 1 : 0);
@@ -2551,20 +2552,26 @@ SDL_bool SDL_IsAndroidTV(void)
 
 SDL_bool SDL_IsChromebook(void)
 {
-    CAFRI_LOGD_ANDROID_JNI("\n");
-    CAFRISOFT_ASSERT(0);
-
+#ifdef ANDROID_CAFRISOFT_AOSP
+    //CAFRI_LOGD_ANDROID_JNI("\n");
+    //CAFRISOFT_ASSERT(0);
+    return Android_Aosp_IsChromebook();
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midIsChromebook);
+#endif
 }
 
 SDL_bool SDL_IsDeXMode(void)
 {
-    CAFRI_LOGD_ANDROID_JNI("\n");
-    CAFRISOFT_ASSERT(0);
-
+#ifdef ANDROID_CAFRISOFT_AOSP
+    //CAFRI_LOGD_ANDROID_JNI("\n");
+    //CAFRISOFT_ASSERT(0);
+    return Android_Aosp_IsDeXMode();
+#else
     JNIEnv *env = Android_JNI_GetEnv();
     return (*env)->CallStaticBooleanMethod(env, mActivityClass, midIsDeXMode);
+#endif
 }
 
 void SDL_AndroidBackButton(void)

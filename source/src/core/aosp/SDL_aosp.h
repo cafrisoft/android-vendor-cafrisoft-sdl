@@ -7,12 +7,17 @@ extern "C" {
 
     extern void Aosp_Init();
     extern void Aosp_Print_DisplayInfo();
+    
+    extern void Android_Aosp_Event_Init(void);
 
     extern void* Android_Aosp_GetNativeWindow(void);
     extern void Android_Aosp_SetOrientation(int w, int h, int resizable, const char* hint);
     extern void Android_Aosp_SetSurfaceViewFormat(int format);
     extern void Android_Aosp_SetActivityTitle(const char* title);
     extern const char* SDL_AospGetInternalStoragePath(void);
+
+    extern int Android_Aosp_GetUserWindowWidth();
+    extern int Android_Aosp_GetUserWindowHeight();
 
     extern void Aosp_TestEx1();
 
@@ -24,6 +29,9 @@ extern "C" {
     extern Sint64 Android_Aosp_FileSeek(SDL_RWops* ctx, Sint64 offset, int whence);
     
     extern void Android_Aosp_PollInputDevices(void);
+    extern void Android_Aosp_SetWindowStyle(SDL_bool fullscreen);
+    extern SDL_bool Android_Aosp_IsDeXMode(void);
+    extern SDL_bool Android_Aosp_IsChromebook(void);
 
 #ifdef __cplusplus
 }

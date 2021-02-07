@@ -18,6 +18,13 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+#ifdef ANDROID_CAFRISOFT_AOSP
+#define LOG_TAG "SDL_androidvideo"
+#include <cutils/log.h>
+#define CAFRI_ALOGD(fmt, ...)  ALOGD("[%s:%s %d] " fmt, __FILE__, __func__, __LINE__, ##__VA_ARGS__)
+#endif
+
+
 #include "../../SDL_internal.h"
 
 #if SDL_VIDEO_DRIVER_ANDROID
@@ -44,10 +51,18 @@
 
 #define ANDROID_VID_DRIVER_NAME "Android"
 
+#ifdef ANDROID_CAFRISOFT_AOSP
+#include "../../core/aosp/SDL_aosp.h"
+#endif
+
 /* Initialization/Query functions */
 static int Android_VideoInit(_THIS);
 static void Android_VideoQuit(_THIS);
 int Android_GetDisplayDPI(_THIS, SDL_VideoDisplay *display, float *ddpi, float *hdpi, float *vdpi);
+
+#ifdef ANDROID_CAFRISOFT_AOSP
+int Aosp_GetDisplayBounds(_THIS, SDL_VideoDisplay* display, SDL_Rect* rect);
+#endif
 
 #include "../SDL_egl_c.h"
 #define Android_GLES_GetProcAddress SDL_EGL_GetProcAddress
@@ -117,6 +132,9 @@ Android_CreateDevice(int devindex)
     }
 
     device->GetDisplayDPI = Android_GetDisplayDPI;
+#ifdef ANDROID_CAFRISOFT_AOSP
+    device->GetDisplayBounds = Aosp_GetDisplayBounds;
+#endif
 
     device->CreateSDLWindow = Android_CreateWindow;
     device->SetWindowTitle = Android_SetWindowTitle;
@@ -218,6 +236,23 @@ Android_GetDisplayDPI(_THIS, SDL_VideoDisplay *display, float *ddpi, float *hdpi
 {
     return Android_JNI_GetDisplayDPI(ddpi, hdpi, vdpi);
 }
+
+#ifdef ANDROID_CAFRISOFT_AOSP
+int
+Aosp_GetDisplayBounds(_THIS, SDL_VideoDisplay* display, SDL_Rect* rect)
+{
+    //return Android_AospI_GetDisplayBounds(displayddpi, hdpi, vdpi);
+
+    rect->x = 0;
+    rect->y = 0;
+    rect->w = Android_Aosp_GetUserWindowWidth();
+    rect->h = Android_Aosp_GetUserWindowHeight();
+
+    CAFRI_ALOGD("rect->w=%d rect->h=%d ", rect->w, rect->h);
+
+    return 0;
+}
+#endif
 
 void
 Android_SetScreenResolution(int surfaceWidth, int surfaceHeight, int deviceWidth, int deviceHeight, Uint32 format, float rate)

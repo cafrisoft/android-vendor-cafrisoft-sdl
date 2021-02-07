@@ -1,0 +1,31 @@
+add device 1: /dev/input/event6
+  name:     "Dell KB216 Wired Keyboard"
+add device 2: /dev/input/event5
+  name:     "Dell KB216 Wired Keyboard"
+add device 3: /dev/input/event3
+  name:     "vt-input"
+add device 4: /dev/input/event2
+  name:     "cec_input"
+could not get driver version for /dev/input/mice, Not a typewriter
+add device 5: /dev/input/event1
+  name:     "aml_vkeypad"
+add device 6: /dev/input/event0
+  name:     "aml_keypad"
+could not get driver version for /dev/input/mouse0, Not a typewriter
+could not get driver version for /dev/input/mouse1, Not a typewriter
+add device 7: /dev/input/event4
+  name:     "PixArt USB Optical Mouse"
+
+[   23719.986376] /dev/input/event5: EV_MSC       MSC_SCAN             000700e1
+[   23719.986376] /dev/input/event5: EV_KEY       KEY_LEFTSHIFT        DOWN
+[   23719.986376] /dev/input/event5: EV_SYN       SYN_REPORT           00000000
+[   23720.114377] /dev/input/event5: EV_MSC       MSC_SCAN             000700e1
+[   23720.114377] /dev/input/event5: EV_KEY       KEY_LEFTSHIFT        UP
+[   23720.114377] /dev/input/event5: EV_SYN       SYN_REPORT           00000000
+[   23720.770374] /dev/input/event5: EV_MSC       MSC_SCAN             00070016
+[   23720.770374] /dev/input/event5: EV_KEY       KEY_S                DOWN
+[   23720.770374] /dev/input/event5: EV_SYN       SYN_REPORT           00000000
+[   23720.882375] /dev/input/event5: EV_MSC       MSC_SCAN             00070016
+[   23720.882375] /dev/input/event5: EV_KEY       KEY_S                UP
+
+

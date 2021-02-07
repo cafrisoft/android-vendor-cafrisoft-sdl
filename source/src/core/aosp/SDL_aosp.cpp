@@ -1,13 +1,15 @@
-#define LOG_TAG "SDL_aosp"
-#define ATRACE_TAG ATRACE_TAG_GRAPHICS
-#define LOG_NDEBUG 0
+#define CLOG_TAG "SDL_aosp"
+#include <Comm/Global/BuildOptions.h>
+#include <Comm/OAL/Log.hpp>
 
-
-#ifdef SDL_AOSP_WIN
+#ifdef WIN_CAFRISOFT_AOSP
 #include <math.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+#include <assert.h>
+
+typedef int WindowSurface;
 
 #else
 #include <gui/SurfaceComposerClient.h>
@@ -37,7 +39,7 @@ static int s_UserWindowWidth = 1920;
 static int s_UserWindowHeight = 1080;
 static bool s_IsAospInit = false;
 
-#ifdef SDL_AOSP_WIN
+#ifdef WIN_CAFRISOFT_AOSP
 
 #else
 static EGLDisplay eglDisplay;
@@ -113,6 +115,9 @@ static void printGLString(const char* name, GLenum s) {
 
 static int init_gl_surface(const WindowSurface* pWindowSurface)
 {
+#ifdef WIN_CAFRISOFT_AOSP
+    return 1;
+#else
     EGLConfig myConfig = { 0 };
     EGLint attrib[] =
     {
@@ -176,10 +181,14 @@ static int init_gl_surface(const WindowSurface* pWindowSurface)
     printGLString("Extensions", GL_EXTENSIONS);
 
     return 1;
+#endif
 }
 
 static void free_gl_surface(void)
 {
+#ifdef WIN_CAFRISOFT_AOSP
+    return ;
+#else
     if (eglDisplay != EGL_NO_DISPLAY)
     {
         eglMakeCurrent(EGL_NO_DISPLAY, EGL_NO_SURFACE,
@@ -189,6 +198,7 @@ static void free_gl_surface(void)
         eglTerminate(eglDisplay);
         eglDisplay = EGL_NO_DISPLAY;
     }
+#endif
 }
 
 void init_scene(void)
@@ -199,7 +209,9 @@ void init_scene(void)
     glViewport(0, 0, 320, 480);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+#ifndef WIN_CAFRISOFT_AOSP
     glFrustumf(-ratio, ratio, -1, 1, 1, 10);
+#endif
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(
@@ -212,7 +224,10 @@ void init_scene(void)
 }
 
 void Aosp_Init() {
+    
+#ifdef WIN_CAFRISOFT_AOSP
 
+#else
     sp<IBinder> mainDpy = SurfaceComposerClient::getBuiltInDisplay(ISurfaceComposer::eDisplayIdMain);
     DisplayInfo mainDpyInfo;
     int err = SurfaceComposerClient::getDisplayInfo(mainDpy, &mainDpyInfo);
@@ -238,6 +253,13 @@ void Aosp_Init() {
     s_ScreenHeight = height;
 
     Android_SetScreenResolution(width, height, width, height, PIXEL_FORMAT_RGBX_8888, 30);
+#endif
+
+    Android_Aosp_Event_Init();
+
+    Comm::OAL::Log::SysLogOpen(CLOG_TAG);
+    Comm::OAL::Log::EnableDebug();
+
 }
 
 void Android_Aosp_SetOrientation(int w, int h, int resizable, const char* hint) {
@@ -248,10 +270,27 @@ void Android_Aosp_SetOrientation(int w, int h, int resizable, const char* hint) 
     s_UserWindowHeight = h;
 }
 
+int Android_Aosp_GetUserWindowWidth() {
+
+    return s_UserWindowWidth;
+}
+
+int Android_Aosp_GetUserWindowHeight() {
+
+    return s_UserWindowHeight;
+}
+
 static WindowSurface* s_windowSurface = NULL;
+
+#ifndef WIN_CAFRISOFT_AOSP
 static EGLNativeWindowType s_ANW;
+#endif
+
 void* Android_Aosp_GetNativeWindow(void) {
 
+#ifdef WIN_CAFRISOFT_AOSP
+    return NULL;
+#else
     assert(s_windowSurface == NULL);
 
     //WindowSurface* windowSurface = new WindowSurface(s_UserWindowWidth, s_UserWindowHeight);
@@ -267,12 +306,21 @@ void* Android_Aosp_GetNativeWindow(void) {
 #endif
 
     return (void*)s_ANW;
+#endif
+}
+
+void Android_Aosp_SetWindowStyle(SDL_bool fullscreen) {
+
 }
 
 void Android_Aosp_SetSurfaceViewFormat(int format) {
 
+#ifdef WIN_CAFRISOFT_AOSP
+
+#else
     assert(s_windowSurface);
     native_window_set_buffers_format(s_ANW, format);
+#endif
 }
 
 void Android_Aosp_SetActivityTitle(const char* title) {
@@ -286,6 +334,11 @@ const char* SDL_AospGetInternalStoragePath(void) {
 
 int Android_Aosp_FileOpen(SDL_RWops* ctx, const char* fileName, const char* mode) {
 
+#ifdef WIN_CAFRISOFT_AOSP
+
+    return -1;
+#else
+
     int iret;
     FILE* fp = fopen(fileName, mode);
     if (fp) {
@@ -297,9 +350,15 @@ int Android_Aosp_FileOpen(SDL_RWops* ctx, const char* fileName, const char* mode
         iret = -1;
     }
     return iret;
+#endif
 }
 
 int Android_Aosp_FileClose(SDL_RWops* ctx) {
+
+#ifdef WIN_CAFRISOFT_AOSP
+
+    return -1;
+#else
 
     FILE* fp = (FILE*)ctx->hidden.androidio.asset;
     if (fp) {
@@ -307,9 +366,15 @@ int Android_Aosp_FileClose(SDL_RWops* ctx) {
     }
     ctx->hidden.androidio.asset = (void*)NULL;
     return 0;
+#endif
 }
 
 size_t Android_Aosp_FileRead(SDL_RWops* ctx, void* buffer, size_t size, size_t maxnum) {
+
+#ifdef WIN_CAFRISOFT_AOSP
+
+    return 0;
+#else
 
     size_t rdsz = 0;
     FILE* fp = (FILE*)ctx->hidden.androidio.asset;
@@ -317,18 +382,33 @@ size_t Android_Aosp_FileRead(SDL_RWops* ctx, void* buffer, size_t size, size_t m
         rdsz = fread(buffer, size, maxnum, fp);
     }
     return rdsz;
+
+#endif
 }
 
 size_t Android_Aosp_FileWrite(SDL_RWops* ctx, const void* buffer, size_t size, size_t num) {
+
+#ifdef WIN_CAFRISOFT_AOSP
+
+    return 0;
+#else
+
     size_t wrsz = 0;
     FILE* fp = (FILE*)ctx->hidden.androidio.asset;
     if (fp) {
         wrsz = fwrite(buffer, size, num, fp);
     }
     return wrsz;
+#endif
 }
 
 Sint64 Android_Aosp_FileSize(SDL_RWops* ctx) {
+
+#ifdef WIN_CAFRISOFT_AOSP
+
+    return 0;
+#else
+
     Sint64 fsize = 0;
     FILE* fp = (FILE*)ctx->hidden.androidio.asset;
     if (fp) {
@@ -338,9 +418,16 @@ Sint64 Android_Aosp_FileSize(SDL_RWops* ctx) {
         fseeko(fp, fpos, SEEK_SET);
     }
     return fsize;
+
+#endif
 }
 
 Sint64 Android_Aosp_FileSeek(SDL_RWops* ctx, Sint64 offset, int whence) {
+
+#ifdef WIN_CAFRISOFT_AOSP
+
+    return 0;
+#else
 
     Sint64 fpos = 0;
     FILE* fp = (FILE*)ctx->hidden.androidio.asset;
@@ -349,8 +436,18 @@ Sint64 Android_Aosp_FileSeek(SDL_RWops* ctx, Sint64 offset, int whence) {
         fpos = ftello(fp);
     }
     return fpos;
+
+#endif
 }
 
 void Android_Aosp_PollInputDevices(void) {
 
+}
+
+SDL_bool Android_Aosp_IsDeXMode(void) {
+    return SDL_FALSE;
+}
+
+SDL_bool Android_Aosp_IsChromebook(void) {
+    return SDL_FALSE;
 }

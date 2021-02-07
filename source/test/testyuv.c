@@ -220,19 +220,8 @@ done:
     return result;
 }
 
-#if 0
-int  main(int argc, char** argv) {
-
-    int iret;
-
 #ifdef ANDROID_CAFRISOFT_AOSP
-    Aosp_Init();
-#endif
-
-    //main_test(argc, argv);
-    iret = main_testyuv(argc, argv);
-    return iret;
-}
+extern void Aosp_Init();
 #endif
 
 #ifdef CAFRISOFT_TEST_MAIN
@@ -287,6 +276,10 @@ int  main(int argc, char** argv)
     Uint8 *raw_yuv;
     Uint32 then, now, i, iterations = 100;
     SDL_bool should_run_automated_tests = SDL_FALSE;
+
+#ifdef ANDROID_CAFRISOFT_AOSP
+    Aosp_Init();
+#endif
 
 //    SDL_calloc(10, 10);
 

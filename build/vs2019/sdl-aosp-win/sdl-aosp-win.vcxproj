@@ -43,7 +43,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalOptions>/D "SDL_AOSP_WIN" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D "WIN_CAFRISOFT_AOSP"  /D "_CRT_SECURE_NO_WARNINGS"  /I "../../../../lib" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(Project_Dir)..\..\..\source\include;$(Project_Dir)..\..\..\opengl\LearnOpenGL\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -156,8 +156,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\src\core\aosp\SDL_aosp.cpp" />
+    <ClCompile Include="..\..\..\source\src\core\aosp\SDL_getevent.cpp" />
     <ClCompile Include="..\..\..\source\src\core\aosp\SDL_WindowSurface.cpp" />
     <ClCompile Include="sdl-aosp-win.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\source\src\core\aosp\system_bin_getevent_lt.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

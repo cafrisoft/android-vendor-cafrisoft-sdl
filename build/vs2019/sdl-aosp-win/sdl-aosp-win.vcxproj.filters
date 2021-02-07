@@ -47,5 +47,13 @@
     <ClCompile Include="..\..\..\source\src\core\aosp\SDL_WindowSurface.cpp">
       <Filter>source\core\aosp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\src\core\aosp\SDL_getevent.cpp">
+      <Filter>source\core\aosp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\source\src\core\aosp\system_bin_getevent_lt.txt">
+      <Filter>source\core\aosp</Filter>
+    </Text>
   </ItemGroup>
 </Project>
